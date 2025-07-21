@@ -23,7 +23,7 @@ const Content = styled.div`
 const Logo = styled(Link)`
     font-family: 'SB어그로';
     font-weight: 300;
-    color: #5e5e5e; // TODO: 컬러칩 설정한 다음 수정하기
+    color: ${({theme}) => theme.colors.natural80};
     font-size: 24px;
     text-decoration: none;
     display: flex;
@@ -31,7 +31,7 @@ const Logo = styled(Link)`
 
 const Body = styled.p`
     font-size: 14px;
-    color: #7c7c7c; // TODO: 컬러칩 설정한 다음 수정하기
+    color: ${({theme}) => theme.colors.natural70};
     text-align: center;
 `;
 

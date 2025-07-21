@@ -13,9 +13,57 @@ export const theme = {
         natural05: '#E6E6E6',
     },
     typo: {
-        body1: {
+        title1Bold: {
+            fontSize: '35px',
+            fontWeight: 300,
+            fontFamily: 'SB어그로'
+        },
+        title1Regular: {
+            fontSize: '35px',
+            fontWeight: 200,
+            fontFamily: 'SB어그로'
+        },
+        title2Bold: {
+            fontSize: '30px',
+            fontWeight: 300,
+            fontFamily: 'SB어그로'
+        },
+        title2Regular: {
+            fontSize: '30px',
+            fontWeight: 200,
+            fontFamily: 'SB어그로'
+        },
+        body1SemiBold: {
+            fontSize: '25px',
+            fontWeight: 500,
+        },
+        body1Regular: {
+            fontSize: '25px',
+            fontWeight: 300,
+        },
+        body2SemiBold: {
+            fontSize: '20px',
+            fontWeight: 500,
+        },
+        body2Regular: {
+            fontSize: '20px',
+            fontWeight: 300,
+        },
+        caption1Regular: {
             fontSize: '18px',
-            fontWeight: 400
+            fontWeight: 300,
+        },
+        caption1Light: {
+            fontSize: '18px',
+            fontWeight: 200,
+        },
+        caption2Regular: {
+            fontSize: '14px',
+            fontWeight: 300,
+        },
+        caption2Light: {
+            fontSize: '14px',
+            fontWeight: 200,
         }
     }
 }
