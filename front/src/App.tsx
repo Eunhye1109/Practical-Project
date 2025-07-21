@@ -10,18 +10,31 @@ import MainLayout from 'layouts/MainLayout';
 import Home from 'pages/Home';
 import Login from 'pages/Login';
 import Join from 'pages/Join';
+import styled from '@emotion/styled';
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
+const Content = styled.main`
+  flex: 1;
+`;
 
 function App() {
   return (
-    <div>
+    <Wrapper>
       <MainLayout>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/join' element={<Join />} />
-        </Routes>
+        <Content>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/join' element={<Join />} />
+          </Routes>
+        </Content>
       </MainLayout>
-    </div>
+    </Wrapper>
   );
 }
 
