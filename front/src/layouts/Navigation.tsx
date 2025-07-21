@@ -7,7 +7,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
 `;
 
 const StyledLink = styled(Link)`
@@ -15,13 +15,13 @@ const StyledLink = styled(Link)`
     color: white;
     font-size: 16px;
 
-    &:not(:last-child)::after {
-        margin-left: 20px;
-        content: '|';
+    &:hover {
+        opacity: 0.8;
     }
 `;
 
 const Navigation = () => {
+    // TODO: 가능하다면 아이콘 추가해보기
     const [nav, setNav] = useState([
         {label: '로그인', to: 'login'},
         {label: '회원가입', to: 'join'}

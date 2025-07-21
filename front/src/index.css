@@ -24,8 +24,7 @@
   font-display: swap;
 }
 
-html, body {
-  height: 100%;
+html, body, * {
   margin: 0;
   font-family: 'Pretendard';
   -webkit-font-smoothing: antialiased;

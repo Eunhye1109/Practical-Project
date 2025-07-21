@@ -21,7 +21,7 @@ const Content = styled.div`
 
 const Logo = styled(Link)`
     font-family: 'SB어그로';
-    font-weight: 00;
+    font-weight: 300;
     color: white;
     font-size: 16px;
     text-decoration: none;

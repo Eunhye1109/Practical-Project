@@ -12,7 +12,7 @@ const MainLayout: FC<Props> = ({children}) => {
     <>
         <Header logoTitle='요즘기업 보고서' />
         {children}
-        <Footer />
+        <Footer logoTitle='요즘기업 보고서' />
     </>
   )
 }
