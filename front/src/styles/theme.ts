@@ -18,7 +18,8 @@ export const theme = {
             10: '#E5E7FF',
         },
         gradient: {
-            cross: 'linear-gradient(45deg, #8B69F4 0%, #849AFF 100%)'
+            cross: 'linear-gradient(45deg, #8B69F4 0%, #849AFF 100%)',
+            crossOpacity: 'linear-gradient(45deg, rgba(139, 105, 244, 0.9) 0%, rgba(132, 154, 255, 0.9) 100%)'
         }
     },
     typo: {

@@ -1,24 +1,27 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
+import bg from '../assets/images/background02.jpg';
 
 const TSt01 = styled.p`
   ${({theme}) => typoStyle.subTitle.bold(theme)}
 `;
 
-const Test = styled.div`
-  background: ${({theme}) => theme.colors.gradient.cross};
+const Container = styled.div`
   width: 100%;
-  height: 700px;
+  height: calc(100vh - 50px);
+  background-image:
+    ${({theme}) => theme.colors.gradient.crossOpacity},
+    url(${bg});
+  background-size: cover;
+  background-position: center;
 `;
-
-
 
 const Home = () => {
   return (
-    <Test>
+    <Container>
       <TSt01>title1Bold</TSt01>
-    </Test>
+    </Container>
   )
 }
 
