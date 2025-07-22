@@ -1,0 +1,112 @@
+## 기업 주요 정보 추출
+
+- message: 정상
+- corp_code: 01137383
+- corp_name: (주)카카오게임즈
+- corp_name_eng: Kakao Games Corp.
+- stock_name: 카카오게임즈
+- stock_code: 293490
+- ceo_nm: Sang Woo Han
+- corp_cls: K
+- jurir_no: 1311110351682
+- bizr_no: 1448118454
+- adres: 경기도 성남시 분당구 판교역로 152, 14층(백현동, 알파돔타워 3) &nbsp
+- hm_url: kakaogames.com
+
+import os
+import requests
+import zipfile
+import io
+import pandas as pd
+import xml.etree.ElementTree as ET
+
+
+API_KEY = "a8595790e77447b84efbb957beac67afdf402347"
+
+# ✅ 0. 설정
+API_KEY
+company_name = input("조회할 기업명을 입력하세요: ")
+CORP_CSV_PATH = "/content/drive/MyDrive/Colab Notebooks/실전프로젝트/cache_file/corp_name_to_code.csv"
+
+# ✅ 1. corpCode.xml 불러오기 or CSV 캐시 로딩
+def load_or_cache_corp_code(api_key, csv_path):
+    if os.path.exists(csv_path):
+        print("✅ 캐시된 corp_code 목록 불러오는 중...")
+        return pd.read_csv(csv_path)
+
+    print("📥 최초 요청: corpCode.xml 다운로드 중...")
+    url = f"https://opendart.fss.or.kr/api/corpCode.xml?crtfc_key={api_key}"
+    res = requests.get(url)
+
+    if "zip" not in res.headers.get("Content-Type", ""):
+        print("❌ ZIP 파일 아님. 응답 내용:", res.text[:300])
+        raise Exception("API 인증키 오류 또는 서버 문제")
+
+    with zipfile.ZipFile(io.BytesIO(res.content)) as zf:
+        xml_content = zf.read("CORPCODE.xml")
+
+    root = ET.fromstring(xml_content)
+    rows = []
+    for child in root.iter("list"):
+        rows.append({
+            "corp_name": child.findtext("corp_name"),
+            "corp_code": child.findtext("corp_code"),
+            "stock_code": child.findtext("stock_code"),
+            "modify_date": child.findtext("modify_date"),
+        })
+
+    df = pd.DataFrame(rows)
+    df.to_csv(csv_path, index=False)
+    print("✅ CSV로 저장 완료:", csv_path)
+    return df
+
+# ✅ 2. 기업명으로 corp_code 검색 (다수일 경우 선택)
+def find_corp_code_by_name(corp_df, name):
+    matches = corp_df[corp_df["corp_name"].str.contains(name, na=False, case=False)]
+    if matches.empty:
+        raise ValueError(f"❌ '{name}'을(를) 포함하는 기업명을 찾을 수 없습니다.")
+
+    if len(matches) > 1:
+        print(f"🔍 '{name}'를 포함하는 기업이 여러 개 있습니다. 아래 번호 중에서 골라주세요:")
+        matches = matches.reset_index(drop=True)
+        for idx, row in matches.iterrows():
+            print(f"{idx}. {row['corp_name']} (stock_code: {row['stock_code']}, corp_code: {row['corp_code']})")
+        while True:
+            try:
+                selection = int(input("선택할 '번호'를 입력하세요 (예: 0, 1, 2): "))
+                if 0 <= selection < len(matches):
+                    corp_code = str(matches.iloc[selection]["corp_code"])
+                    corp_name = matches.iloc[selection]["corp_name"]
+                    return corp_code, corp_name
+                else:
+                    print("범위 내 숫자를 입력해주세요.")
+            except ValueError:
+                print("숫자만 입력해주세요.")
+
+    corp_code = str(matches.iloc[0]["corp_code"])
+    corp_name = matches.iloc[0]["corp_name"]
+    return corp_code, corp_name
+
+# ✅ 3. 기업개황 API 호출
+def get_company_info(api_key, corp_code, corp_name=""):
+    corp_code = str(corp_code).zfill(8)  # ← ★★★★★핵심: 8자리 zero-padding
+    url = "https://opendart.fss.or.kr/api/company.json"
+    params = {"crtfc_key": api_key, "corp_code": corp_code}
+    res = requests.get(url, params=params)
+    data = res.json()
+    if data.get("status") != "000":
+        raise Exception(f"'{corp_name}'의 기업개황 데이터를 조회할 수 없습니다.\n사유: {data.get('message')}")
+    return data
+
+# ✅ 4. 실행
+try:
+    corp_df = load_or_cache_corp_code(API_KEY, CORP_CSV_PATH)
+    corp_code, corp_name = find_corp_code_by_name(corp_df, company_name)
+    info = get_company_info(API_KEY, corp_code, corp_name)
+
+    print("\n📄 기업 개황 정보:")
+    for key, val in info.items():
+        print(f"{key}: {val}")
+
+except Exception as e:
+    print("❌ 오류 발생:", e)
