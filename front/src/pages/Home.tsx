@@ -1,35 +1,61 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
-import bg from '../assets/images/background03.jpg';
 import { SearchInput } from 'components/molecules';
 
+import { useState, useEffect } from 'react';
+
+import bg1 from '../assets/images/background01.jpg';
+import bg2 from '../assets/images/background02.jpg';
+import bg3 from '../assets/images/background03.jpg';
+import bg4 from '../assets/images/background04.jpg';
+import bg5 from '../assets/images/background05.jpg';
+
+interface Props {
+  readonly bgImg: string;
+}
+
 const Container = styled.div`
+  // 배경 크기 세팅
   width: 100%;
   height: calc(100vh - 50px);
-  background-image:
-    ${({theme}) => theme.colors.gradient.crossOpacity},
-    url(${bg});
-  background-size: cover;
-  background-position: center;
+  // 배경 디스플레이 세팅
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding-bottom: 20px;
+  // 배경 스타일 세팅
+  background-color: ${({theme}) => theme.colors.primary[10]};
 `;
 
-const Content = styled.div`
+const Content = styled.div<Props>`
+  // 배경 크기 세팅 
+  height: 100%;
+  width: calc(100vw - 40px);
+  border-radius: 50px;
+  // 배경 디스플레이 세팅
   display: flex;
-  width: 100%;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  box-sizing: border-box;
+  padding-bottom: 40px;
   gap: 20px;
-  margin-bottom: 50px;
+  // 배경 이미지 세팅
+  background-image:
+    ${({theme}) => theme.colors.gradient.crossOpacity},
+    url(${({bgImg}) => bgImg});
+  background-size: cover;
+  background-position: center;
+  // TODO:배경 전환 애니메이션 추가하기
 `;
 
 const Title = styled.div`
+  // 크기 세팅
   width: 100%;
+  // 디스플레이 세팅
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,9 +74,19 @@ const SubText = styled.p`
 `;
 
 const Home = () => {
+  const imgList = [bg1, bg2, bg3, bg4, bg5]
+  const [imgIndex, setImgIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImgIndex((prevIndex) => (prevIndex + 1) % imgList.length);
+    }, 5000);
+    return () => clearInterval(interval)
+  }, []);
+
   return (
     <Container>
-      <Content>
+      <Content bgImg={imgList[imgIndex]}>
         <Title>
           <SubText>투자에는 역시 요즘기업 보고서!</SubText>
           <MainText>요즘 제일 잘 나가는 기업은 어디?</MainText>

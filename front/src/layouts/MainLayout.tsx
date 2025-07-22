@@ -12,13 +12,14 @@ const MainLayout: FC<Props> = ({children}) => {
   // 특정 페이지에서 footer 안보이게 설정
   const location = useLocation();
   const hidePath = ['/'];
-  const footerVisible = !hidePath.includes(location.pathname);
+  const visible = !hidePath.includes(location.pathname);
 
   return (
     <>
+        
         <Header logoTitle='요즘기업 보고서' />
         {children}
-        {footerVisible && <Footer logoTitle='요즘기업 보고서' />}
+        {visible && <Footer logoTitle='요즘기업 보고서' />}
     </>
   )
 }

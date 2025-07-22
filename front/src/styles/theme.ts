@@ -12,6 +12,7 @@ export const theme = {
             20: '#CCCCCC',
             10: '#DCDCDC',
             5: '#E6E6E6',
+            0: '#FFFFFF'
         },
         primary: {
             100: '#755FFF',
@@ -19,7 +20,7 @@ export const theme = {
         },
         gradient: {
             cross: 'linear-gradient(45deg, #8B69F4 0%, #849AFF 100%)',
-            crossOpacity: 'linear-gradient(45deg, rgba(139, 105, 244, 0.9) 0%, rgba(132, 154, 255, 0.9) 100%)'
+            crossOpacity: 'linear-gradient(45deg, rgba(139, 105, 244, 0.8) 0%, rgba(132, 154, 255, 0.8) 100%)'
         }
     },
     typo: {

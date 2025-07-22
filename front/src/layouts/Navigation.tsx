@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
 const Container = styled.div`
@@ -10,9 +10,9 @@ const Container = styled.div`
     gap: 30px;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(Link)<{change: boolean}>`
     text-decoration: none;
-    color: white;
+    color: ${({theme, change}) => change ? theme.colors.natural[0] : theme.colors.primary[100]};
     font-size: 16px;
 
     &:hover {
@@ -21,6 +21,10 @@ const StyledLink = styled(Link)`
 `;
 
 const Navigation = () => {
+    const location = useLocation();
+    const hidePath = ['/'];
+    const change = !hidePath.includes(location.pathname);
+
     // TODO: 가능하다면 아이콘 추가해보기
     const [nav, setNav] = useState([
         {label: '로그인', to: 'login'},
@@ -33,7 +37,7 @@ const Navigation = () => {
   return (
     <Container>
         {nav.map((item, index) => (
-            <StyledLink key={index} to={item.to}>{item.label}</StyledLink>
+            <StyledLink change={change} key={index} to={item.to}>{item.label}</StyledLink>
         ))}
     </Container>
   )
