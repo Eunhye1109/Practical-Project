@@ -2,12 +2,13 @@ import React from 'react';
 import { ThemeProvider, Theme } from '@emotion/react';
 import { theme } from '../src/styles/theme';
 import type { Preview } from '@storybook/react-webpack5';
+import type { StoryFn, StoryContext } from '@storybook/react-webpack5';
 
 const typedTheme = theme as unknown as Theme;
 
-const withThemeProvider = (Story, context) => (
+const withThemeProvider = (Story: StoryFn, context: StoryContext) => (
   <ThemeProvider theme={typedTheme}>
-    <Story {...context} />
+    {Story(context.args, context)}
   </ThemeProvider>
 );
 
