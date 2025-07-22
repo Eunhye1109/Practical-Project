@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
 import bg from '../assets/images/background02.jpg';
+import { SearchInput } from 'components/molecules';
 
 const TSt01 = styled.p`
   ${({theme}) => typoStyle.subTitle.bold(theme)}
@@ -15,12 +16,16 @@ const Container = styled.div`
     url(${bg});
   background-size: cover;
   background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const Home = () => {
   return (
     <Container>
-      <TSt01>title1Bold</TSt01>
+      <SearchInput width='50%' height='60px' label='기업명을 입력해주세요.' />
     </Container>
   )
 }
