@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Container = styled.footer`
     width: 100%;
     height: 100px;
-    background-color: ${({theme}) => theme.colors.natural90};
+    background-color: ${({theme}) => theme.colors.natural[90]};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,7 +23,7 @@ const Content = styled.div`
 const Logo = styled(Link)`
     font-family: 'SB어그로';
     font-weight: 300;
-    color: ${({theme}) => theme.colors.natural80};
+    color: ${({theme}) => theme.colors.natural[80]};
     font-size: 24px;
     text-decoration: none;
     display: flex;
@@ -31,7 +31,7 @@ const Logo = styled(Link)`
 
 const Body = styled.p`
     font-size: 14px;
-    color: ${({theme}) => theme.colors.natural70};
+    color: ${({theme}) => theme.colors.natural[70]};
     text-align: center;
 `;
 

@@ -6,7 +6,7 @@ import Navigation from './Navigation';
 const Container = styled.header`
     height: 50px;
     width: 100%;
-    background-color: ${({theme}) => theme.colors.natural90};
+    background-color: ${({theme}) => theme.colors.natural[90]};
     display: flex;
     justify-content: center;
     align-items: center;

@@ -1,16 +1,25 @@
 export const theme = {
     colors: {
-        natural100: '#121212',
-        natural90: '#1A1A1A',
-        natural80: '#333333',
-        natural70: '#4C4C4C',
-        natural60: '#666666',
-        natural50: '#808080',
-        natural40: '#999999',
-        natural30: '#B3B3B3',
-        natural20: '#CCCCCC',
-        natural10: '#DCDCDC',
-        natural05: '#E6E6E6',
+        natural: {
+            100: '#121212',
+            90: '#1A1A1A',
+            80: '#333333',
+            70: '#4C4C4C',
+            60: '#666666',
+            50: '#808080',
+            40: '#999999',
+            30: '#B3B3B3',
+            20: '#CCCCCC',
+            10: '#DCDCDC',
+            5: '#E6E6E6',
+        },
+        primary: {
+            100: '#755FFF',
+            10: '#E5E7FF',
+        },
+        gradient: {
+            cross: 'linear-gradient(45deg, #8B69F4 0%, #849AFF 100%)'
+        }
     },
     typo: {
         title1Bold: {

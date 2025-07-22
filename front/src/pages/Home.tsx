@@ -6,13 +6,19 @@ const TSt01 = styled.p`
   ${({theme}) => typoStyle.subTitle.bold(theme)}
 `;
 
+const Test = styled.div`
+  background: ${({theme}) => theme.colors.gradient.cross};
+  width: 100%;
+  height: 700px;
+`;
+
 
 
 const Home = () => {
   return (
-    <div>
+    <Test>
       <TSt01>title1Bold</TSt01>
-    </div>
+    </Test>
   )
 }
 
