@@ -3,13 +3,7 @@ import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
 import { SearchInput } from 'components/molecules';
 
-import { useState, useEffect } from 'react';
-
-import bg1 from '../assets/images/background01.jpg';
-import bg2 from '../assets/images/background02.jpg';
-import bg3 from '../assets/images/background03.jpg';
-import bg4 from '../assets/images/background04.jpg';
-import bg5 from '../assets/images/background05.jpg';
+import bg from '../assets/images/background06.png';
 
 interface Props {
   readonly bgImg: string;
@@ -46,7 +40,8 @@ const Content = styled.div<Props>`
   // 배경 이미지 세팅
   background-image:
     ${({theme}) => theme.colors.gradient.crossOpacity},
-    url(${({bgImg}) => bgImg});
+    url(${bg}),
+    ${({theme}) => theme.colors.gradient.cross};
   background-size: cover;
   background-position: center;
   // TODO:배경 전환 애니메이션 추가하기
@@ -74,19 +69,10 @@ const SubText = styled.p`
 `;
 
 const Home = () => {
-  const imgList = [bg1, bg2, bg3, bg4, bg5]
-  const [imgIndex, setImgIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setImgIndex((prevIndex) => (prevIndex + 1) % imgList.length);
-    }, 5000);
-    return () => clearInterval(interval)
-  }, []);
 
   return (
     <Container>
-      <Content bgImg={imgList[imgIndex]}>
+      <Content bgImg={bg}>
         <Title>
           <SubText>투자에는 역시 요즘기업 보고서!</SubText>
           <MainText>요즘 제일 잘 나가는 기업은 어디?</MainText>
