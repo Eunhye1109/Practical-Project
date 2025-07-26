@@ -4,19 +4,10 @@ import java.util.Map;
 
 public interface SearchCacheService {
 
-	static Object getCachedResult(String corpName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	 Object getCachedResult(String corpName);
 
-	static boolean existsValidCache(String corpName) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	 boolean existsValidCache(String corpName);
 
-	static void save(String corpName, Map<String, Object> result) {
-		// TODO Auto-generated method stub
-		
-	}
+	 void save(String corpName, Map<String, Object> result);
 
 }

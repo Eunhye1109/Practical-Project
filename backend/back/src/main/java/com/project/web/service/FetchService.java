@@ -1,22 +1,9 @@
 package com.project.web.service;
 
-import org.springframework.http.*;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import java.util.Map;
 
-@Service
-public class FetchService {
+public interface FetchService {
 
-    private final RestTemplate restTemplate = new RestTemplate();
-
-    public Map<String, Object> fetchColumns(String corpName) {
-        String url = "http://localhost:8000/fetch?corp_name=" + corpName;
-        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return response.getBody();
-        }
-        throw new RuntimeException("FastAPI fetch 호출 실패");
-    }
+	Map<String, Object> fetchColumns(String corpName);
+	
 }
