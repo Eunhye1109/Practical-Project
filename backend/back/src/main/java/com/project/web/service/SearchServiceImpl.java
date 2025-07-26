@@ -10,7 +10,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
-    private FetchService fetchService;
+    private FetchServiceImpl fetchService;
     private EmbedService embedService;
     private ColumnMapperService columnMapperService;
 
