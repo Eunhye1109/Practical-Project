@@ -13,7 +13,7 @@ interface Props extends VisibleProps {
 const Text = styled.p<VisibleProps>`
   ${({theme}) => typoStyle.subCaption.regular(theme)};
   color: red;
-  opacity: ${({visible}) => visible ? 1 : 0};
+  opacity: ${({visible}) => visible ? 0 : 1};
   margin: 0;
 `;
 

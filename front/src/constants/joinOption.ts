@@ -29,7 +29,7 @@ export const joinInputOptions: JoinInputOption[] = [
     inputTitleLabel: "아이디",
     inputLabel: "아이디를 입력해주세요.",
     textLabel: "중복된 아이디가 존재합니다.",
-    visible: true,
+    visible: false,
     blur: false,
   },
   {

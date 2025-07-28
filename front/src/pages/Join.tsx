@@ -140,7 +140,7 @@ const SubTitle = styled.p`
 const Join = () => {
   // 아이디/비번 에러 메시지 활성/비활성
   const [idVisible, setIdVisible] = useState(true);
-  const [pwVisible, setPwVisible] = useState(false);
+  const [pwVisible, setPwVisible] = useState(true);
   // 비밀번호 중복 확인
   const [pwOverlap, setPwOverlap] = useState('');
   // 제출 버튼 활성/비활성
@@ -176,23 +176,45 @@ const Join = () => {
 
   // 비밀번호 중복 확인 메소드
   const handlePwCheckBlur = () => {
-    // 둘 중 하나라도 빈칸이면 false
+    // 둘 중 하나라도 빈칸이면 true
     if(formData.pw === '' || pwOverlap === '') {
-      setPwVisible(false);
+      setPwVisible(true);
       return;
     }
     // 두 값이 일치하면 true
     if(formData.pw === pwOverlap) {
-      setPwVisible(false);
-    } else {
       setPwVisible(true);
+    } else {
+      setPwVisible(false);
     }
+  }
+
+  // 데이터 입력 완료
+  const formComplete = (data: UserInfoData) => {
+    if(data.id === '') return setBtnActive('deactive');
+    if(data.pw === '') return setBtnActive('deactive');
+    if(data.phone === '') return setBtnActive('deactive');
+    if(data.agreement === false) return setBtnActive('deactive');
+    if(idVisible === false) return setBtnActive('deactive');
+    if(pwVisible === false) return setBtnActive('deactive');
+
+    return setBtnActive('primary');
   }
 
   // 데이터 저장 확인
   useEffect(() => {
+    formComplete(formData);
     console.log('[DEBUG] formData changed:', formData);
-  }, [formData]);
+  }, [formData, idVisible, pwVisible]);
+
+  // TODO: 데이터 제출 로직(회원가입 완료)
+  const handleJoinClick = () => {
+    if(btnActive === 'deactive') {
+      console.log('미제출');
+    } else {
+      console.log('제출');
+    }
+  }
 
   return (
     <Container>
@@ -207,7 +229,7 @@ const Join = () => {
               inputLabel={opt.inputLabel}
               inputTitleLabel={opt.inputTitleLabel}
               textLabel={opt.textLabel}
-              visible={opt.visible ? (opt.name === 'id' ? idVisible : pwVisible) : false}
+              visible={opt.visible ? (opt.name === 'id' ? idVisible : pwVisible) : true}
               type={opt.type ?? 'text'}
               onChange={opt.name == 'pwCheck' ? handlePwOverlapChange : handleInputChange(opt.name)}
               onBlur={opt.blur ? (opt.name === 'id' ? handleIdCheckBlur : handlePwCheckBlur) : undefined}
@@ -248,7 +270,9 @@ const Join = () => {
           label='회원가입'
           variant={btnActive}
           size='lg'
-          margin='' />
+          margin=''
+          onClick={handleJoinClick}
+        />
       </Content>
     </Container>
   )
