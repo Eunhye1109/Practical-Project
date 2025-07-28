@@ -150,7 +150,7 @@ const Join = () => {
   const [formData, setFormData] = useState<UserInfoData>({
     id: '',
     pw: '',
-    phone: 0,
+    phone: '',
     job: jobList[0],
     purpose: purposeList[0],
     investmentType: investmentTypeList[0],
@@ -165,8 +165,8 @@ const Join = () => {
     setPwOverlap(e.target.value);
   }
   // dropdown 데이터 저장 메소드
-  const handleDropdownChange = (name: string) => (selected: string) => {
-    setFormData(prev => ({ ...prev, [name]: selected }));
+  const handleDropdownChange = (name: string) => (selected: string[]) => {
+    setFormData(prev => ({ ...prev, [name]: selected[0] }));
   };
 
   // 아이디 중복 확인 메소드
@@ -204,8 +204,6 @@ const Join = () => {
           {joinInputOptions.map((opt, index) => (
             <InputBox
               key={index}
-              width='100%'
-              height='50px'
               inputLabel={opt.inputLabel}
               inputTitleLabel={opt.inputTitleLabel}
               textLabel={opt.textLabel}
@@ -220,12 +218,10 @@ const Join = () => {
           {joinDropdownOption.map((opt, index) => (
             <DropdownBox
               key={index}
-              categoryList={opt.categoryList}
-              value={formData[opt.name as keyof UserInfoData] as string}
-              onChange={handleDropdownChange(opt.name)}
+              itemList={opt.categoryList}
               label={opt.label}
-              listIcon={<CheckBoxOutline />}
-              color={theme.colors.natural[20]}           
+              mode={'radio'}
+              onChange={handleDropdownChange(opt.name)}
             />
           ))}
         </DropdownForm>

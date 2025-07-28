@@ -160,8 +160,6 @@ const Login = () => {
         <Line width='60%' color={theme.colors.primary[10]} margin='30px' />
         <InputContent>
           <InputBox
-            width='100%'
-            height='50px'
             inputLabel='아이디를 입력해주세요.'
             inputTitleLabel='아이디'
             textLabel='아이디를 확인해주세요.'
@@ -169,8 +167,6 @@ const Login = () => {
             onChange={(e) => {setId(e.target.value)}}
           />
           <InputBox
-            width='100%'
-            height='50px'
             inputLabel='비밀번호를 입력해주세요.'
             inputTitleLabel='비밀번호'
             textLabel='비밀번호를 확인해주세요.'

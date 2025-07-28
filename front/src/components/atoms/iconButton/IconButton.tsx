@@ -6,9 +6,9 @@ interface Props extends StyleProps {
     readonly icon: React.ReactNode;
   }
   
-  interface StyleProps {
-    readonly color: string;
-  }
+interface StyleProps {
+  readonly color: string;
+}
 
 const Button = styled.button`
     display: flex;

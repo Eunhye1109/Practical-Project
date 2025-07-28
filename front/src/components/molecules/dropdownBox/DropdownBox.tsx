@@ -4,12 +4,10 @@ import { typoStyle } from 'styles/typoStyle';
 import Dropdown from '../dropdown/Dropdown';
 
 interface Props {
-  readonly categoryList: string[];
-  readonly value: string;
-  readonly onChange: (value: string) => void;
+  readonly itemList: string[];
   readonly label: string;
-  readonly listIcon: React.ReactNode;
-  readonly color: string;
+  readonly mode: 'radio' | 'checkBox';
+  readonly onChange?: (selectedList: string[]) => void;
 }
 
 const Container = styled.div`
@@ -27,17 +25,15 @@ const DropdownTitle = styled.p`
   ${({theme}) => typoStyle.caption.regular(theme)}
 `;
 
-const DropdownBox = ({categoryList, label, value, onChange, listIcon, color}: Props) => {
+const DropdownBox = ({itemList, label, mode, onChange}: Props) => {
   return (
     <Container>
         <DropdownTitle>{label}</DropdownTitle>
         <Dropdown
-            categoryList={categoryList}
-            value={value}
-            onChange={onChange}
-            width='100%'
-            listIcon={listIcon}
-            color={color}
+          itemList={itemList}
+          width='100%'
+          mode={mode}
+          onChange={onChange}
         />
     </Container>
   )

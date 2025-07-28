@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 interface Props extends TextAlign{
     readonly width: string;
-    readonly height: string;
     readonly label?: string;
     readonly button?: React.ReactNode;
     readonly focusing?: boolean;
@@ -19,7 +18,7 @@ interface TextAlign {
 
 const Container = styled.div<Props>`
     width: ${({width}) => width};
-    height: ${({height}) => height};
+    height: 50px;
     border: 1px solid ${({focusing, theme}) => focusing ? theme.colors.primary[100] : theme.colors.natural[20]};
     border-radius: 5px;
     display: flex;
@@ -49,12 +48,12 @@ const InputBar = styled.input<TextAlign>`
     }
 `;
 
-const Input = ({width, height, label, button, type, onChange, onBlur, align}: Props) => {
+const Input = ({width, label, button, type, onChange, onBlur, align}: Props) => {
     const [focusing, setFocusing] = useState(false);
 
   return (
     // 내부 값 바꾸기
-    <Container width={width} height={height} focusing={focusing}>
+    <Container width={width} focusing={focusing}>
         <InputBar placeholder={label} onFocus={() => setFocusing(true)} onBlur={() => {setFocusing(false); onBlur && onBlur();}} type={type} onChange={onChange} align={align} />
         {button}
     </Container>

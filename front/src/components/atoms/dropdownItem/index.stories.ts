@@ -13,5 +13,6 @@ type Story = StoryObj<typeof DropdownItem>;
 export const Default: Story = {
     args: {
         label: 'test',
+        mode: 'radio',
     }
 }

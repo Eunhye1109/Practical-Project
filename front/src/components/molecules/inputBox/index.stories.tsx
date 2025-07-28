@@ -12,8 +12,6 @@ type Story = StoryObj<typeof InputBox>;
 
 export const Default: Story = {
     args: {
-        width: "800px",
-        height: "50px",
         inputLabel: "asdasdasd",
         textLabel: "adsasa",
         visible: false

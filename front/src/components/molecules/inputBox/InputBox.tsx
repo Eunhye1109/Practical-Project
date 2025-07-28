@@ -4,8 +4,6 @@ import { WarningText, Input } from 'components/atoms'
 import { typoStyle } from 'styles/typoStyle';
 
 interface Props {
-    readonly width: string;
-    readonly height: string;
     readonly inputLabel: string;
     readonly inputTitleLabel: string;
     readonly textLabel: string;
@@ -41,12 +39,12 @@ const InputTitle = styled.p`
   ${({theme}) => typoStyle.caption.regular(theme)}
 `;
 
-const InputBox = ({width, height, inputLabel, inputTitleLabel, textLabel, visible, type, onChange, onBlur}: Props) => {
+const InputBox = ({inputLabel, inputTitleLabel, textLabel, visible, type, onChange, onBlur}: Props) => {
   return (
     <Container>
         <InputTitle>{inputTitleLabel}</InputTitle>
         <InputContent>
-          <Input width={width} height={height} label={inputLabel} type={type} onChange={onChange} onBlur={onBlur} align='left' />
+          <Input width='100%' label={inputLabel} type={type} onChange={onChange} onBlur={onBlur} align='left' />
           <WarningText label={textLabel} visible={visible} />
         </InputContent>
     </Container>

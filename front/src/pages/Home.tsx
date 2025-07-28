@@ -76,7 +76,7 @@ const Home = () => {
           <SubText>투자 할 때는 역시 요즘기업 보고서!</SubText>
           <MainText>요즘 투자하기 좋은 기업은 어디?</MainText>
         </Title>
-        <SearchInput width='50%' height='60px' label='기업명을 입력해주세요.' icon={<Search width='100%' height='100%' />} />
+        <SearchInput width='50%' label='기업명을 입력해주세요.' icon={<Search width='100%' height='100%' />} />
       </Content>
     </Container>
   )

@@ -14,6 +14,7 @@ export const Default: Story = {
     args: {
         itemList: [
             'test1', 'test2', 'test3', 'test4'
-        ]
+        ],
+        mode: 'radio',
     }
 }
