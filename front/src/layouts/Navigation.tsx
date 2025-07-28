@@ -3,6 +3,8 @@ import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
+import { Login, Join, Person, Bookmark, History } from 'assets/icons';
+
 const Container = styled.div`
     display: flex;
     justify-content: center;
@@ -11,8 +13,14 @@ const Container = styled.div`
 `;
 
 const StyledLink = styled(Link)<{change: boolean}>`
+    // 디스플레이 세팅
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    // 스타일 세팅
     text-decoration: none;
-    color: ${({theme, change}) => change ? theme.colors.natural[0] : theme.colors.primary[100]};
+    color: ${({theme, change}) => change ? theme.colors.natural[100] : theme.colors.primary[100]};
     font-size: 16px;
 
     &:hover {
@@ -20,15 +28,24 @@ const StyledLink = styled(Link)<{change: boolean}>`
     }
 `;
 
+const Icon = styled.div`
+    // 크기 세팅
+    width: 20px;
+    height: 20px;
+    // 디스플레이 세팅
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
 const Navigation = () => {
     const location = useLocation();
     const hidePath = ['/'];
     const change = !hidePath.includes(location.pathname);
 
-    // TODO: 가능하다면 아이콘 추가해보기
     const [nav, setNav] = useState([
-        {label: '로그인', to: 'login'},
-        {label: '회원가입', to: 'join'}
+        {label: '로그인', to: 'login', icon: <Login />},
+        {label: '회원가입', to: 'join', icon: <Join />}
     ]);
 
     // TODO: 로그인 상태에 따라 nav 배열 안의 내용물 바뀌게 하는 로직 추가
@@ -37,7 +54,10 @@ const Navigation = () => {
   return (
     <Container>
         {nav.map((item, index) => (
-            <StyledLink change={change} key={index} to={item.to}>{item.label}</StyledLink>
+            <StyledLink change={change} key={index} to={item.to}>
+                <Icon>{item.icon}</Icon>
+                {item.label}
+            </StyledLink>
         ))}
     </Container>
   )

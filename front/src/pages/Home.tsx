@@ -1,9 +1,9 @@
-import React from 'react'
 import styled from '@emotion/styled'
+import React from 'react'
 import { typoStyle } from 'styles/typoStyle';
 import { SearchInput } from 'components/molecules';
-
-import bg from '../assets/images/background06.png';
+import { Search } from 'assets/icons';
+import bg from '../assets/images/bg/background06.png';
 
 interface Props {
   readonly bgImg: string;
@@ -20,6 +20,7 @@ const Container = styled.div`
   box-sizing: border-box;
   overflow: hidden;
   padding-bottom: 20px;
+  margin-top: 50px;
   // 배경 스타일 세팅
   background-color: ${({theme}) => theme.colors.primary[10]};
 `;
@@ -44,7 +45,6 @@ const Content = styled.div<Props>`
     ${({theme}) => theme.colors.gradient.cross};
   background-size: cover;
   background-position: center;
-  // TODO:배경 전환 애니메이션 추가하기
 `;
 
 const Title = styled.div`
@@ -69,15 +69,14 @@ const SubText = styled.p`
 `;
 
 const Home = () => {
-
   return (
     <Container>
       <Content bgImg={bg}>
         <Title>
-          <SubText>투자에는 역시 요즘기업 보고서!</SubText>
-          <MainText>요즘 제일 잘 나가는 기업은 어디?</MainText>
+          <SubText>투자 할 때는 역시 요즘기업 보고서!</SubText>
+          <MainText>요즘 투자하기 좋은 기업은 어디?</MainText>
         </Title>
-        <SearchInput width='50%' height='60px' label='기업명을 입력해주세요.' />
+        <SearchInput width='50%' height='60px' label='기업명을 입력해주세요.' icon={<Search width='100%' height='100%' />} />
       </Content>
     </Container>
   )

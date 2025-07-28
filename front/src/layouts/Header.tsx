@@ -3,13 +3,18 @@ import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router-dom';
 import Navigation from './Navigation';
 
+import logo from '../assets/images/logo/logo_vertical.png';
+
 const Container = styled.header<{change: boolean}>`
     height: 50px;
     width: 100%;
-    background-color: ${({theme, change}) => change ? theme.colors.natural[90] : theme.colors.primary[10]};
+    background-color: ${({theme, change}) => change ? theme.colors.natural[0] : theme.colors.primary[10]};
     display: flex;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    top: 0;
+    box-shadow: ${({change}) => change ? '0 5px 5px 5px rgba(155, 155, 155, 0.1)' : 'none'};
 `;
 
 const Content = styled.div`
@@ -19,21 +24,15 @@ const Content = styled.div`
     align-items: center;
 `;
 
-const Logo = styled(Link)<{change: boolean}>`
-    font-family: 'SB어그로';
-    font-weight: 300;
-    color: ${({theme, change}) => change ? theme.colors.natural[0] : theme.colors.primary[100]};
-    font-size: 16px;
-    text-decoration: none;
+const LogoBox = styled(Link)<{change: boolean}>`
     display: flex;
 `;
 
-interface Props {
-    readonly logoTitle: string;
+const Logo = styled.img`
+    height: 25px;
+`;
 
-}
-
-const Header = ({logoTitle}: Props) => {
+const Header = () => {
     // 특정 페이지에서 배경색 변경
     const location = useLocation();
     const hidePath = ['/'];
@@ -42,7 +41,9 @@ const Header = ({logoTitle}: Props) => {
   return (
     <Container change={change}>
         <Content>
-            <Logo change={change} to={'/'}>{logoTitle}</Logo>
+            <LogoBox change={change} to={'/'}>
+                <Logo src={logo} />
+            </LogoBox>
             <Navigation />
         </Content>
     </Container>

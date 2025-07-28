@@ -11,7 +11,7 @@ export const theme = {
             30: '#B3B3B3',
             20: '#CCCCCC',
             10: '#DCDCDC',
-            5: '#E6E6E6',
+            5: '#f5f5f5ff',
             0: '#FFFFFF'
         },
         primary: {
@@ -45,32 +45,32 @@ export const theme = {
             fontFamily: 'SB어그로'
         },
         body1SemiBold: {
-            fontSize: '25px',
+            fontSize: '20px',
             fontWeight: 500,
         },
         body1Regular: {
-            fontSize: '25px',
+            fontSize: '20px',
             fontWeight: 300,
         },
         body2SemiBold: {
-            fontSize: '20px',
+            fontSize: '18px',
             fontWeight: 500,
         },
         body2Regular: {
-            fontSize: '20px',
+            fontSize: '18px',
             fontWeight: 300,
         },
         caption1Regular: {
-            fontSize: '18px',
-            fontWeight: 300,
+            fontSize: '16px',
+            fontWeight: 400,
         },
         caption1Light: {
-            fontSize: '18px',
+            fontSize: '16px',
             fontWeight: 200,
         },
         caption2Regular: {
             fontSize: '14px',
-            fontWeight: 300,
+            fontWeight: 400,
         },
         caption2Light: {
             fontSize: '14px',
