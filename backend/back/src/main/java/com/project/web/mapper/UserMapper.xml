@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.web.mapper.UserMapper">
+
+    <insert id="signup" parameterType="com.project.web.vo.UserVO">
+        INSERT INTO T_USER (
+            USER_ID, USER_PW, USER_PHONE, USER_JOB,
+            USER_PURPOSE, RISK_TYPE, JOINED_AT ,TERMS_AGREE
+        )
+        VALUES (
+            #{userId}, #{userPw}, #{userPhone}, #{userJob},
+            #{userPurpose}, #{riskType}, #{joinedAt}, #{termsAgree}
+        )
+    </insert>
+
+    <select id="check_id" resultType="com.project.web.vo.UserVO" parameterType="String">
+        SELECT *
+        FROM T_USER
+        WHERE USER_ID = #{userId}
+    </select>
+
+</mapper>
