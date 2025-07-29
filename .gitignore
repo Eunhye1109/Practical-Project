@@ -72,3 +72,20 @@ Desktop.ini
 
 # 암호화 jar 파일
 jasypt-cli.jar
+
+# IDE
+.idea/
+*.iml
+
+# 빌드 결과물
+/target/
+*.log
+
+# 환경 변수 / 보안 설정
+application-dev.properties
+application-prod.properties
+.env
+
+# OS
+.DS_Store
+Thumbs.db
