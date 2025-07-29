@@ -1,0 +1,16 @@
+<mapper namespace="com.project.web.mapper.SearchCacheMapper">
+  <select id="existsValidCache" resultType="boolean">
+    SELECT COUNT(*) > 0 FROM search_cache
+    WHERE corp_name = #{corpName}
+      AND cached_at >= SYSDATE - INTERVAL '3' MONTH
+  </select>
+
+  <select id="findByCorpName" resultType="com.project.web.vo.SearchCacheVO">
+    SELECT * FROM search_cache WHERE corp_name = #{corpName}
+  </select>
+
+  <insert id="save">
+    INSERT INTO search_cache (corp_name, col_name, col_value)
+    VALUES (#{corpName}, #{colName}, #{colValue})
+  </insert>
+</mapper>

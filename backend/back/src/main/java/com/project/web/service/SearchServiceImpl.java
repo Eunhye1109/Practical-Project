@@ -1,23 +1,30 @@
 package com.project.web.service;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import com.project.web.dto.SearchResultDTO;
+import com.project.web.mapper.TargetColMapper;
+import com.project.web.vo.ColumnMatchVO;
+
 import java.util.*;
 
 @Service
+@Builder
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
     private FetchServiceImpl fetchService;
-    private EmbedService embedService;
+    private EmbedServiceImpl embedService;
     private ColumnMapperService columnMapperService;
+    private TargetColMapper targetColMapper;
 
-    private static final List<String> YEARS = List.of("2023", "2022", "2021");
+    private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
     @Override
-    public Map<String, Object> search(String corpName) {
+    public SearchResultDTO search(String corpName) {
         // 1. FastAPI에서 기업 컬럼 수집
         Map<String, Object> allYearData = fetchService.fetchColumns(corpName);
         Map<String, Object> latestData = extractLatestYearData(allYearData);
@@ -27,7 +34,7 @@ public class SearchServiceImpl implements SearchService {
         }
 
         Set<String> rawCols = latestData.keySet();
-        List<String> targetCols = getTargetColsFromDB();  // 대표 컬럼 목록
+        List<String> targetCols = targetColMapper.selectAllTargetCols();  // 대표 컬럼 목록
 
         Map<String, String> finalMatches = new LinkedHashMap<>();
         List<String> unmatchedTargets = new ArrayList<>();
@@ -55,27 +62,33 @@ public class SearchServiceImpl implements SearchService {
         }
 
         // 4. 최종 결과 조립
-        Map<String, Object> result = new LinkedHashMap<>();
+        List<ColumnMatchVO> columnList = new ArrayList<>();
         for (String target : targetCols) {
             String matched = finalMatches.get(target);
-            Object value = matched != null ? latestData.get(matched) : null;
-            result.put(target, Map.of("matched_col", matched, "value", value));
+            String value = matched != null ? (String) latestData.get(matched) : null;
+            columnList.add(
+            	    ColumnMatchVO.builder()
+                    .targetCol(target)
+                    .matchedCol(matched)
+                    .value(value)
+                    .build()
+            );
         }
+        return SearchResultDTO.builder()
+        	    .corpName(corpName)
+        	    .columns(columnList)
+        	    .build();
 
-        return result;
+
     }
 
-    private Map<String, Object> extractLatestYearData(Map<String, Object> all) {
+    private Map<String, Object> extractLatestYearData(Map<String, Object> allYearData) {
         for (String year : YEARS) {
-            if (all.containsKey(year)) {
-                return (Map<String, Object>) all.get(year);
+            if (allYearData.containsKey(year)) {
+                return (Map<String, Object>) allYearData.get(year);
             }
         }
         return null;
     }
 
-    private List<String> getTargetColsFromDB() {
-        // TODO: JPA 조회
-        return List.of("영업이익", "순이익", "ROE", "자기자본", "부채비율");
-    }
 }
