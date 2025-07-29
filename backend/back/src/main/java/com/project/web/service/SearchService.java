@@ -1,9 +1,11 @@
 package com.project.web.service;
 
-import java.util.Map;
+
+import com.project.web.dto.SearchResultDTO;
 
 public interface SearchService {
 
-	Map<String, Object> search(String corpName);
+	// 찾고자 하는 컬럼을 서치해라
+	SearchResultDTO search(String corpName);
 
 }

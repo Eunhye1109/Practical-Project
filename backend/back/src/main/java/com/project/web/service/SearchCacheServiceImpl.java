@@ -1,28 +1,60 @@
 package com.project.web.service;
 
-import java.util.Map;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.project.web.dto.SearchResultDTO;
+import com.project.web.mapper.SearchCacheMapper;
+import com.project.web.vo.ColumnMatchVO;
+import com.project.web.vo.SearchCacheVO;
+
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Builder
 @RequiredArgsConstructor
 public class SearchCacheServiceImpl implements SearchCacheService {
 
-	@Override
-	public Object getCachedResult(String corpName) {
-		return null;
-	}
+    private final SearchCacheMapper searchCacheMapper;
 
-	@Override
-	public boolean existsValidCache(String corpName) {
-		return false;
-	}
+    @Override
+    public boolean existsValidCache(String corpName) {
+        return searchCacheMapper.existsValidCache(corpName);
+    }
 
-	@Override
-	public void save(String corpName, Map<String, Object> result) {
-		
-	}
+    @Override
+    public SearchResultDTO getCachedResult(String corpName) {
+        List<SearchCacheVO> cached = searchCacheMapper.getCachedResult(corpName);
+        List<ColumnMatchVO> columns = cached.stream()
+            .map(vo -> ColumnMatchVO.builder()
+                .targetCol(vo.getColName())
+                .matchedCol(null)  // 캐시에는 matchedCol 없으므로 생략
+                .value(vo.getColValue())
+                .build())
+            .toList();
 
+        return SearchResultDTO.builder()
+            .corpName(corpName)
+            .columns(columns)
+            .build();
+    }
+
+    @Override
+    public SearchResultDTO save(String corpName, SearchResultDTO result) {
+        LocalDateTime now = LocalDateTime.now();
+        for (ColumnMatchVO col : result.getColumns()) {
+            SearchCacheVO vo = SearchCacheVO.builder()
+                .corpName(corpName)
+                .colName(col.getTargetCol())
+                .colValue(col.getValue())
+                .cachedAt(now)
+                .build();
+            searchCacheMapper.save(vo);
+        }
+        return result;
+    }
 }
