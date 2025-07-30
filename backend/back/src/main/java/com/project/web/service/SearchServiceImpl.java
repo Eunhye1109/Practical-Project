@@ -20,7 +20,10 @@ public class SearchServiceImpl implements SearchService {
     private final EmbedServiceImpl embedService;
     private final ColumnMapperService columnMapperService;
     private final TargetColMapper targetColMapper;
+<<<<<<< HEAD
     private final FinancialRatioService financialRatioService;
+=======
+>>>>>>> ff40fe6 (feat: search FASTAPI 연동중)
 
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
