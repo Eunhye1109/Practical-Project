@@ -21,6 +21,8 @@ import com.project.web.vo.UserVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 
+import com.project.web.vo.UserVO;
+
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -56,3 +58,4 @@ public class UserController {
    return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 }
 	
+}
