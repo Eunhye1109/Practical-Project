@@ -9,9 +9,10 @@ public interface UserMapper {
 	
 	int signup(UserVO request);     // 회원가입 (DB저장)
 	
-	UserVO login(UserVO vo);   
+	UserVO login(UserVO vo);
+
+	String checkId(String userId);   
 	
 	
 	
 }
-//@Param("userId")String userId, @Param("userPw")String userPw
