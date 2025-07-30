@@ -26,6 +26,18 @@ export const typoStyle = {
             font-family: ${theme.typo.title2Regular.fontFamily};
         `
     },
+    subTitle2: {
+        bold: (theme: AppTheme) => css`
+            font-size: ${theme.typo.title3Bold.fontSize};
+            font-weight: ${theme.typo.title3Bold.fontWeight};
+            font-family: ${theme.typo.title3Bold.fontFamily};
+        `,
+        regular: (theme: AppTheme) => css`
+            font-size: ${theme.typo.title3Regular.fontSize};
+            font-weight: ${theme.typo.title3Regular.fontWeight};
+            font-family: ${theme.typo.title3Regular.fontFamily};
+        `
+    },
     body: {
         semiBold: (theme: AppTheme) => css`
             font-size: ${theme.typo.body1SemiBold.fontSize};

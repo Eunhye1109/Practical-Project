@@ -48,6 +48,7 @@ const Content = styled.div`
   /* background-color: rgba(255, 255, 255, 0.3);
   border: 1px solid white; */
   background-color: white;
+  border: 1px solid ${({theme}) => theme.colors.natural[20]};
 `;
 
 const Logo = styled.img`

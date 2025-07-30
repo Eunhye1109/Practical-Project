@@ -4,6 +4,7 @@ import { typoStyle } from 'styles/typoStyle';
 import { SearchInput } from 'components/molecules';
 import { Search } from 'assets/icons';
 import bg from '../assets/images/bg/background06.png';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   readonly bgImg: string;
@@ -69,6 +70,13 @@ const SubText = styled.p`
 `;
 
 const Home = () => {
+  // 네비게이션
+  const navigate = useNavigate();
+
+  // 검색 실행
+  const handleSearchClick = () => {
+    navigate('/searchResult');
+  }
   return (
     <Container>
       <Content bgImg={bg}>
@@ -76,7 +84,12 @@ const Home = () => {
           <SubText>투자 할 때는 역시 요즘기업 보고서!</SubText>
           <MainText>요즘 투자하기 좋은 기업은 어디?</MainText>
         </Title>
-        <SearchInput width='50%' label='기업명을 입력해주세요.' icon={<Search width='100%' height='100%' />} />
+        <SearchInput
+          width='50%'
+          label='기업명을 입력해주세요.'
+          icon={<Search width='100%' height='100%' />}
+          onClick={handleSearchClick}
+        />
       </Content>
     </Container>
   )

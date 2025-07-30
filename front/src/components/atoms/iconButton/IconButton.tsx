@@ -10,7 +10,7 @@ interface StyleProps {
   readonly color: string;
 }
 
-const Button = styled.button`
+const Button = styled.div`
     display: flex;
     border: none;
     background-color: transparent;

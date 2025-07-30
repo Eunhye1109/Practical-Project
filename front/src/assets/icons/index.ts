@@ -13,3 +13,4 @@ export { ReactComponent as RadioButtonChecked } from './radio_button_checked.svg
 export { ReactComponent as RadioButtonUnchecked } from './radio_button_unchecked.svg';
 export { ReactComponent as Search } from './search.svg';
 export { ReactComponent as Share } from './share.svg';
+export { ReactComponent as Check } from './check.svg';

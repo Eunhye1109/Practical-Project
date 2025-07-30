@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import DropdownButton from '../dropdownButton/DropdownButton'
 import DropdownList from '../dropdownList/DropdownList'
@@ -21,10 +21,14 @@ interface ContainerProps {
 const Container = styled.div<ContainerProps>`
     // 크기
     width: ${({width}) => width};
+    min-width: ${({width}) => width};
+    max-width: ${({width}) => width};
     // 디스플레이
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
     gap: 5px;
+    position: relative;
 `;
 
 const Dropdown = ({width, itemList, mode, onChange}: Props) => {
@@ -34,6 +38,8 @@ const Dropdown = ({width, itemList, mode, onChange}: Props) => {
     const [open, setOpen] = useState(false);
     // 아이콘 버튼 컨트롤
     const [icon, setIcon] = useState(<DropDown />);
+    // 클릭 아웃사이드
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     // 아이템 리스트 컨트롤 함수
     const handleToggleButtonClick = () => {
@@ -58,19 +64,35 @@ const Dropdown = ({width, itemList, mode, onChange}: Props) => {
         onChange?.(selectedList);
     }
 
+    // 클릭 감지해서 드랍다운 닫기
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setOpen(false);
+                setIcon(<DropDown />);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
   return (
-    <Container width={width}>
+    <Container ref={dropdownRef} width={width}>
         <DropdownButton
             label={label}
             onClick={handleToggleButtonClick}
             icon={icon}
             borderColor={!open ? undefined : theme.colors.primary[100]}
         />
-        {open && <DropdownList
-                    itemList={itemList}
-                    mode={mode}
-                    onChange={handleLabelChange}
-        />}
+        <DropdownList
+            itemList={itemList}
+            mode={mode}
+            onChange={handleLabelChange}
+            open={open}
+        />
     </Container>
   )
 }

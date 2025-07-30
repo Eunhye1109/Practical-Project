@@ -24,6 +24,7 @@ const Container = styled.div<ContainerProps>`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
     // 스타일
     ${({theme}) => typoStyle.subBody.regular(theme)}
     border: 1px solid ${({borderColor}) => borderColor};
@@ -39,12 +40,20 @@ const Container = styled.div<ContainerProps>`
     }
 `;
 
+const Label = styled.div`
+    flex: 1;
+    // 텍스트 관리
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
+
 const DropdownButton = ({label, onClick, icon = <DropDown />, borderColor}: Props) => {
     const theme = useTheme();
 
   return (
     <Container onClick={onClick} borderColor={borderColor ?? theme.colors.natural[20]}>
-        {label}
+        <Label>{label}</Label>
         <IconButton icon={icon} color={theme.colors.primary[100]} />
     </Container>
   )

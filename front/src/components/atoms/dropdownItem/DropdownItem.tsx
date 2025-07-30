@@ -26,7 +26,7 @@ const Container = styled.div`
   color: ${({theme}) => theme.colors.natural[50]};
   text-align: left;
   box-sizing: border-box;
-  padding-left: 20px;
+  padding: 0 15px;
   cursor: pointer;
   // 디스플레이
   display: flex;
@@ -54,6 +54,13 @@ const Icon = styled.div<StyleProps>`
   background-color: transparent;
 `;
 
+const Label = styled.div`
+    flex: 1;
+    // 텍스트 관리
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`;
 
 const DropdownItem = ({label, color, mode, selected, onSelect}: Props) => {
   // const [selected, setSelected] = useState(false);
@@ -76,7 +83,7 @@ const DropdownItem = ({label, color, mode, selected, onSelect}: Props) => {
   return (
       <Container onClick={() => onSelect(label)}>
         <Icon color={color}>{icon()}</Icon>
-        {label}
+        <Label>{label}</Label>
       </Container>
   )
 }

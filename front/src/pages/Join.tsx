@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
+import { useNavigate } from 'react-router-dom';
 import { typoStyle } from 'styles/typoStyle';
 import { Button, IconButton, Line } from 'components/atoms';
 import { theme } from 'styles/theme';
@@ -31,11 +32,12 @@ const Content = styled.div`
   align-items: center;
   box-sizing: border-box;
   flex-direction: column;
-  margin-top: 100px;
+  margin-top: 70px;
   margin-bottom: 100px;
   // 스타일
   background-color: white;
   border-radius: 20px;
+  border: 1px solid ${({theme}) => theme.colors.natural[20]};
 `;
 
 const Title = styled.p`
@@ -138,6 +140,8 @@ const SubTitle = styled.p`
 `;
 
 const Join = () => {
+  // 페이지 이동
+  const navigate = useNavigate();
   // 아이디/비번 에러 메시지 활성/비활성
   const [idVisible, setIdVisible] = useState(true);
   const [pwVisible, setPwVisible] = useState(true);
@@ -213,6 +217,7 @@ const Join = () => {
       console.log('미제출');
     } else {
       console.log('제출');
+      navigate('/login');
     }
   }
 

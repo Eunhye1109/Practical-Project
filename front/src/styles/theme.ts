@@ -10,13 +10,14 @@ export const theme = {
             40: '#999999',
             30: '#B3B3B3',
             20: '#CCCCCC',
-            10: '#DCDCDC',
-            5: '#f5f5f5ff',
+            10: '#f5f5f5ff',
+            5: '#fafafaff',
             0: '#FFFFFF'
         },
         primary: {
             100: '#755FFF',
-            10: '#E5E7FF',
+            50: '#aea2ffff',
+            10: '#f0f1ffff',
         },
         gradient: {
             cross: 'linear-gradient(225deg, #8B69F4 0%, #849AFF 100%)',
@@ -44,6 +45,16 @@ export const theme = {
             fontWeight: 200,
             fontFamily: 'SB어그로'
         },
+        title3Bold: {
+            fontSize: '25px',
+            fontWeight: 300,
+            fontFamily: 'SB어그로'
+        },
+        title3Regular: {
+            fontSize: '25px',
+            fontWeight: 200,
+            fontFamily: 'SB어그로'
+        },
         body1SemiBold: {
             fontSize: '20px',
             fontWeight: 500,
@@ -62,19 +73,19 @@ export const theme = {
         },
         caption1Regular: {
             fontSize: '16px',
-            fontWeight: 400,
+            fontWeight: 600,
         },
         caption1Light: {
             fontSize: '16px',
-            fontWeight: 200,
+            fontWeight: 500,
         },
         caption2Regular: {
             fontSize: '14px',
-            fontWeight: 400,
+            fontWeight: 600,
         },
         caption2Light: {
             fontSize: '14px',
-            fontWeight: 200,
+            fontWeight: 500,
         }
     }
 }

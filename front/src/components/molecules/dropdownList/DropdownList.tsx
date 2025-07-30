@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { DropdownItem } from 'components/atoms'
 import { theme } from 'styles/theme';
 
-interface Props extends CarriedProps {
+interface Props extends CarriedProps, AnimationProps {
   readonly itemList: string[];
   readonly onChange?: (selected: string[]) => void;
 }
@@ -13,22 +13,35 @@ interface CarriedProps {
   readonly mode: 'checkBox' | 'radio';
 }
 
-const Container = styled.div`
+interface AnimationProps {
+  readonly open: boolean;
+}
+
+const Container = styled.div<AnimationProps>`
   // 크기
   width: 100%;
-  max-height: 200px;
+  max-height: ${({open}) => open ? '200px' : '0'};
   // 디스플레이
   display: flex;
   justify-content: start;
   flex-direction: column;
   overflow-y: auto;
   box-sizing: border-box;
+  // 위치
+  position: absolute;
+  top: calc(100% + 5px);
+  z-index: 100;
   // 스타일
   border: 1px solid ${({theme}) => theme.colors.primary[100]};
   border-radius: 5px;
+
+  // 애니메이션
+  transform-origin: top;
+  visibility: ${({open}) => open ? 'visible' : 'hidden'};
+  transition: 0.3s ease-in-out;
 `;
 
-const DropdownList = ({itemList, mode, onChange}: Props) => {
+const DropdownList = ({itemList, mode, onChange, open}: Props) => {
   const [selectedList, setSelectedList] = useState<string[]>(mode === 'radio' ? [itemList[0]] : itemList);
 
   const handleSelect = (label: string) => {
@@ -67,7 +80,7 @@ const DropdownList = ({itemList, mode, onChange}: Props) => {
   }
 
   return (
-    <Container>
+    <Container open={open}>
       {itemList.map((item, index) => (
         <DropdownItem
           key={index}

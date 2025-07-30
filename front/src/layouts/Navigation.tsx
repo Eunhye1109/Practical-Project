@@ -20,8 +20,10 @@ const StyledLink = styled(Link)<{change: boolean}>`
     gap: 4px;
     // 스타일 세팅
     text-decoration: none;
-    color: ${({theme, change}) => change ? theme.colors.natural[100] : theme.colors.primary[100]};
+    color: ${({theme, change}) => change ? theme.colors.natural[0] : theme.colors.primary[100]};
     font-size: 16px;
+
+    transition: 0.2s ease-in-out;
 
     &:hover {
         opacity: 0.8;

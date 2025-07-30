@@ -4,17 +4,18 @@ import { Link, useLocation } from 'react-router-dom';
 import Navigation from './Navigation';
 
 import logo from '../assets/images/logo/logo_vertical.png';
+import whiteLogo from '../assets/images/logo/logo_vertical_white.png';
 
 const Container = styled.header<{change: boolean}>`
     height: 50px;
     width: 100%;
-    background-color: ${({theme, change}) => change ? theme.colors.natural[0] : theme.colors.primary[10]};
+    background-color: ${({theme, change}) => change ? theme.colors.primary[100] : theme.colors.primary[10]};
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
     top: 0;
-    box-shadow: ${({change}) => change ? '0 5px 5px 5px rgba(155, 155, 155, 0.1)' : 'none'};
+    z-index: 1000;
 `;
 
 const Content = styled.div`
@@ -42,7 +43,7 @@ const Header = () => {
     <Container change={change}>
         <Content>
             <LogoBox change={change} to={'/'}>
-                <Logo src={logo} />
+                <Logo src={change ? whiteLogo : logo} />
             </LogoBox>
             <Navigation />
         </Content>
