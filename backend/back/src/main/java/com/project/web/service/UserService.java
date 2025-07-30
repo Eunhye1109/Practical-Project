@@ -8,5 +8,7 @@ public interface UserService {
 	public UserDTO signup(UserVO request);
 
 	public UserDTO login(String userId, String userPw);
+
+	public UserDTO checkId(String userId);
 	
 }

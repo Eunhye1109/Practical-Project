@@ -12,7 +12,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Autowired
-    private UserMapper usermapper;
+    private UserMapper userMapper;
 
 
     @Override
@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 //        UserVO vo = userdto.getUservo();
 //        usermapper.signup(vo);
     	
-    	int ok = usermapper.signup(request);
+    	int ok = userMapper.signup(request);
     	
     	// if usermapper.signup(userdto) = 0일때??? 실패
 	    	if(ok == 0) {
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     	
     	System.out.println("userId: " + userId + ", userPw: " + userPw);
 
-		UserVO ok = usermapper.login(vo);
+		UserVO ok = userMapper.login(vo);
 
     		
 	    	if(ok == null) {
@@ -63,5 +63,21 @@ public class UserServiceImpl implements UserService {
 			            .build();
 
     }
+
+	@Override
+	public UserDTO checkId(String userId) {
+		String vo =userMapper.checkId(userId);
+		
+		if (vo != null) {
+			return UserDTO.builder()
+					.message(userId+"는 사용중인 ID입니다.")
+					.success(false)
+					.build();
+		}
+		return UserDTO.builder()
+				.message(userId+"는 사용가능한 ID입니다.")
+				.success(true)
+				.build();
+	}
 
 }
