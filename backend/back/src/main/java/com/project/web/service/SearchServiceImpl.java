@@ -1,6 +1,5 @@
 package com.project.web.service;
 
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -12,14 +11,13 @@ import com.project.web.vo.ColumnMatchVO;
 import java.util.*;
 
 @Service
-@Builder
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
-    private FetchServiceImpl fetchService;
-    private EmbedServiceImpl embedService;
-    private ColumnMapperService columnMapperService;
-    private TargetColMapper targetColMapper;
+    private final FetchServiceImpl fetchService;
+    private final EmbedServiceImpl embedService;
+    private final ColumnMapperService columnMapperService;
+    private final TargetColMapper targetColMapper;
 
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 

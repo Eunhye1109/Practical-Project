@@ -11,11 +11,9 @@ import com.project.web.mapper.SearchCacheMapper;
 import com.project.web.vo.ColumnMatchVO;
 import com.project.web.vo.SearchCacheVO;
 
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Builder
 @RequiredArgsConstructor
 public class SearchCacheServiceImpl implements SearchCacheService {
 
