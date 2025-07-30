@@ -21,14 +21,11 @@ public class UserServiceImpl implements UserService {
 //        UserVO vo = userdto.getUservo();
 //        usermapper.signup(vo);
     	
-    	int ok = userMapper.signup(request);
+    	int ok = usermapper.signup(request);
     	
     	// if usermapper.signup(userdto) = 0일때??? 실패
 	    	if(ok == 0) {
-	    		return UserDTO.builder()
-	    				.success(false)
-	    				.message("회원가입 실패")
-	    				.build();
+	    		return UserDTO.builder().success(false).build();
 	    	}
 	    	
         return UserDTO.builder()
@@ -49,7 +46,6 @@ public class UserServiceImpl implements UserService {
 
 		UserVO ok = userMapper.login(vo);
 
-    		
 	    	if(ok == null) {
 	    		return UserDTO.builder()
 	    				.success(false)
