@@ -1,8 +1,6 @@
 package com.project.web.controller;
 
 
-import java.sql.Timestamp;
-import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,9 +29,12 @@ public class UserController {
     	UserDTO response = userService.signup(request);
 	    return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
-//
-//	@GetMapping("login")
-//	public ResponseEntity<UserDTO> login(@RequestParam )
+
+	@GetMapping("login")
+	public ResponseEntity<UserDTO> login(@RequestParam String userId, @RequestParam String userPw){
+		UserDTO response = userService.login(userId, userPw);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 
 }
 	
