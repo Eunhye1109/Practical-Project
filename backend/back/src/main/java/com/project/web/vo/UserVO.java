@@ -16,6 +16,6 @@ public class UserVO {
 	    private String userPurpose;
 	    private String riskType;
 	    private Timestamp joinedAt;
-	    private String termsAgree;
+	    private int termsAgree;
 
 }

@@ -1,11 +1,12 @@
 package com.project.web.service;
 
 import com.project.web.dto.UserDTO;
+import com.project.web.vo.UserVO;
 
 public interface UserService {
 
-	UserDTO signup(UserDTO userDTO);
+	public UserDTO signup(UserVO request);
 
-	String login(String userId, String userPw);
+	public String login(String userId, String userPw);
 	
 }

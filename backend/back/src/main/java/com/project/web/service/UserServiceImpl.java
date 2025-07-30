@@ -1,5 +1,6 @@
 package com.project.web.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,22 @@ public class UserServiceImpl implements UserService {
     private UserMapper usermapper;
 
     @Override
-    public UserDTO signup(UserDTO userdto) {
+    public UserDTO signup(UserVO request) {
 //        UserVO vo = userdto.getUservo();
 //        usermapper.signup(vo);
-    	int ok = usermapper.signup(userdto);
-        // if usermapper.signup(userdto) = 0일때??? 실패
+    	
+    	int ok = usermapper.signup(request);
+    	
+    	// if usermapper.signup(userdto) = 0일때??? 실패
+	    	if(ok == 0) {
+	    		return UserDTO.builder().success(false).build();
+	    	}
+	    	
         return UserDTO.builder()
 //                .uservo() success(true)만 주면 괜찮
                 .success(true)
+                .message("회원가입 성공")
+                .userId(request.getUserId())
                 .build();
     }
 
@@ -31,9 +40,9 @@ public class UserServiceImpl implements UserService {
 
         if (user == null) return null;
 
-        if (userPw.equals(user.getUserPw())) {
-            return jwtUtil.generateToken(userId);
-        }
+//        if (userPw.equals(user.getUserPw())) {
+//            return jwtUtil.generateToken(userId);
+//        }
 
         return null;
     }
