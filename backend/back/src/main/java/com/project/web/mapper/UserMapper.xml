@@ -28,10 +28,20 @@
     )
 </insert>
 
-    <select id="check_id" resultType="com.project.web.vo.UserVO" parameterType="String">
-        SELECT *
-        FROM T_USER
-        WHERE USER_ID = #{userId}
-    </select>
+    <select id="login" parameterType="com.project.web.vo.UserVO" resultType="com.project.web.vo.UserVO">
+     SELECT 
+    USER_ID AS userId,
+    USER_PW AS userPw,
+    USER_PHONE AS userPhone,
+    USER_JOB AS userJob,
+    USER_PURPOSE AS userPurpose,
+    JOINED_AT AS joinedAt,
+    RISK_TYPE AS riskType,
+    TERMS_AGREE AS termsAgree
+    FROM T_USER
+    WHERE USER_ID = #{userId}
+      AND USER_PW = #{userPw}
+	</select>
+
 
 </mapper>

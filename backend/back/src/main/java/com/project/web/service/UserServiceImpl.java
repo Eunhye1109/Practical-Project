@@ -3,7 +3,6 @@ package com.project.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.project.web.dto.UserDTO;
 import com.project.web.mapper.UserMapper;
 import com.project.web.vo.UserVO;
@@ -11,8 +10,10 @@ import com.project.web.vo.UserVO;
 @Service
 public class UserServiceImpl implements UserService {
 
+
     @Autowired
     private UserMapper usermapper;
+
 
     @Override
     public UserDTO signup(UserVO request) {
@@ -23,7 +24,10 @@ public class UserServiceImpl implements UserService {
     	
     	// if usermapper.signup(userdto) = 0일때??? 실패
 	    	if(ok == 0) {
-	    		return UserDTO.builder().success(false).build();
+	    		return UserDTO.builder()
+	    				.success(false)
+	    				.message("회원가입 실패")
+	    				.build();
 	    	}
 	    	
         return UserDTO.builder()
@@ -35,17 +39,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(String userId, String userPw) {
-        UserVO user = usermapper.check_id(userId);
+    public UserDTO login(String userId, String userPw) {
+    	UserVO vo = new UserVO();
+    	vo.setUserId(userId);
+    	vo.setUserPw(userPw);
+    	
+    	System.out.println("userId: " + userId + ", userPw: " + userPw);
 
-        if (user == null) return null;
+		UserVO ok = usermapper.login(vo);
 
-//        if (userPw.equals(user.getUserPw())) {
-//            return jwtUtil.generateToken(userId);
-//        }
+    		
+	    	if(ok == null) {
+	    		return UserDTO.builder()
+	    				.success(false)
+	    				.message("Id 또는 Pw가 틀렸습니다.")
+	    				.build();
+	    	}
+    	
+			    return UserDTO.builder()
+			            .success(true)
+			            .message("로그인 성공")
+			            .userId(userId)
+			            .build();
 
-        return null;
     }
 
-    
 }
