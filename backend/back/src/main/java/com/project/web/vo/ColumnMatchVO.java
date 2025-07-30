@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ColumnMatchVO {
+	
     private String targetCol;      // 대표 컬럼명
     private String matchedCol;     // 실제 원본 컬럼명
     private String value;          // 값 (null 가능)

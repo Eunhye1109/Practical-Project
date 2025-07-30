@@ -18,7 +18,7 @@ public class SearchController {
 	private SearchCacheService searchCacheService;
 
     @GetMapping("/search/{corp_name}")
-    public ResponseEntity<SearchResultDTO> search(@PathVariable String corpName) {
+    public ResponseEntity<SearchResultDTO> search(@PathVariable("corp_name") String corpName) {
     	
     	// 만약 찾을 컬럼이 DB에 있다(if 3개월 이내 검색기록 있음)면 DB에 있는 값을 가져와라
         if (searchCacheService.existsValidCache(corpName)) {
