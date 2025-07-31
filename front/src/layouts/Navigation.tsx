@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import { useLogin } from 'contexts/LoginContext';
+import { LoginType } from 'types/user.types';
 
 import { Login, Join, Person, Bookmark, History, Logout } from 'assets/icons';
 
@@ -12,7 +14,7 @@ const Container = styled.div`
     gap: 30px;
 `;
 
-const StyledLink = styled(Link)<{change: boolean}>`
+const StyledLink = styled(Link, {shouldForwardProp: (prop) => prop !== 'change'})<{change?: boolean}>`
     // 디스플레이 세팅
     display: flex;
     justify-content: center;
@@ -41,6 +43,7 @@ const Icon = styled.div`
 `;
 
 const Navigation = () => {
+    const {user, logout} = useLogin();
     const location = useLocation();
     const hidePath = ['/'];
     const change = !hidePath.includes(location.pathname);
@@ -56,8 +59,8 @@ const Navigation = () => {
 
     // TODO: 로그인 상태에 따라 nav 배열 안의 내용물 바뀌게 하는 로직 추가
     //       (내용물: 관심기업 / 최근조회보고서 / 마이페이지 / 로그아웃)
-    const login = (state: boolean) => {
-        if(state) {
+    useEffect(() => {
+        if(user !== null) {
             setNav([
                 {label: '관심기업', to: '/mypage?tab=0', icon: <Bookmark />},
                 {label: '최근조회보고서', to: '/mypage?tab=1', icon: <History />},
@@ -70,14 +73,15 @@ const Navigation = () => {
                 {label: '회원가입', to: '/join', icon: <Join />}
             ])
         }
-    }
+    }, [user])
 
   return (
     <Container>
         {nav.map((item, index) => (
             <StyledLink change={change} key={index} to={item.to} onClick={() => {
                 if(item.label === '로그아웃') {
-                    alert('로그아웃');
+                    logout();
+                    alert('로그아웃 되었습니다.');
                 }
             }}>
                 <Icon>{item.icon}</Icon>

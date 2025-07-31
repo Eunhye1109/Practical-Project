@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
+import { LoginProvider } from 'contexts/LoginContext';
 
 // Layouts import
 import MainLayout from 'layouts/MainLayout';
@@ -27,17 +28,19 @@ const Content = styled.main`
 function App() {
   return (
     <Wrapper>
-      <MainLayout>
-        <Content>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/join' element={<Join />} />
-            <Route path='/searchResult' element={<SearchResult />} />
-            <Route path='/mypage' element={<Mypage />} />
-          </Routes>
-        </Content>
-      </MainLayout>
+      <LoginProvider>
+        <MainLayout>
+          <Content>
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/join' element={<Join />} />
+              <Route path='/searchResult' element={<SearchResult />} />
+              <Route path='/mypage' element={<Mypage />} />
+            </Routes>
+          </Content>
+        </MainLayout>
+      </LoginProvider>
     </Wrapper>
   );
 }

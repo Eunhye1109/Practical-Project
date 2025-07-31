@@ -5,7 +5,7 @@ import { typoStyle } from 'styles/typoStyle';
 import { Button, IconButton, Line } from 'components/atoms';
 import { theme } from 'styles/theme';
 import { DropdownBox, InputBox } from 'components/molecules';
-import { UserInfoData } from 'types/user.types';
+import { UserDTO } from 'types/user.types';
 import { CheckBox, CheckBoxOutline } from 'assets/icons';
 import { jobList, purposeList, investmentTypeList, joinInputOptions, agreementText, joinDropdownOption } from 'constants/joinOption';
 
@@ -151,9 +151,9 @@ const Join = () => {
   const [btnActive, setBtnActive] = useState('deactive');
 
   // 사용자 데이터 
-  const [formData, setFormData] = useState<UserInfoData>({
-    id: '',
-    pw: '',
+  const [formData, setFormData] = useState<UserDTO>({
+    userId: '',
+    userPw: '',
     phone: '',
     job: jobList[0],
     purpose: purposeList[0],
@@ -181,12 +181,12 @@ const Join = () => {
   // 비밀번호 중복 확인 메소드
   const handlePwCheckBlur = () => {
     // 둘 중 하나라도 빈칸이면 true
-    if(formData.pw === '' || pwOverlap === '') {
+    if(formData.userPw === '' || pwOverlap === '') {
       setPwVisible(true);
       return;
     }
     // 두 값이 일치하면 true
-    if(formData.pw === pwOverlap) {
+    if(formData.userPw === pwOverlap) {
       setPwVisible(true);
     } else {
       setPwVisible(false);
@@ -194,9 +194,9 @@ const Join = () => {
   }
 
   // 데이터 입력 완료
-  const formComplete = (data: UserInfoData) => {
-    if(data.id === '') return setBtnActive('deactive');
-    if(data.pw === '') return setBtnActive('deactive');
+  const formComplete = (data: UserDTO) => {
+    if(data.userId === '') return setBtnActive('deactive');
+    if(data.userPw === '') return setBtnActive('deactive');
     if(data.phone === '') return setBtnActive('deactive');
     if(data.agreement === false) return setBtnActive('deactive');
     if(idVisible === false) return setBtnActive('deactive');

@@ -25,7 +25,7 @@ const Content = styled.div`
     align-items: center;
 `;
 
-const LogoBox = styled(Link)<{change: boolean}>`
+const LogoBox = styled(Link, {shouldForwardProp: (prop) => prop !== 'change'})<{change?: boolean}>`
     display: flex;
 `;
 

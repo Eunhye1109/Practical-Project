@@ -3,12 +3,16 @@ import styled from '@emotion/styled'
 import bg from '../assets/images/bg/background09.png'
 import logo from '../assets/images/logo/logo_horizental.png';
 import { typoStyle } from 'styles/typoStyle';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Line } from 'components/atoms';
 import { InputBox } from 'components/molecules';
 import { useTheme } from '@emotion/react';
 import { useState, useEffect } from 'react';
 import { Button } from 'components/atoms';
+// 백엔드 연결
+import { useLogin } from 'contexts/LoginContext';
+import { loginUser } from 'api/userApi';
+import { LoginType } from 'types/user.types';
 
 interface Props {
   readonly bgImg: string;
@@ -125,30 +129,43 @@ const JoinLink = styled(Link)`
 `;
 
 const Login = () => {
+  const {login} = useLogin();
+  const navigate = useNavigate();
   const theme = useTheme();
-  // 아이디/비번 경고메시지 관리
-  const [idVisible, setIdVisible] = useState(false);
-  const [pwVisible, setPwVisible] = useState(true);
-  // 아이디/비번 값 관리 -> contextAPI로 관리해야 하나
-  const [id, setId] = useState('');
-  const [pw, setPW] = useState('');
+  // 아이디/비번 값 관리
+  const [userId, setUserId] = useState('');
+  const [userPw, setUserPw] = useState('');
   // 버튼 스타일
   const [btnStyle, setBtnStyle] = useState('deactive');
 
   // 로그인 버튼 활성/비활성
   useEffect(() => {
-    if(id === '' || pw === '') {
+    if(userId === '' || userPw === '') {
       setBtnStyle('deactive')
     } else {
       setBtnStyle('primary')
     }
-  }, [id, pw]);
+  }, [userId, userPw]);
 
   // TODO: 아이디 서치 로직
   // TODO: 비밀번호 서치 로직
-  const handleLoginClick = () => {
-    // TODO: 로그인 로직
-    alert('로그인 완료')
+  const handleLoginClick = async () => {
+    try {
+      const loginData: LoginType = {userId, userPw};
+      const userData = await loginUser(loginData);
+      if(userData.success) {
+        login(userData);
+        alert('환영합니다.');
+        navigate('/');
+        console.log(userId, userData);
+      } else {
+        alert('아이디 또는 패스워드가 일치하지 않습니다.');
+        console.log(userData);
+      }
+    } catch(err: any) {
+      console.error('로그인 오류:', err.response?.data || err.message);
+      alert('로그인 실패');
+    }
   }
 
   return (
@@ -158,22 +175,22 @@ const Login = () => {
           <MainText>로그인</MainText>
           <SubText>어서오세요, 환영합니다!</SubText>
         </Title>
-        <Line width='60%' color={theme.colors.primary[10]} margin='30px' />
+        <Line width='60%' color={theme.colors.primary[50]} margin='30px' />
         <InputContent>
           <InputBox
             inputLabel='아이디를 입력해주세요.'
             inputTitleLabel='아이디'
             textLabel='아이디를 확인해주세요.'
-            visible={idVisible}
-            onChange={(e) => {setId(e.target.value)}}
+            visible={true}
+            onChange={(e) => {setUserId(e.target.value)}}
           />
           <InputBox
             inputLabel='비밀번호를 입력해주세요.'
             inputTitleLabel='비밀번호'
             textLabel='비밀번호를 확인해주세요.'
             type='password'
-            visible={pwVisible}
-            onChange={(e) => setPW(e.target.value)}
+            visible={true}
+            onChange={(e) => setUserPw(e.target.value)}
           />
         </InputContent>
         <Button variant={btnStyle} size='lg' label='로그인' margin='20px' onClick={handleLoginClick} />
@@ -183,7 +200,7 @@ const Login = () => {
             지금 바로 <JoinLink to='/join'>[회원가입]</JoinLink>하고 서비스를 이용해보세요!
           </JoinText>
         </JoinContent>
-        <Line width='60%' color={theme.colors.primary[10]} margin='30px' />
+        <Line width='60%' color={theme.colors.primary[50]} margin='30px' />
         <Link to='/'>
           <Logo src={logo} />
         </Link>

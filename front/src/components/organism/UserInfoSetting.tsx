@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
 import { Button } from 'components/atoms';
-import { UserInfoData } from 'types/user.types';
+import { UserDTO } from 'types/user.types';
 import { useNavigate } from 'react-router-dom';
 import { joinDropdownOption, joinInputOptions } from 'constants/userInfoSettingOption';
 import { DropdownBox, InputBox } from 'components/molecules';
@@ -65,9 +65,9 @@ const UserInfoSetting = () => {
   const [btnActive, setBtnActive] = useState('deactive');
 
   // 사용자 데이터(데이터 받아와서 넣기)
-  const [formData, setFormData] = useState<UserInfoData>({
-    id: '',
-    pw: '',
+  const [formData, setFormData] = useState<UserDTO>({
+    userId: '',
+    userPw: '',
     phone: '',
     job: '',
     purpose: '',
@@ -103,12 +103,12 @@ const UserInfoSetting = () => {
   // 비밀번호 중복 확인 메소드
   const handlePwCheckBlur = () => {
     // 둘 중 하나라도 빈칸이면 true
-    if(formData.pw === '' || pwOverlap === '') {
+    if(formData.userPw === '' || pwOverlap === '') {
       setPwVisible(true);
       return;
     }
     // 두 값이 일치하면 true
-    if(formData.pw === pwOverlap) {
+    if(formData.userPw === pwOverlap) {
       setPwVisible(true);
     } else {
       setPwVisible(false);
