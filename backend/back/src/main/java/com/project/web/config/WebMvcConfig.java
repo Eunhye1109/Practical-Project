@@ -9,8 +9,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-				.allowedOrigins("http://localhost:3000") // React 개발용
-				.allowedMethods("GET", "POST", "PUT", "DELETE")
+				.allowedOrigins("http://localhost:3000","http://localhost:8087") // React 개발용, swagger
+				.allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
 				.allowedHeaders("*")
 				.allowCredentials(true);
 	}
