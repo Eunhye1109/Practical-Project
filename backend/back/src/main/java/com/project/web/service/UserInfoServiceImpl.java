@@ -14,8 +14,12 @@ public class UserInfoServiceImpl implements UserInfoService{
 	private UserInfoMapper userInfoMapper;
 
 	@Override
-	public UserDTO secession(UserVO request) {
-		int ok = userInfoMapper.secession(request);
+	public UserDTO secession(String userId, String userPw) {
+		UserVO vo = new UserVO();
+    	vo.setUserId(userId);
+    	vo.setUserPw(userPw);
+		
+		int ok = userInfoMapper.secession(vo);
 		
 		if(ok == 0) {
 			return UserDTO.builder()
@@ -26,7 +30,11 @@ public class UserInfoServiceImpl implements UserInfoService{
 		return UserDTO.builder()
 				.message("회원탈퇴 성공")
 				.success(true)
+				.userId(userId)
+				.userPw(userPw)
 				.build();
 	}
+
+
 
 }
