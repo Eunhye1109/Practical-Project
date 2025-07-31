@@ -25,7 +25,7 @@ export interface JoinInputOption {
 
 export const joinInputOptions: JoinInputOption[] = [
   {
-    name: "id",
+    name: "userId",
     inputTitleLabel: "아이디",
     inputLabel: "아이디를 입력해주세요.",
     textLabel: "중복된 아이디가 존재합니다.",
@@ -42,7 +42,7 @@ export const joinInputOptions: JoinInputOption[] = [
     type: "password",
   },
   {
-    name: "pw",
+    name: "userPw",
     inputTitleLabel: " 새 비밀번호",
     inputLabel: "새 비밀번호를 입력해주세요.",
     textLabel: "간격조정",
@@ -60,7 +60,7 @@ export const joinInputOptions: JoinInputOption[] = [
     type: "password",
   },
   {
-    name: "phone",
+    name: "userPhone",
     inputTitleLabel: "휴대전화번호",
     inputLabel: "휴대전화 번호를 입력해주세요.",
     textLabel: "간격조정",
@@ -78,17 +78,17 @@ export interface JoinDropdownOption {
 
 export const joinDropdownOption: JoinDropdownOption[] = [
     {   
-        name: 'job',
+        name: 'userJob',
         categoryList: jobList,
         label: '직업',
     },
     {   
-        name: 'purpose',
+        name: 'userPurpose',
         categoryList: purposeList,
         label: '서비스 사용 목적',
     },
     {   
-        name: 'investmentType',
+        name: 'termsType',
         categoryList: investmentTypeList,
         label: '투자 유형',
     }

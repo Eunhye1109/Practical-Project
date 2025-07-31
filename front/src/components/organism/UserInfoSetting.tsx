@@ -68,11 +68,10 @@ const UserInfoSetting = () => {
   const [formData, setFormData] = useState<UserDTO>({
     userId: '',
     userPw: '',
-    phone: '',
-    job: '',
-    purpose: '',
-    investmentType: '',
-    agreement: true
+    userPhone: '',
+    userJob: '',
+    userPurpose: '',
+    riskType: '',
   });
 
   // input 데이터 저장 메소드

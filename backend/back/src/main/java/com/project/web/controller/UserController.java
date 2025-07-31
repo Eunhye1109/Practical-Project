@@ -34,11 +34,11 @@ public class UserController {
 
 	@PostMapping("/login")
 	public ResponseEntity<UserDTO> login(@RequestBody UserVO request){
-		UserDTO response = userService.login(request.getUserId(), request.getUserPw());
+		UserDTO response = userService.login(request.getUserId(), request.getUserPw(), request.getRiskType());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@GetMapping("check_id/{userId}")
+	@GetMapping("/check_id/{userId}")
 	public ResponseEntity<UserDTO> checkId(@PathVariable("userId") String userId){
 		UserDTO response = userService.checkId(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);

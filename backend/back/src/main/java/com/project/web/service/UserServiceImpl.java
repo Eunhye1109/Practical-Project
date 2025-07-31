@@ -1,6 +1,8 @@
 package com.project.web.service;
 
 
+import java.sql.Timestamp;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.project.web.dto.UserDTO;
@@ -20,6 +22,9 @@ public class UserServiceImpl implements UserService {
 //        UserVO vo = userdto.getUservo();
 //        usermapper.signup(vo);
     	
+    	if (request.getJoinedAt() == null) {
+    		request.setJoinedAt(new Timestamp(System.currentTimeMillis()));
+    	}
     	int ok = userMapper.signup(request);
     	
     	// if usermapper.signup(userdto) = 0일때??? 실패
@@ -39,12 +44,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO login(String userId, String userPw) {
+    public UserDTO login(String userId, String userPw, String riskType) {
     	UserVO vo = new UserVO();
     	vo.setUserId(userId);
     	vo.setUserPw(userPw);
+    	vo.setRiskType(riskType);
     	
-    	System.out.println("userId: " + userId + ", userPw: " + userPw);
+    	System.out.println("userId: " + userId + ", userPw: " + userPw + ", riskType: " + riskType);
 
 		UserVO ok = userMapper.login(vo);
 
@@ -61,6 +67,7 @@ public class UserServiceImpl implements UserService {
 			            .message("로그인 성공")
 			            .userId(userId)
 			            .userPw(userPw)
+			            .riskType(ok.getRiskType())
 			            .build();
 
     }

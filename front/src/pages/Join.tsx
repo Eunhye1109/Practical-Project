@@ -8,6 +8,9 @@ import { DropdownBox, InputBox } from 'components/molecules';
 import { UserDTO } from 'types/user.types';
 import { CheckBox, CheckBoxOutline } from 'assets/icons';
 import { jobList, purposeList, investmentTypeList, joinInputOptions, agreementText, joinDropdownOption } from 'constants/joinOption';
+import { useLogin } from 'contexts/LoginContext';
+// 백엔드 연결
+import { joinUser, idCheckUser } from 'api/userApi';
 
 const Container = styled.div`
   // 크기
@@ -140,6 +143,7 @@ const SubTitle = styled.p`
 `;
 
 const Join = () => {
+  const {login} = useLogin();
   // 페이지 이동
   const navigate = useNavigate();
   // 아이디/비번 에러 메시지 활성/비활성
@@ -154,11 +158,11 @@ const Join = () => {
   const [formData, setFormData] = useState<UserDTO>({
     userId: '',
     userPw: '',
-    phone: '',
-    job: jobList[0],
-    purpose: purposeList[0],
-    investmentType: investmentTypeList[0],
-    agreement: false
+    userPhone: '',
+    userJob: jobList[0],
+    userPurpose: purposeList[0],
+    riskType: investmentTypeList[0],
+    termsAgree: 0
   });
 
   // input 데이터 저장 메소드
@@ -174,8 +178,22 @@ const Join = () => {
   };
 
   // 아이디 중복 확인 메소드
-  const handleIdCheckBlur = () => {
+  const handleIdCheckBlur = async () => {
     // TODO: 로직 작성
+    try {
+      const res = await idCheckUser(formData.userId);
+      if(res.success) {
+        setIdVisible(true);
+        console.log('중복 미존재: ', res.success);
+        
+      } else {
+        setIdVisible(false);
+        console.log('중복 존재: ', res.success);
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }
   }
 
   // 비밀번호 중복 확인 메소드
@@ -197,8 +215,8 @@ const Join = () => {
   const formComplete = (data: UserDTO) => {
     if(data.userId === '') return setBtnActive('deactive');
     if(data.userPw === '') return setBtnActive('deactive');
-    if(data.phone === '') return setBtnActive('deactive');
-    if(data.agreement === false) return setBtnActive('deactive');
+    if(data.userPhone === '') return setBtnActive('deactive');
+    if(data.termsAgree === 0) return setBtnActive('deactive');
     if(idVisible === false) return setBtnActive('deactive');
     if(pwVisible === false) return setBtnActive('deactive');
 
@@ -211,13 +229,19 @@ const Join = () => {
     console.log('[DEBUG] formData changed:', formData);
   }, [formData, idVisible, pwVisible]);
 
-  // TODO: 데이터 제출 로직(회원가입 완료)
-  const handleJoinClick = () => {
+  // 데이터 제출 로직(회원가입 완료)
+  const handleJoinClick = async () => {
     if(btnActive === 'deactive') {
-      console.log('미제출');
+      alert('회원가입을 완료하려면 모든 입력란을 채워주세요.');
     } else {
-      console.log('제출');
-      navigate('/login');
+      try {
+        const result = await joinUser(formData);
+        login({userId: formData.userId, userPw: formData.userPw, riskType: formData.riskType});
+        console.log('회원가입에 성공했습니다.');
+      } catch (error) {
+        console.log('회원가입에 실패했습니다.');
+      }
+      navigate('/');
     }
   }
 
@@ -234,10 +258,10 @@ const Join = () => {
               inputLabel={opt.inputLabel}
               inputTitleLabel={opt.inputTitleLabel}
               textLabel={opt.textLabel}
-              visible={opt.visible ? (opt.name === 'id' ? idVisible : pwVisible) : true}
+              visible={opt.visible ? (opt.name === 'userId' ? idVisible : pwVisible) : true}
               type={opt.type ?? 'text'}
               onChange={opt.name == 'pwCheck' ? handlePwOverlapChange : handleInputChange(opt.name)}
-              onBlur={opt.blur ? (opt.name === 'id' ? handleIdCheckBlur : handlePwCheckBlur) : undefined}
+              onBlur={opt.blur ? (opt.name === 'userId' ? handleIdCheckBlur : handlePwCheckBlur) : undefined}
             />
           ))}
         </InputForm>
@@ -260,9 +284,9 @@ const Join = () => {
             <Agreement>
               <AgreementCheck>
                 <IconButton
-                  icon={formData.agreement ? <CheckBox /> : <CheckBoxOutline />}
-                  color={formData.agreement ? theme.colors.primary[100] : theme.colors.natural[20]}
-                  onClick={() => setFormData(prev => ({...prev, agreement: !prev.agreement}))}
+                  icon={formData.termsAgree ? <CheckBox /> : <CheckBoxOutline />}
+                  color={formData.termsAgree ? theme.colors.primary[100] : theme.colors.natural[20]}
+                  onClick={() => setFormData(prev => ({...prev, termsAgree: prev.termsAgree === 0 ? 1 : 0,}))}
                 />
                 <span><strong>[필수]</strong>  서비스 이용약관에 동의합니다.</span>
               </AgreementCheck>

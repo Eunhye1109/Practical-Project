@@ -135,6 +135,7 @@ const Login = () => {
   // 아이디/비번 값 관리
   const [userId, setUserId] = useState('');
   const [userPw, setUserPw] = useState('');
+  const [riskType, setRiskType] = useState('');
   // 버튼 스타일
   const [btnStyle, setBtnStyle] = useState('deactive');
 
@@ -151,13 +152,13 @@ const Login = () => {
   // TODO: 비밀번호 서치 로직
   const handleLoginClick = async () => {
     try {
-      const loginData: LoginType = {userId, userPw};
+      const loginData: LoginType = {userId, userPw, riskType};
       const userData = await loginUser(loginData);
       if(userData.success) {
         login(userData);
         alert('환영합니다.');
         navigate('/');
-        console.log(userId, userData);
+        console.log(userData);
       } else {
         alert('아이디 또는 패스워드가 일치하지 않습니다.');
         console.log(userData);
