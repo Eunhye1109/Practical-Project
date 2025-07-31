@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
 			            .success(true)
 			            .message("로그인 성공")
 			            .userId(userId)
+			            .userPw(userPw)
 			            .build();
 
     }
