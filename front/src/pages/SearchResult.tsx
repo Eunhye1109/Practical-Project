@@ -35,7 +35,7 @@ const TopPanner = styled.div<{fixed: boolean}>`
     // 스타일
     background-color: white;
     border-bottom: 1px solid ${({theme}) => theme.colors.natural[20]};
-    box-shadow: 0px 0px 20px 0px rgba(214, 202, 255, 0.1);
+    box-shadow: 0px 5px 10px 0px rgba(150, 150, 150, 0.1);
 `;
 
 const PannerTitleBox = styled.div`
@@ -64,7 +64,7 @@ const SearchBarBox = styled.div<{fixed: boolean}>`
     background-color: ${({fixed}) => fixed ? 'white' : undefined};
     padding-bottom: ${({fixed}) => fixed ? '30px' : '0'};
     border-bottom: ${({fixed, theme}) => fixed ? `1px solid ${theme.colors.natural[20]}` : 'none'};
-    box-shadow: ${({fixed}) => fixed ? '0px 5px 10px 0px rgba(150, 150, 150, 0.3)' : undefined};
+    box-shadow: ${({fixed}) => fixed ? '0px 5px 10px 0px rgba(150, 150, 150, 0.1)' : undefined};
 `;
 
 const Content = styled.div<{fixed: boolean}>`

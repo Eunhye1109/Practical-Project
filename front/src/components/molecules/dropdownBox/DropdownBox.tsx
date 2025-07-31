@@ -8,6 +8,8 @@ interface Props {
   readonly label: string;
   readonly mode: 'radio' | 'checkBox';
   readonly onChange?: (selectedList: string[]) => void;
+  readonly btnLabel?: string;
+  readonly selfSelected?: string;
 }
 
 const Container = styled.div`
@@ -23,9 +25,10 @@ const Container = styled.div`
 
 const DropdownTitle = styled.p`
   ${({theme}) => typoStyle.caption.regular(theme)}
+  color: ${({theme}) => theme.colors.natural[60]};
 `;
 
-const DropdownBox = ({itemList, label, mode, onChange}: Props) => {
+const DropdownBox = ({itemList, label, mode, onChange, selfSelected, btnLabel}: Props) => {
   return (
     <Container>
         <DropdownTitle>{label}</DropdownTitle>
@@ -34,6 +37,8 @@ const DropdownBox = ({itemList, label, mode, onChange}: Props) => {
           width='100%'
           mode={mode}
           onChange={onChange}
+          selfSelected={selfSelected}
+          btnLabel={btnLabel}
         />
     </Container>
   )

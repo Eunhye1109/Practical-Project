@@ -12,6 +12,7 @@ interface Props {
     readonly label: string;
     readonly onClick?: () => void;
     readonly width?: string;
+    readonly value?: string;
 }
 
 const Container = styled.div<{width?: string}>`
@@ -22,7 +23,7 @@ const Container = styled.div<{width?: string}>`
     gap: 5px;
 `;
 
-const SearchBar = ({itemList, modeList, label, onClick, width}: Props) => {
+const SearchBar = ({itemList, modeList, label, onClick, width, value}: Props) => {
   return (
     <Container width={width}>
         {itemList.map((item, index) => (
@@ -38,6 +39,7 @@ const SearchBar = ({itemList, modeList, label, onClick, width}: Props) => {
             icon={<Search />}
             onClick={onClick}
             align='left'
+            value={value}
         />
     </Container>
   )

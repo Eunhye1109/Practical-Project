@@ -8,6 +8,8 @@ import { theme } from 'styles/theme'
 interface Props extends ContainerProps, ListCarriedProps {
     readonly itemList: string[];
     readonly onChange?: (selectedList: string[]) => void;
+    readonly btnLabel?: string;
+    readonly selfSelected?: string;
 }
 
 interface ListCarriedProps {
@@ -31,7 +33,7 @@ const Container = styled.div<ContainerProps>`
     position: relative;
 `;
 
-const Dropdown = ({width, itemList, mode, onChange}: Props) => {
+const Dropdown = ({width, itemList, mode, onChange, btnLabel, selfSelected}: Props) => {
     // label 변경
     const [label, setLabel] = useState(itemList[0]);
     // 아이템 리스트 컨트롤
@@ -82,7 +84,7 @@ const Dropdown = ({width, itemList, mode, onChange}: Props) => {
   return (
     <Container ref={dropdownRef} width={width}>
         <DropdownButton
-            label={label}
+            label={btnLabel ?? label}
             onClick={handleToggleButtonClick}
             icon={icon}
             borderColor={!open ? undefined : theme.colors.primary[100]}
@@ -92,6 +94,7 @@ const Dropdown = ({width, itemList, mode, onChange}: Props) => {
             mode={mode}
             onChange={handleLabelChange}
             open={open}
+            selfSelected={selfSelected}
         />
     </Container>
   )

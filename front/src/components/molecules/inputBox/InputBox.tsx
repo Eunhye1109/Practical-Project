@@ -11,6 +11,7 @@ interface Props {
     readonly type?: string;
     readonly onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     readonly onBlur?: () => void;
+    readonly value?: string;
 }
 
 const Container = styled.div`
@@ -21,7 +22,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: start;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 `;
 
 const InputContent = styled.div`
@@ -37,14 +38,15 @@ const InputContent = styled.div`
 
 const InputTitle = styled.p`
   ${({theme}) => typoStyle.caption.regular(theme)}
+  color: ${({theme}) => theme.colors.natural[60]};
 `;
 
-const InputBox = ({inputLabel, inputTitleLabel, textLabel, visible, type, onChange, onBlur}: Props) => {
+const InputBox = ({inputLabel, inputTitleLabel, textLabel, visible, type, onChange, onBlur, value}: Props) => {
   return (
     <Container>
         <InputTitle>{inputTitleLabel}</InputTitle>
         <InputContent>
-          <Input width='100%' label={inputLabel} type={type} onChange={onChange} onBlur={onBlur} align='left' />
+          <Input width='100%' label={inputLabel} type={type} onChange={onChange} onBlur={onBlur} align='left' value={value} />
           <WarningText label={textLabel} visible={visible} />
         </InputContent>
     </Container>

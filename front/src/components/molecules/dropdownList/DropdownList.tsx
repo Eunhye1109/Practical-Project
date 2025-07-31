@@ -7,6 +7,7 @@ import { theme } from 'styles/theme';
 interface Props extends CarriedProps, AnimationProps {
   readonly itemList: string[];
   readonly onChange?: (selected: string[]) => void;
+  readonly selfSelected?: string;
 }
 
 interface CarriedProps {
@@ -41,8 +42,15 @@ const Container = styled.div<AnimationProps>`
   transition: 0.3s ease-in-out;
 `;
 
-const DropdownList = ({itemList, mode, onChange, open}: Props) => {
-  const [selectedList, setSelectedList] = useState<string[]>(mode === 'radio' ? [itemList[0]] : itemList);
+const DropdownList = ({itemList, mode, onChange, open, selfSelected}: Props) => {
+  const [selectedList, setSelectedList] = useState<string[]>(() => {
+    if (selfSelected !== undefined && itemList.includes(selfSelected)) {
+      return [selfSelected];
+    }
+
+    if (mode === 'radio') return [itemList[0]];
+    return itemList;
+  });
 
   const handleSelect = (label: string) => {
     setSelectedList((prev) => {
@@ -87,7 +95,7 @@ const DropdownList = ({itemList, mode, onChange, open}: Props) => {
           label={item}
           onSelect={() => handleSelect(item)}
           mode={mode}
-          selected={selectedList.includes(item)}
+          selected={selfSelected !== undefined ? item === selfSelected : selectedList.includes(item)}
           color={selectedList.includes(item) ? theme.colors.primary[100] : theme.colors.natural[20]}
         />
       ))}

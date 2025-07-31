@@ -12,6 +12,7 @@ import Login from 'pages/Login';
 import Join from 'pages/Join';
 import styled from '@emotion/styled';
 import SearchResult from 'pages/SearchResult';
+import Mypage from 'pages/Mypage';
 
 const Wrapper = styled.div`
   display: flex;
@@ -33,6 +34,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/join' element={<Join />} />
             <Route path='/searchResult' element={<SearchResult />} />
+            <Route path='/mypage' element={<Mypage />} />
           </Routes>
         </Content>
       </MainLayout>

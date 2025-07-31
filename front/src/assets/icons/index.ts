@@ -8,6 +8,7 @@ export { ReactComponent as Help } from './help.svg';
 export { ReactComponent as History } from './history.svg';
 export { ReactComponent as Join } from './join.svg';
 export { ReactComponent as Login } from './login.svg';
+export { ReactComponent as Logout } from './logout.svg';
 export { ReactComponent as Person } from './person.svg';
 export { ReactComponent as RadioButtonChecked } from './radio_button_checked.svg';
 export { ReactComponent as RadioButtonUnchecked } from './radio_button_unchecked.svg';

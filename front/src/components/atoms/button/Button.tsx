@@ -12,7 +12,7 @@ interface Props extends StyleProps {
 interface StyleProps {
     readonly variant: string;
     readonly size: string;
-    readonly margin: string;
+    readonly margin?: string;
 }
 
 const variantStyle = (variant: string) => (props: {theme: Theme}) => {

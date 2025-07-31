@@ -148,7 +148,6 @@ export const allItemList = [
                 type: 'tag',
                 data: [],
             },
-            
         ]
     },
 ]

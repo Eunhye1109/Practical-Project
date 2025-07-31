@@ -67,8 +67,8 @@ const itemStyle = (item: string) => (props: {theme: Theme}) =>  {
                 padding: 4px 8px;
                 // 스타일
                 ${props.theme.typo.caption2Light}
-                color: ${props.theme.colors.natural[80]};
-                background-color: ${props.theme.colors.natural[10]};
+                color: white;
+                background-color: ${props.theme.colors.natural[100]};
                 border-radius: 3px;
                 z-index: 1000;
                 cursor: pointer;

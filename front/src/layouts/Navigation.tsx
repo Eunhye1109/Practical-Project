@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
-import { Login, Join, Person, Bookmark, History } from 'assets/icons';
+import { Login, Join, Person, Bookmark, History, Logout } from 'assets/icons';
 
 const Container = styled.div`
     display: flex;
@@ -46,17 +46,40 @@ const Navigation = () => {
     const change = !hidePath.includes(location.pathname);
 
     const [nav, setNav] = useState([
-        {label: '로그인', to: 'login', icon: <Login />},
-        {label: '회원가입', to: 'join', icon: <Join />}
+        {label: '관심기업', to: '/mypage?tab=0', icon: <Bookmark />},
+        {label: '최근조회보고서', to: '/mypage?tab=1', icon: <History />},
+        {label: '마이페이지', to: '/mypage?tab=2', icon: <Person />},
+        {label: '로그아웃', to: '/', icon: <Logout />},
+        {label: '로그인', to: '/login', icon: <Login />},
+        {label: '회원가입', to: '/join', icon: <Join />}
     ]);
 
     // TODO: 로그인 상태에 따라 nav 배열 안의 내용물 바뀌게 하는 로직 추가
     //       (내용물: 관심기업 / 최근조회보고서 / 마이페이지 / 로그아웃)
+    const login = (state: boolean) => {
+        if(state) {
+            setNav([
+                {label: '관심기업', to: '/mypage?tab=0', icon: <Bookmark />},
+                {label: '최근조회보고서', to: '/mypage?tab=1', icon: <History />},
+                {label: '마이페이지', to: '/mypage?tab=2', icon: <Person />},
+                {label: '로그아웃', to: '/', icon: <Logout />}
+            ])
+        } else {
+            setNav([
+                {label: '로그인', to: '/login', icon: <Login />},
+                {label: '회원가입', to: '/join', icon: <Join />}
+            ])
+        }
+    }
 
   return (
     <Container>
         {nav.map((item, index) => (
-            <StyledLink change={change} key={index} to={item.to}>
+            <StyledLink change={change} key={index} to={item.to} onClick={() => {
+                if(item.label === '로그아웃') {
+                    alert('로그아웃');
+                }
+            }}>
                 <Icon>{item.icon}</Icon>
                 {item.label}
             </StyledLink>

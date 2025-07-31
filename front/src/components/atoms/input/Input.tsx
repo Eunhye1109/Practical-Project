@@ -10,6 +10,7 @@ interface Props extends TextAlign{
     readonly type?: string;
     readonly onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     readonly onBlur?: () => void;
+    readonly value?: string;
 }
 
 interface TextAlign {
@@ -48,13 +49,13 @@ const InputBar = styled.input<TextAlign>`
     }
 `;
 
-const Input = ({width, label, button, type, onChange, onBlur, align}: Props) => {
+const Input = ({width, label, button, type, onChange, onBlur, align, value}: Props) => {
     const [focusing, setFocusing] = useState(false);
 
   return (
     // 내부 값 바꾸기
     <Container width={width} focusing={focusing}>
-        <InputBar placeholder={label} onFocus={() => setFocusing(true)} onBlur={() => {setFocusing(false); onBlur && onBlur();}} type={type} onChange={onChange} align={align} />
+        <InputBar placeholder={label} onFocus={() => setFocusing(true)} onBlur={() => {setFocusing(false); onBlur && onBlur();}} type={type} onChange={onChange} align={align} value={value} />
         {button}
     </Container>
   )

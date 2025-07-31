@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useState } from 'react'
 import { typoStyle } from 'styles/typoStyle';
 import { SearchInput } from 'components/molecules';
 import { Search } from 'assets/icons';
@@ -70,6 +70,8 @@ const SubText = styled.p`
 `;
 
 const Home = () => {
+  // 검색어
+  const [searchWord, setSearchWord] = useState('');
   // 네비게이션
   const navigate = useNavigate();
 
@@ -89,6 +91,7 @@ const Home = () => {
           label='기업명을 입력해주세요.'
           icon={<Search width='100%' height='100%' />}
           onClick={handleSearchClick}
+          onChange={(e) => {setSearchWord(e.target.value)}}
         />
       </Content>
     </Container>

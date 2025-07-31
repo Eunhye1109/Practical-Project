@@ -37,7 +37,7 @@ const Content = styled.div`
   // 크기 세팅
   width: calc(50% - 10px);
   height: calc(100% - 40px);
-  border-radius: 20px;
+  border-radius: 10px;
   // 디스플레이 세팅
   display: flex;
   justify-content: center;

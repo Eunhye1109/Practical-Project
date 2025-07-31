@@ -36,7 +36,7 @@ const Content = styled.div`
   margin-bottom: 100px;
   // 스타일
   background-color: white;
-  border-radius: 20px;
+  border-radius: 10px;
   border: 1px solid ${({theme}) => theme.colors.natural[20]};
 `;
 
