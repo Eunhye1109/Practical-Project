@@ -4,6 +4,8 @@ import { typoStyle } from 'styles/typoStyle';
 import { InputBox } from 'components/molecules';
 import { Button } from 'components/atoms';
 import { useNavigate } from 'react-router-dom';
+import { deleteId } from 'api/userApi';
+import { useLogin } from 'contexts/LoginContext';
 
 const Container = styled.div`
   // 크기
@@ -54,6 +56,7 @@ const NotiText = styled.div<{thickness: boolean}>`
 `;
 
 const Withdrawal = () => {
+  
   // 페이지 이동
   const navigate = useNavigate();
   // 비밀번호 저장

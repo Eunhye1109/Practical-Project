@@ -21,3 +21,9 @@ export const idCheckUser = async (idData: string) => {
     const res = await axios.get(`${BASE_URL}v1/auth/check_id/${idData}`);
     return res.data;
 }
+
+// 회원탈퇴
+export const deleteId = async (userData: LoginType) => {
+    const res = await axios.get(`${BASE_URL}v1/info/secession/${userData.userId}/${userData.userPw}`);
+    return res.data;
+}
