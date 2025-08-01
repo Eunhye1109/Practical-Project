@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Data
 @Builder
@@ -16,5 +16,5 @@ public class SearchCacheVO {
     private String corpName;           // 기업명
     private String colName;            // 컬럼명 (대표 컬럼명)
     private String colValue;           // 실제 값 (latestData.get(matchedCol))
-    private LocalDateTime cachedAt;    // 캐시 저장 시점
+    private Timestamp cachedAt;    // 캐시 저장 시점
 }

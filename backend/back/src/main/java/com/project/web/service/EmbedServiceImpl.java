@@ -31,6 +31,8 @@ public class EmbedServiceImpl implements EmbedService{
                 for (String target : targetCols) {
                     Map<String, Object> entry = (Map<String, Object>) result.get(target);
                     matched.put(target, (String) entry.get("match"));
+                    System.out.println("[score] " + entry.get("score")); // 개발 중 확인용
+
                 }
                 return matched;
             }

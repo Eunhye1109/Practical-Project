@@ -7,10 +7,10 @@
 
   <!-- DB에 존재하는 매핑인지 확인 (1개만 반환) -->
   <select id="findMappedCol" resultType="string">
-    SELECT matched_col
-    FROM target_col_map
-    WHERE target_col = #{targetCol}
-      AND matched_col IN
+    SELECT MATCHED_COL
+    FROM TARGET_COL_MAP
+    WHERE TARGET_COL = #{targetCol}
+      AND MATCHED_COL IN
       <foreach item="col" collection="candidateCols" open="(" separator="," close=")">
         #{col}
       </foreach>
@@ -19,7 +19,7 @@
 
   <!-- 새 매핑 저장 -->
   <insert id="saveMapping">
-    INSERT INTO target_col_map (target_col, matched_col)
+    INSERT INTO TARGET_COL_MAP (TARGET_COL, MATCHED_COL)
     VALUES (#{targetCol}, #{matchedCol})
   </insert>
 

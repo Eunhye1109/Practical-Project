@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.project.web.vo.TargetColVO;
+
 @Mapper
 public interface TargetColMapper {
 	
-//	@Select("SELECT target_col FROM target_col")
-    List<String> selectAllTargetCols();  // 대표컬럼
+    List<TargetColVO> selectAllTargetCols();  // 대표컬럼
 }

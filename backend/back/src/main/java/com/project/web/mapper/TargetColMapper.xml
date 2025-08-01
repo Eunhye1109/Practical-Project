@@ -6,10 +6,14 @@
 <mapper namespace="com.project.web.mapper.TargetColMapper">
 
   <!-- 대표 컬럼 전체 조회 -->
-  <select id="selectAllTargetCols" resultType="com.project.web.vo.TargetColVO">
-    SELECT target_col_idx, target_col
-    FROM target_col
-    ORDER BY target_col_idx
-  </select>
+  	<select id="selectAllTargetCols" resultType="com.project.web.vo.TargetColVO">
+    SELECT 
+	TARGET_COL_IDX AS targetColIdx,
+    TARGET_COL_NAME AS targetColName,
+    DESCRIPTION AS description,
+    CREATED_AT AS createdAt
+    FROM TARGET_COL
+    ORDER BY TARGET_COL_IDX
+	</select>
 
 </mapper>
