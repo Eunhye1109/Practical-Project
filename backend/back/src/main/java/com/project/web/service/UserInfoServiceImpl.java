@@ -35,6 +35,4 @@ public class UserInfoServiceImpl implements UserInfoService{
 				.build();
 	}
 
-
-
 }

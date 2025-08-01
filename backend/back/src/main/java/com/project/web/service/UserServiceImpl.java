@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.project.web.dto.UserDTO;
 import com.project.web.mapper.UserMapper;
+import com.project.web.vo.UpdateUserVO;
 import com.project.web.vo.UserVO;
 
 @Service
@@ -80,5 +81,23 @@ public class UserServiceImpl implements UserService {
 				.success(true)
 				.build();
 	}
+	
+	@Override
+	public UserDTO updateUser(UpdateUserVO request) {
+	    // VO → Mapper에 그대로 전달
+	    int result = userMapper.updateUser(request);
 
+	    if (result == 0) {
+	        return UserDTO.builder()
+	                .success(false)
+	                .message("❌ 회원 정보 수정에 실패했습니다.")
+	                .build();
+	    }
+
+	    return UserDTO.builder()
+	            .success(true)
+	            .message("✅ 회원 정보가 성공적으로 수정되었습니다.")
+	            .userId(request.getUserId())
+	            .build();
+	}
 }
