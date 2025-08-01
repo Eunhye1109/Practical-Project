@@ -10,7 +10,7 @@ import com.project.web.vo.TargetColMapVO;
 @Mapper
 public interface TargetColMapMapper {
 	
-    String findMappedCol(@Param("targetCol") String targetCol, @Param("candidateCols") Set<String> candidateCols);
+    String findMappedCol(@Param("targetName") String targetCol, @Param("candidateCols") Set<String> candidateCols);
     
     void saveMapping(TargetColMapVO vo);
 }

@@ -4,6 +4,7 @@ package com.project.web.service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class SearchCacheServiceImpl implements SearchCacheService {
     public SearchResultDTO getCachedResult(String corpName) {
         List<SearchCacheVO> cached = searchCacheMapper.getCachedResult(corpName);
         List<ColumnMatchVO> columns = cached.stream()
+    		.filter(Objects::nonNull) // 🔒 null 방지
             .map(vo -> ColumnMatchVO.builder()
                 .targetCol(vo.getColName())
                 .matchedCol(null)  // 캐시에는 matchedCol 없으므로 생략

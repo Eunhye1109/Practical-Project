@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import com.project.web.dto.MatchResultDTO;
 import com.project.web.dto.SearchResultDTO;
 import com.project.web.mapper.TargetColMapper;
 import com.project.web.vo.ColumnMatchVO;
@@ -64,15 +65,18 @@ public class SearchServiceImpl implements SearchService {
         // 3. 임베딩 호출로 남은 것 매핑
         if (!unmatchedTargets.isEmpty()) {
             System.out.println("📡 [3] 임베딩 매핑 요청 대상 = " + unmatchedTargets.size() + "개");
-            Map<String, String> embedMatches = embedService.getEmbeddingMatches(unmatchedTargets, rawCols);
+            Map<String, MatchResultDTO> embedMatches = embedService.getEmbeddingMatches(unmatchedTargets, rawCols);
             for (String target : unmatchedTargets) {
-                String matched = embedMatches.get(target);
-                if (matched != null) {
-                    System.out.println("✅ [3] 임베딩 매핑 성공: " + target + " → " + matched);
+                MatchResultDTO match = embedMatches.get(target);
+                if (match != null && match.getSimilarity() >= 0.8) {
+                    String matched = match.getMatchedCol();
+                    double similarity = match.getSimilarity();
+
                     finalMatches.put(target, matched);
-                    columnMapperService.saveMapping(target, matched);  // DB 저장
+                    columnMapperService.saveMapping(target, matched, similarity);  // ✅ 유사도 저장
+                    System.out.println("✅ [3] 임베딩 매핑 성공: " + target + " → " + matched + " (유사도: " + similarity + ")");
                 } else {
-                    System.out.println("❌ [3] 임베딩 매핑 실패: " + target);
+                    System.out.println("❌ [3] 임베딩 실패 또는 유사도 낮음: " + target);
                 }
             }
         }
