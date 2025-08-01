@@ -16,5 +16,6 @@ public class SearchCacheVO {
     private String corpName;           // 기업명
     private String colName;            // 컬럼명 (대표 컬럼명)
     private String colValue;           // 실제 값 (latestData.get(matchedCol))
+    private String years;
     private Timestamp cachedAt;    // 캐시 저장 시점
 }

@@ -15,5 +15,6 @@ import com.project.web.vo.ColumnMatchVO;
 @NoArgsConstructor
 public class SearchResultDTO {
     private String corpName;
+    private String year;
     private List<ColumnMatchVO> columns;
 }

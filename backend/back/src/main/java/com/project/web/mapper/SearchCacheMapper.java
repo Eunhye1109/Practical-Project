@@ -9,6 +9,7 @@ import com.project.web.vo.SearchCacheVO;
 
 @Mapper
 public interface SearchCacheMapper {
+	
     boolean existsValidCache(@Param("corpName") String corpName);
     
     List<SearchCacheVO> getCachedResult(@Param("corpName") String corpName);
