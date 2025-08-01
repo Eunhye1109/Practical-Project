@@ -26,43 +26,47 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public SearchResultDTO search(String corpName) {
 
-        // 1. FastAPI에서 기업 컬럼 수집
+    	// 1. FastAPI에서 기업 컬럼 수집
         System.out.println("📦 [1] FastAPI fetch 시작 → corpName = " + corpName);
         Map<String, Object> allYearData = fetchService.fetchColumns(corpName);
         System.out.println("📦 [1] allYearData.keys = " + allYearData.keySet());
 
-        Map<String, Object> latestData = extractLatestYearData(allYearData);
-        if (latestData == null) {
+        // 2. 전체 rawCols 수집 (3개년 통합)
+        Set<String> rawCols = new HashSet<>();
+        for (String year : YEARS) {
+            if (allYearData.containsKey(year)) {
+                Map<String, Object> yearData = (Map<String, Object>) allYearData.get(year);
+                rawCols.addAll(yearData.keySet());
+            }
+        }
+        if (rawCols.isEmpty()) {
             System.out.println("❌ [1] 최근 3개년 데이터 없음");
             throw new RuntimeException("해당 기업의 최근 3개년 데이터가 존재하지 않습니다.");
         }
-        System.out.println("✅ [1] latestData.keySet = " + latestData.keySet());
 
-        Set<String> rawCols = latestData.keySet();
-        List<TargetColVO> targetCols = targetColMapper.selectAllTargetCols();  // 대표 컬럼 목록
+        // 3. 대표 컬럼 조회
+        List<TargetColVO> targetCols = targetColMapper.selectAllTargetCols();
         System.out.println("📌 [2] 대표컬럼 개수 = " + targetCols.size());
 
         Map<String, String> finalMatches = new LinkedHashMap<>();
         List<String> unmatchedTargets = new ArrayList<>();
 
-        // 2. 기존 DB 매핑 시도
+        // 4. DB 기반 매핑 시도
         for (TargetColVO target : targetCols) {
-            String targetColName = target.getTargetColName();  // VO에서 꺼내기
-            if (targetColName == null || targetColName.isBlank()) {
-                System.out.println("⚠️ [2.1] targetColName이 null 또는 공백이라 skip");
-                continue;
-            }
+            String targetColName = target.getTargetColName();
+            if (targetColName == null || targetColName.isBlank()) continue;
+
             String matched = columnMapperService.findMappedCol(targetColName, rawCols);
             if (matched != null) {
-                System.out.println("✅ [2] 매핑 성공 (DB): " + targetColName + " → " + matched);
                 finalMatches.put(targetColName, matched);
+                System.out.println("✅ [2] DB 매핑 성공: " + targetColName + " → " + matched);
             } else {
-                System.out.println("❌ [2] 매핑 실패 (DB): " + targetColName);
                 unmatchedTargets.add(targetColName);
+                System.out.println("❌ [2] DB 매핑 실패: " + targetColName);
             }
         }
 
-        // 3. 임베딩 호출로 남은 것 매핑
+        // 5. 임베딩 기반 보완 매핑
         if (!unmatchedTargets.isEmpty()) {
             System.out.println("📡 [3] 임베딩 매핑 요청 대상 = " + unmatchedTargets.size() + "개");
             Map<String, MatchResultDTO> embedMatches = embedService.getEmbeddingMatches(unmatchedTargets, rawCols);
@@ -73,7 +77,7 @@ public class SearchServiceImpl implements SearchService {
                     double similarity = match.getSimilarity();
 
                     finalMatches.put(target, matched);
-                    columnMapperService.saveMapping(target, matched, similarity);  // ✅ 유사도 저장
+                    columnMapperService.saveMapping(target, matched, similarity);
                     System.out.println("✅ [3] 임베딩 매핑 성공: " + target + " → " + matched + " (유사도: " + similarity + ")");
                 } else {
                     System.out.println("❌ [3] 임베딩 실패 또는 유사도 낮음: " + target);
@@ -81,31 +85,42 @@ public class SearchServiceImpl implements SearchService {
             }
         }
 
+        // 6. 결과 조립 (연도별 값 포함)
         List<ColumnMatchVO> columnList = new ArrayList<>();
-
-        // 4. 최종 결과 조립
-        System.out.println("🔧 [4] 최종 결과 조립 시작");
         for (TargetColVO target : targetCols) {
             String targetColName = target.getTargetColName();
             String matched = finalMatches.get(targetColName);
-            String value = matched != null ? (String) latestData.get(matched) : null;
 
-            System.out.println("📊 [4] 최종 매핑: " + targetColName + " → " + matched + ", 값: " + value);
+            Map<String, String> yearValues = new LinkedHashMap<>();
+            if (matched != null) {
+                for (String year : YEARS) {
+                    Map<String, Object> yearData = (Map<String, Object>) allYearData.get(year);
+                    if (yearData != null && yearData.containsKey(matched)) {
+                        yearValues.put(year, String.valueOf(yearData.get(matched)));
+                    } else {
+                        yearValues.put(year, null);
+                    }
+                }
+            }
+
+            System.out.println("📊 [4] 최종 매핑: " + targetColName + " → " + matched + ", 연도별 값: " + yearValues);
 
             columnList.add(
                 ColumnMatchVO.builder()
                     .targetCol(targetColName)
                     .matchedCol(matched)
-                    .value(value)
+                    .values(yearValues)
                     .build()
             );
         }
 
+        // 7. DTO 반환
         return SearchResultDTO.builder()
             .corpName(corpName)
             .columns(columnList)
             .build();
     }
+
 
 
     private Map<String, Object> extractLatestYearData(Map<String, Object> allYearData) {
