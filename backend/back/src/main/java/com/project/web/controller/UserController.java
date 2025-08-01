@@ -49,12 +49,11 @@ public class UserController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@Operation(summary = "회원정보수정")
-	@PatchMapping("/update")
-	public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserVO request) {
-	    UserDTO result = userService.updateUser(request);
-	    return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
-	}
-	
+   @Operation(summary = "회원정보수정")
+   @PatchMapping("/update")
+   public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserVO request) {
+   UserDTO result = userService.updateUser(request);
+   return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 }
 	
+}
