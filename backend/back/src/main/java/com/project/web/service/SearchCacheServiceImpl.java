@@ -1,6 +1,7 @@
 package com.project.web.service;
 
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class SearchCacheServiceImpl implements SearchCacheService {
 
     @Override
     public SearchResultDTO save(String corpName, SearchResultDTO result) {
-        LocalDateTime now = LocalDateTime.now();
+    	Timestamp  now = Timestamp.valueOf(LocalDateTime.now());
         for (ColumnMatchVO col : result.getColumns()) {
             SearchCacheVO vo = SearchCacheVO.builder()
                 .corpName(corpName)

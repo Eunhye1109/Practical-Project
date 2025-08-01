@@ -15,6 +15,7 @@ public class SearchController {
 
 	@Autowired
 	private SearchService searchService;
+	@Autowired
 	private SearchCacheService searchCacheService;
 
     @GetMapping("/search/{corp_name}")
