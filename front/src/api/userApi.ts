@@ -1,5 +1,5 @@
 import axios from "axios";
-import { UserDTO, LoginType } from "types/user.types";
+import { UserDTO, LoginType, DeleteUserType } from "types/user.types";
 
 // 백엔드 주소
 const BASE_URL = 'http://localhost:8087/api/';
@@ -23,7 +23,7 @@ export const idCheckUser = async (idData: string) => {
 }
 
 // 회원탈퇴
-export const deleteId = async (userData: LoginType) => {
-    const res = await axios.get(`${BASE_URL}v1/info/secession/${userData.userId}/${userData.userPw}`);
+export const deleteId = async (userData: DeleteUserType) => {
+    const res = await axios.post(`${BASE_URL}v1/info/secession/${userData.userId}/${userData.userPw}`);
     return res.data;
 }

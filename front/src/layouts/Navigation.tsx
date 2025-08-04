@@ -56,9 +56,7 @@ const Navigation = () => {
         {label: '로그인', to: '/login', icon: <Login />},
         {label: '회원가입', to: '/join', icon: <Join />}
     ]);
-
-    // TODO: 로그인 상태에 따라 nav 배열 안의 내용물 바뀌게 하는 로직 추가
-    //       (내용물: 관심기업 / 최근조회보고서 / 마이페이지 / 로그아웃)
+    
     useEffect(() => {
         if(user !== null) {
             setNav([

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserDTO, LoginType } from "types/user.types";
+import { LoginType } from "types/user.types";
 
 interface LoginContextType {
     user: LoginType | null;

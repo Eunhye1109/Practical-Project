@@ -148,8 +148,6 @@ const Login = () => {
     }
   }, [userId, userPw]);
 
-  // TODO: 아이디 서치 로직
-  // TODO: 비밀번호 서치 로직
   const handleLoginClick = async () => {
     try {
       const loginData: LoginType = {userId, userPw, riskType};

@@ -179,7 +179,6 @@ const Join = () => {
 
   // 아이디 중복 확인 메소드
   const handleIdCheckBlur = async () => {
-    // TODO: 로직 작성
     try {
       const res = await idCheckUser(formData.userId);
       if(res.success) {

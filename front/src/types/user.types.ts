@@ -12,4 +12,8 @@ export interface UserDTO {
     success?: boolean;
 }
 
-export type LoginType = Pick<UserDTO, 'userId' | 'userPw' | 'riskType' | 'success'>
+// 로그인 타입
+export type LoginType = Pick<UserDTO, 'userId' | 'userPw' | 'riskType' | 'success'>;
+
+// 회원 탈퇴 차입
+export type DeleteUserType = Pick<UserDTO,'userId' | 'userPw' | 'success'>;

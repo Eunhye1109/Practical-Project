@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled';
 import { typoStyle } from 'styles/typoStyle';
 import { InputBox } from 'components/molecules';
 import { Button } from 'components/atoms';
 import { useNavigate } from 'react-router-dom';
-import { deleteId } from 'api/userApi';
+import { DeleteUserType } from 'types/user.types';
 import { useLogin } from 'contexts/LoginContext';
+// 백엔드 연결
+import { deleteId } from 'api/userApi';
 
 const Container = styled.div`
   // 크기
@@ -48,6 +50,7 @@ const NotiBox = styled.div`
   flex-direction: column;
   gap: 5px;
   margin-bottom: 50px;
+  margin-top: 20px;
 `;
 
 const NotiText = styled.div<{thickness: boolean}>`
@@ -56,28 +59,43 @@ const NotiText = styled.div<{thickness: boolean}>`
 `;
 
 const Withdrawal = () => {
-  
+  const {user, logout} = useLogin();
   // 페이지 이동
   const navigate = useNavigate();
   // 비밀번호 저장
-  const [ currentPw, setCurrentPw] = useState('');
+  const [currentPw, setCurrentPw] = useState('');
   // 제출 버튼 활성/비활성
   const [btnActive, setBtnActive] = useState('deactive');
+  // 경고 문구 활성/비활성
+  const [warning, setWarning] = useState(true);
+  // 제출 데이터
+  const deleteUser:DeleteUserType = {userId: user?.userId ?? '', userPw: user?.userPw ?? ''}
 
-  const handlePrevPwOverlapChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handlePwChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setCurrentPw(e.target.value);
+    if((currentPw !== '' && currentPw !== null && currentPw !== undefined) && e.target.value === deleteUser.userPw) {
+      setBtnActive('default');
+    }
   }
   const handlePwCheckBlur = () => {
-    // TODO: 비밀번호 확인 로직
+    if((currentPw !== '' && currentPw !== null && currentPw !== undefined) && currentPw !== deleteUser.userPw) {
+      setWarning(false);
+    } else {
+      setWarning(true);
+    }
   }
 
-  // TODO: 탈퇴 요청 로직
-  const handleJoinClick = () => {
-    if(btnActive === 'deactive'){
-      alert('비밀번호를 확인해주세요.');
-    } else {
-      alert('탈퇴가 완료되었습니다.');
-      navigate('/');
+  const handleJoinClick = async () => {
+    try {
+      const result = await deleteId(deleteUser);
+      if(result.success) {
+          deleteId(deleteUser);
+          logout();
+          navigate('/');
+          alert('탈퇴가 완료되었습니다.');
+        }
+      } catch (e) {
+        alert('비밀번호를 확인해주세요.');
     }
   }
 
@@ -89,10 +107,9 @@ const Withdrawal = () => {
             inputLabel='비밀번호를 입력해주세요.'
             inputTitleLabel='비밀번호 확인'
             textLabel='비밀번호가 틀렸습니다.'
-            visible={true}
-            onChange={handlePrevPwOverlapChange}
+            visible={warning}
+            onChange={handlePwChange}
             onBlur={handlePwCheckBlur}
-            // TODO: value값 받아온 데이터로 넣기
           />
         </InputForm>
         <NotiBox>
