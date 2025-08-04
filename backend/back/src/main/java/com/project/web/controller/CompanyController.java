@@ -25,7 +25,7 @@ public class CompanyController {
 	@Autowired
 	private CompanyServiceImpl companyService;
 	
-	@PostMapping
+	@PostMapping("/company")
 	public ResponseEntity<FcDTO> insertCompany(@RequestParam String userId,@RequestParam String corpName, @RequestParam String u_comment) {
 		FcDTO response = companyService.insertCompany(userId, corpName, u_comment);
 	    return new ResponseEntity<>(response, response.getSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
