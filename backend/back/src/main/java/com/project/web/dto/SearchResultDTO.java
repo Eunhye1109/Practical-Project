@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 import com.project.web.vo.ColumnMatchVO;
 
@@ -17,4 +18,6 @@ public class SearchResultDTO {
     private String corpName;
     private String year;
     private List<ColumnMatchVO> columns;
+    private Map<String, Map<String, String>> ratios;
+
 }

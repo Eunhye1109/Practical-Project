@@ -20,6 +20,7 @@ public class SearchServiceImpl implements SearchService {
     private final EmbedServiceImpl embedService;
     private final ColumnMapperService columnMapperService;
     private final TargetColMapper targetColMapper;
+    private final FinancialRatioService financialRatioService;
 
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
@@ -114,10 +115,12 @@ public class SearchServiceImpl implements SearchService {
             );
         }
 
+        Map<String, Map<String, String>> ratios = financialRatioService.calculate(columnList);
         // 7. DTO 반환
         return SearchResultDTO.builder()
             .corpName(corpName)
             .columns(columnList)
+            .ratios(ratios)
             .build();
     }
 
