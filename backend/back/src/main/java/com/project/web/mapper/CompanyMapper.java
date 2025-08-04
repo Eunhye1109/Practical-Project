@@ -18,6 +18,10 @@ public interface CompanyMapper {
     // 관심 기업 조회
     List<FcVO> selectCompany(String userId);
     
+    // 메모 수정
+    int updateComment(@Param("userId") String userId, @Param("corpName") String corpName, @Param("u_comment") String u_comment);
+
+    
     // 관심 기업 삭제
     int deleteCompany(@Param("userId") String userId, @Param("corpName") String corpName);
 }
