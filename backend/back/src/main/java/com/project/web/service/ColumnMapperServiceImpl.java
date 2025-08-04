@@ -3,6 +3,7 @@ package com.project.web.service;
 import org.springframework.stereotype.Service;
 
 import com.project.web.mapper.TargetColMapMapper;
+import com.project.web.vo.ColumnMatchVO;
 import com.project.web.vo.TargetColMapVO;
 
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,12 @@ public class ColumnMapperServiceImpl implements ColumnMapperService {
 
         targetColMapMapper.saveMapping(vo);
         log.debug("✅ 매핑 저장 완료: {}", vo);
+    }
+    
+    public List<ColumnMatchVO> match(Map<String, Map<String, Object>> allYearData) {
+		return null;
+        // FastAPI에서 가져온 raw data를 ColumnMatchVO 리스트로 변환
+        // 연도별 value 정리 및 matchedCol 설정
     }
 }
 
