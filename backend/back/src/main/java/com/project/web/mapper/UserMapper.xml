@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.web.mapper.UserMapper">
+
+    <insert id="signup" parameterType="com.project.web.vo.UserVO">
+    INSERT INTO T_USER (
+        USER_ID,
+        USER_PW,
+        USER_PHONE,
+        USER_JOB,
+        USER_PURPOSE,
+        JOINED_AT,
+        RISK_TYPE,
+        TERMS_AGREE
+    )
+    VALUES (
+        #{userId},       
+        #{userPw},       
+        #{userPhone},    
+        #{userJob},      
+        #{userPurpose},  
+        #{joinedAt},     
+        #{riskType},     
+        #{termsAgree}    
+    )
+</insert>
+
+    <select id="login" parameterType="com.project.web.vo.UserVO" resultType="com.project.web.vo.UserVO">
+     SELECT 
+    USER_ID AS userId,
+    USER_PW AS userPw,
+    USER_PHONE AS userPhone,
+    USER_JOB AS userJob,
+    USER_PURPOSE AS userPurpose,
+    JOINED_AT AS joinedAt,
+    RISK_TYPE AS riskType,
+    TERMS_AGREE AS termsAgree
+    FROM T_USER
+    WHERE USER_ID = #{userId}
+      AND USER_PW = #{userPw}
+	</select>
+
+<select id="checkId" resultType="string" parameterType="string">
+    SELECT USER_ID FROM T_USER WHERE USER_ID = #{userId}
+</select>
+
+</mapper>
