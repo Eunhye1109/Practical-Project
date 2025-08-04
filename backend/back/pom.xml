@@ -79,7 +79,24 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+		<dependency>
+   			 <groupId>io.jsonwebtoken</groupId>
+    			<artifactId>jjwt-api</artifactId>
+    			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+    		<groupId>io.jsonwebtoken</groupId>
+    		<artifactId>jjwt-impl</artifactId>
+    		<version>0.11.5</version>
+    	<scope>runtime</scope>
+		</dependency>
+		<dependency>
+   			 <groupId>io.jsonwebtoken</groupId>
+   			 <artifactId>jjwt-jackson</artifactId> <!-- 또는 jjwt-gson 사용 가능 -->
+    			<version>0.11.5</version>
+    			<scope>runtime</scope>
+		</dependency>
+
 		<!-- Jasypt 프로퍼티스 파일 내 암호화 -->
 		<dependency>
 		  <groupId>com.github.ulisesbocchio</groupId>
