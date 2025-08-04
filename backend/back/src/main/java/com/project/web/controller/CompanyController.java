@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +26,8 @@ public class CompanyController {
 	@Autowired
 	private CompanyServiceImpl companyService;
 	
-	@PostMapping
-	public ResponseEntity<FcDTO> insertCompany(@RequestParam String userId,@RequestParam String corpName) {
-		FcDTO response = companyService.insertCompany(userId, corpName);
+	public ResponseEntity<FcDTO> insertCompany(@RequestParam String userId,@RequestParam String corpName, @RequestParam String u_comment) {
+		FcDTO response = companyService.insertCompany(userId, corpName, u_comment);
 	    return new ResponseEntity<>(response, response.getSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
 	}
 	
@@ -39,6 +39,14 @@ public class CompanyController {
         return ResponseEntity.ok(result);
     }
     
+     // 메모 수정
+    @PatchMapping("/comment")
+    public ResponseEntity<FcDTO> updateComment(@RequestParam String userId, @RequestParam String corpName, @RequestParam String u_comment) {
+        FcDTO response = companyService.updateComment(userId, corpName, u_comment);
+        return new ResponseEntity<>(response, response.getSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    // 관심 기업 삭제
     @DeleteMapping("/{userId}/{corpName}")
     public ResponseEntity<FcDTO> deleteCompany(@PathVariable String userId, @PathVariable String corpName) {
         FcDTO response = companyService.deleteCompany(userId, corpName);
