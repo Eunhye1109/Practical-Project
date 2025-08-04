@@ -101,4 +101,23 @@ public class UserServiceImpl implements UserService {
 	            .userId(request.getUserId())
 	            .build();
 	}
+	@Override
+	public UserDTO getUserInfo(String userId) {
+	    UserVO vo = userMapper.getUserInfo(userId);
+
+	    if (vo == null) {
+	        return UserDTO.builder()
+	                .success(false)
+	                .message("해당 ID의 사용자가 존재하지 않습니다.")
+	                .build();
+	    }
+
+	    return UserDTO.builder()
+	            .success(true)
+	            .message("회원 조회 성공")
+	            .userId(vo.getUserId())
+	            .userPw(vo.getUserPw())
+	            .build();
+	}
+
 }
