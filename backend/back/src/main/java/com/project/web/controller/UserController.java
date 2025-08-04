@@ -56,4 +56,3 @@ public class UserController {
    return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 }
 	
-}

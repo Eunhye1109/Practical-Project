@@ -89,3 +89,34 @@ application-prod.properties
 # OS
 .DS_Store
 Thumbs.db
+
+#################################
+# 8. Python / FastAPI 관련
+#################################
+
+# Python 바이트코드 캐시
+__pycache__/
+*.py[cod]
+
+# FastAPI에서 생성된 pyc 캐시도 포함됨
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# PyCharm 설정 (이미 IDEA 항목에 일부 있음)
+*.idea/
+*.idea_modules/
+
+# virtualenv
+venv/
+.venv/
+
+# mypy, pytest, coverage
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter notebook
+.ipynb_checkpoints/
