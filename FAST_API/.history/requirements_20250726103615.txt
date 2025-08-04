@@ -1,0 +1,8 @@
+🔹 의존 패키지 리스트
+
+fastapi
+uvicorn
+requests
+sentence-transformers
+transformers
+pydantic
