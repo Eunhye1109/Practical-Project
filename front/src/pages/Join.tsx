@@ -235,7 +235,7 @@ const Join = () => {
     } else {
       try {
         const result = await joinUser(formData);
-        login({userId: formData.userId, userPw: formData.userPw, riskType: formData.riskType});
+        login(formData);
         console.log('회원가입에 성공했습니다.');
       } catch (error) {
         console.log('회원가입에 실패했습니다.');

@@ -31,6 +31,7 @@ export const LoginProvider = ({children}: {children: React.ReactNode}) => {
 
     const logout = () => {
         setUser(null);
+        sessionStorage.removeItem('user');
     }
 
     return (

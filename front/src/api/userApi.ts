@@ -27,3 +27,8 @@ export const deleteId = async (userData: DeleteUserType) => {
     const res = await axios.post(`${BASE_URL}v1/info/secession/${userData.userId}/${userData.userPw}`);
     return res.data;
 }
+
+// 회원정보 수정
+export const updateUser = async (userData: UserDTO) => {
+    const res = await axios.get
+}
