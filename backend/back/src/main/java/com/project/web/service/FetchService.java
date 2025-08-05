@@ -1,5 +1,6 @@
 package com.project.web.service;
 
+import java.util.Map;
 
 public interface FetchService {
 

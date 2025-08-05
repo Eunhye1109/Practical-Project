@@ -3,6 +3,7 @@ package com.project.web.service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.web.dto.SearchResultDTO;
 import com.project.web.mapper.SearchCacheMapper;
+import com.project.web.utils.ConvertToFlatYearlyListUtil;
 import com.project.web.vo.ColumnMatchVO;
 import com.project.web.vo.SearchCacheVO;
 
@@ -45,38 +47,44 @@ public class SearchCacheServiceImpl implements SearchCacheService {
         List<ColumnMatchVO> columns = grouped.entrySet().stream()
             .map(entry -> ColumnMatchVO.builder()
                 .targetCol(entry.getKey())
-                .matchedCol(null) // 캐시에는 matchedCol 저장 안 하므로 null
                 .values(entry.getValue())
                 .build())
             .toList();
+        List<Map<String, Object>> flatList = ConvertToFlatYearlyListUtil.convert(columns, grouped);
 
         return SearchResultDTO.builder()
             .corpName(corpName)
-            .columns(columns)
+            .columns(flatList)
             .build();
     }
 
     @Override
     public SearchResultDTO save(String corpName, SearchResultDTO result) {
-    	Timestamp  now = Timestamp.valueOf(LocalDateTime.now());
-    	 for (ColumnMatchVO col : result.getColumns()) {
-             String colName = col.getTargetCol();
-             Map<String, String> yearValues = col.getValues();
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
 
-             if (yearValues == null) continue;
-             for (Map.Entry<String, String> entry : yearValues.entrySet()) {
-            	 String year = entry.getKey();
-                 String value = entry.getValue();
-                 SearchCacheVO vo = SearchCacheVO.builder()
-                     .corpName(corpName)
-                     .colName(colName)
-                     .colValue(value)
-                     .years(year)   // ← 연도 저장
-                     .cachedAt(now)
-                     .build();
-                 searchCacheMapper.save(vo);
-             }
-         }
-         return result;
+        for (Map<String, Object> row : result.getColumns()) {
+            String year = String.valueOf(row.get("year"));
+            for (Map.Entry<String, Object> entry : row.entrySet()) {
+                String colName = entry.getKey();
+                if (colName.equals("year")) continue;
+
+                Object val = entry.getValue();
+                if (val == null) continue;
+
+                SearchCacheVO vo = SearchCacheVO.builder()
+                    .corpName(corpName)
+                    .colName(colName)
+                    .colValue(String.valueOf(val))
+                    .years(year)
+                    .cachedAt(now)
+                    .build();
+
+
+                searchCacheMapper.save(vo);
+            }
+        }
+
+        return result;
     }
+
 }
