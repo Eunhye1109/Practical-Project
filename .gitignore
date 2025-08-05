@@ -120,3 +120,4 @@ htmlcov/
 
 # Jupyter notebook
 .ipynb_checkpoints/
+backend/back/bin/
