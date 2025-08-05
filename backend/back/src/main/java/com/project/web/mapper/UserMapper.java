@@ -2,6 +2,7 @@ package com.project.web.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.project.web.vo.UpdateUserVO;
 import com.project.web.vo.UserVO;
 
 @Mapper
@@ -11,7 +12,9 @@ public interface UserMapper {
 	
 	UserVO login(UserVO vo);
 
-	String checkId(String userId);   
+	String checkId(String userId);
+
+	int updateUser(UpdateUserVO request);   
 	
 	
 	

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.web.mapper.CompanyMapper">
+
+    <!-- 관심 기업 등록 -->
+	<insert id="insertCompany">
+	    INSERT INTO FAVORITE_COMPANY (USER_ID, CORP_NAME, U_COMMENT)
+	    VALUES (#{userId}, #{corpName}, #{u_comment})
+	</insert>
+	
+	<select id="selectCompany" resultType="com.project.web.vo.FcVO">
+    SELECT 
+        FC_IDX AS fc_idx,
+        USER_ID AS userId,
+        CORP_NAME AS corpName,
+        CREATED_AT AS createdAt,
+        U_COMMENT AS u_comment
+    FROM FAVORITE_COMPANY
+    WHERE USER_ID = #{userId}
+    ORDER BY CREATED_AT DESC
+</select>
+	
+	 <!-- 메모 수정 -->
+	<update id="updateComment" parameterType="com.project.web.vo.FcVO">
+    UPDATE FAVORITE_COMPANY
+    SET U_COMMENT = #{u_comment}
+    WHERE USER_ID = #{userId} AND CORP_NAME = #{corpName}
+</update>
+	
+	
+	<!-- 관심 기업 삭제 -->
+	<delete id="deleteCompany">
+	    DELETE FROM FAVORITE_COMPANY
+	    WHERE USER_ID = #{userId} AND CORP_NAME = #{corpName}
+	</delete>
+
+</mapper>

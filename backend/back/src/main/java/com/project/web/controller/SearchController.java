@@ -8,6 +8,10 @@ import com.project.web.dto.SearchResultDTO;
 import com.project.web.service.SearchCacheService;
 import com.project.web.service.SearchService;
 
+import com.project.web.service.SearchCacheService;
+import com.project.web.service.SearchService;
+
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -28,6 +32,15 @@ public class SearchController {
         // 아니면 search 실행하고 save(DB 등록) 한 후 search한 값을 줘라
         SearchResultDTO result = searchService.search(corpName);  // ✅ 새로 fetch + 매핑 수행
         searchCacheService.save(corpName, result);                   // ✅ 캐시 저장 (최초 or 오래된 경우)
+
+    @GetMapping("/search/{corp_name}")
+    public ResponseEntity<?> search(@PathVariable String corpName) {
+        if (SearchCacheService.existsValidCache(corpName)) {
+            return ResponseEntity.ok(SearchCacheService.getCachedResult(corpName)); // ✅ 캐시된 결과 바로 리턴
+        }
+
+        Map<String, Object> result = searchService.search(corpName);  // ✅ 새로 fetch + 매핑 수행
+        SearchCacheService.save(corpName, result);                   // ✅ 캐시 저장 (최초 or 오래된 경우)
         return ResponseEntity.ok(result);
     }
 }
