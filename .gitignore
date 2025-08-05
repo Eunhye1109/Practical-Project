@@ -89,3 +89,12 @@ application-prod.properties
 # OS
 .DS_Store
 Thumbs.db
+
+#################################
+# 🔥 FastAPI 파이썬 캐시 파일
+#################################
+*.pyc
+__pycache__/
+**/__pycache__/
+FAST_API/**/__pycache__/
+venv/

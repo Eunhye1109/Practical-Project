@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.project.web.dto.MatchResultDTO;
 import com.project.web.dto.SearchResultDTO;
 import com.project.web.mapper.TargetColMapper;
+import com.project.web.utils.ConvertToFlatYearlyListUtil;
 import com.project.web.vo.ColumnMatchVO;
 import com.project.web.vo.TargetColVO;
 
@@ -116,12 +117,13 @@ public class SearchServiceImpl implements SearchService {
         }
 
         Map<String, Map<String, String>> ratios = financialRatioService.calculate(columnList);
-        // 7. DTO 반환
+        List<Map<String, Object>> flatColumns = ConvertToFlatYearlyListUtil.convert(columnList, ratios);
+
         return SearchResultDTO.builder()
             .corpName(corpName)
-            .columns(columnList)
-            .ratios(ratios)
+            .columns(flatColumns)
             .build();
+
     }
 
 
