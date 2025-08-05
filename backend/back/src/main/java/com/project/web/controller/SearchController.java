@@ -8,6 +8,10 @@ import com.project.web.dto.SearchResultDTO;
 import com.project.web.service.SearchCacheService;
 import com.project.web.service.SearchService;
 
+import com.project.web.service.SearchCacheService;
+import com.project.web.service.SearchService;
+
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
