@@ -98,3 +98,4 @@ __pycache__/
 **/__pycache__/
 FAST_API/**/__pycache__/
 venv/
+backend/back/bin/
