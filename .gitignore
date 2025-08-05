@@ -121,3 +121,67 @@ htmlcov/
 # Jupyter notebook
 .ipynb_checkpoints/
 backend/back/bin/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+#################################
+# 2. 에디터/IDE 설정 파일
+#################################
+# VSCode
+.vscode/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse(STS) 워크스페이스
+.metadata/
+
+#################################
+# 3. 로그 및 환경설정 파일
+#################################
+*.log
+.env
+.env.*
+
+#################################
+# 4. 백엔드 (Spring Boot / Maven or Gradle)
+#################################
+# 빌드 결과물
+**/target/
+**/build/
+
+# Maven wrapper 제외 (필요 시)
+!**/mvnw
+!**/mvnw.cmd
+!**/.mvn/wrapper/maven-wrapper.jar
+
+#################################
+# 5. 프론트엔드 (React / Node.js)
+#################################
+# 종속성
+**/node_modules/
+
+# 빌드 산출물
+**/dist/
+**/build/
+**/.cache/
+
+#################################
+# 6. 민감정보 및 인증서
+#################################
+*.keystore
+*.jks
+*.pem
+*.p12
+*.crt
+*.key
+
+#################################
+# 7. 기타 (필요 시 추가)
+#################################
+# 프로젝트 스택과 무관한 항목은 필요할 때만 추가하세요.
+# 예) Unity, .csproj, .sln 등

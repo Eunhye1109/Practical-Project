@@ -20,7 +20,10 @@ public class SearchServiceImpl implements SearchService {
     private final EmbedServiceImpl embedService;
     private final ColumnMapperService columnMapperService;
     private final TargetColMapper targetColMapper;
+<<<<<<< HEAD
     private final FinancialRatioService financialRatioService;
+=======
+>>>>>>> ff40fe6 (feat: search FASTAPI 연동중)
 
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
@@ -48,6 +51,24 @@ public class SearchServiceImpl implements SearchService {
         // 3. 대표 컬럼 조회
         List<TargetColVO> targetCols = targetColMapper.selectAllTargetCols();
         System.out.println("📌 [2] 대표컬럼 개수 = " + targetCols.size());
+    private FetchService fetchService;
+    private EmbedService embedService;
+    private ColumnMapperService columnMapperService;
+
+    private static final List<String> YEARS = List.of("2023", "2022", "2021");
+
+    @Override
+    public Map<String, Object> search(String corpName) {
+        // 1. FastAPI에서 기업 컬럼 수집
+        Map<String, Object> allYearData = fetchService.fetchColumns(corpName);
+        Map<String, Object> latestData = extractLatestYearData(allYearData);
+
+        if (latestData == null) {
+            throw new RuntimeException("해당 기업의 최근 3개년 데이터가 존재하지 않습니다.");
+        }
+
+        Set<String> rawCols = latestData.keySet();
+        List<String> targetCols = getTargetColsFromDB();  // 대표 컬럼 목록
 
         Map<String, String> finalMatches = new LinkedHashMap<>();
         List<String> unmatchedTargets = new ArrayList<>();
@@ -82,9 +103,6 @@ public class SearchServiceImpl implements SearchService {
                     System.out.println("✅ [3] 임베딩 매핑 성공: " + target + " → " + matched + " (유사도: " + similarity + ")");
                 } else {
                     System.out.println("❌ [3] 임베딩 실패 또는 유사도 낮음: " + target);
-                }
-            }
-        }
 
         // 6. 결과 조립 (연도별 값 포함)
         List<ColumnMatchVO> columnList = new ArrayList<>();
@@ -130,6 +148,21 @@ public class SearchServiceImpl implements SearchService {
         for (String year : YEARS) {
             if (allYearData.containsKey(year)) {
                 return (Map<String, Object>) allYearData.get(year);
+        // 4. 최종 결과 조립
+        Map<String, Object> result = new LinkedHashMap<>();
+        for (String target : targetCols) {
+            String matched = finalMatches.get(target);
+            Object value = matched != null ? latestData.get(matched) : null;
+            result.put(target, Map.of("matched_col", matched, "value", value));
+        }
+
+        return result;
+    }
+
+    private Map<String, Object> extractLatestYearData(Map<String, Object> all) {
+        for (String year : YEARS) {
+            if (all.containsKey(year)) {
+                return (Map<String, Object>) all.get(year);
             }
         }
         return null;
