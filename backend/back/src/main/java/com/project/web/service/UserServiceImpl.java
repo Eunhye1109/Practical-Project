@@ -28,7 +28,10 @@ public class UserServiceImpl implements UserService {
     	
     	// if usermapper.signup(userdto) = 0일때??? 실패
 	    	if(ok == 0) {
-	    		return UserDTO.builder().success(false).build();
+	    		return UserDTO.builder()
+	    				.success(false)
+	    				.message("회원가입 실패")
+	    				.build();
 	    	}
 	    	
         return UserDTO.builder()
@@ -47,19 +50,12 @@ public class UserServiceImpl implements UserService {
 
         UserVO ok = userMapper.login(vo);  // 실제 로그인 검증
 
-	    	if(ok == null) {
-	    		return UserDTO.builder()
-	    				.success(false)
-	    				.message("Id 또는 Pw가 틀렸습니다.")
-	    				.build();
-	    	}
-    	
-			    return UserDTO.builder()
-			            .success(true)
-			            .message("로그인 성공")
-			            .userId(userId)
-			            .userPw(userPw)
-			            .build();
+        if (ok == null) {
+            return UserDTO.builder()
+                    .success(false)
+                    .message("Id 또는 Pw가 틀렸습니다.")
+                    .build();
+        }
 
         // ✅ 토큰 생성
         String token = jwtUtil.generateToken(userId);
