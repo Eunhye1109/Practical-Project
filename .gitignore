@@ -91,6 +91,31 @@ application-prod.properties
 Thumbs.db
 
 #################################
+# 🔥 FastAPI 파이썬 캐시 파일
+#################################
+*.pyc
+__pycache__/
+**/__pycache__/
+FAST_API/**/__pycache__/
+venv/
+backend/back/bin/
+=======
+*.iml
+
+# 빌드 결과물
+/target/
+*.log
+
+# 환경 변수 / 보안 설정
+application-dev.properties
+application-prod.properties
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+#################################
 # 8. Python / FastAPI 관련
 #################################
 
