@@ -11,7 +11,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
 				.allowedOrigins("http://localhost:3000","http://localhost:8087") // React 개발용, swagger
-				.allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
+				.allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE","OPTIONS")
+				.allowedMethods("GET", "POST", "PUT", "DELETE")
 				.allowedHeaders("*")
 				.allowCredentials(true);
 	}
