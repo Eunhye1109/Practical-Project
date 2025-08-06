@@ -12,7 +12,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		registry.addMapping("/**")
 				.allowedOrigins("http://localhost:3000","http://localhost:8087") // React 개발용, swagger
 				.allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE","OPTIONS")
-				.allowedMethods("GET", "POST", "PUT", "DELETE")
 				.allowedHeaders("*")
 				.allowCredentials(true);
 	}
