@@ -110,6 +110,12 @@
         <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         <version>2.5.0</version>
       </dependency>
+     
+     <!-- TypeHandler 설정 -->
+		<dependency>
+		  <groupId>com.fasterxml.jackson.core</groupId>
+		  <artifactId>jackson-databind</artifactId>
+		</dependency>
 
    </dependencies>
 

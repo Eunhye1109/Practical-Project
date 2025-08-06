@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.web.mapper.SearchListMapper">
+
+<insert id="insertSearchResult" parameterType="com.project.web.dto.SearchListDTO">
+	INSERT INTO SEARCH_LIST_CACHE (
+        CORP_NAME,
+        CEO_NAME,
+        STOCK_TYPE,
+        ESTABLISH_DATE,
+        ADDRESS,
+        BIZ_NO,
+        <!-- AFFIL_JSON,-->
+        KEYWORDS_JSON,
+        GPT_SUMMARY
+    ) VALUES (
+        #{corpName, jdbcType=VARCHAR},
+        #{ceoName, jdbcType=VARCHAR},
+        #{stockType, jdbcType=VARCHAR},
+        TO_DATE(#{establishDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+        #{address, jdbcType=VARCHAR},
+        #{bizNo, jdbcType=VARCHAR},
+        <!-- #{affiliates, jdbcType=CLOB, typeHandler=com.project.web.handler.JsonTypeHandler},-->
+        #{keywords, jdbcType=CLOB, typeHandler=com.project.web.handler.JsonTypeHandler},
+        #{gptSummary, jdbcType=CLOB}
+    )
+</insert>
+
+<select id="selectByCorpName" parameterType="String" resultType="com.project.web.dto.SearchListDTO">
+    SELECT
+        CORP_NAME AS corpName,
+        CEO_NAME AS ceoName,
+        STOCK_TYPE AS stockType,
+        TO_CHAR(ESTABLISH_DATE, 'YYYY-MM-DD') AS establishDate,
+        ADDRESS AS address,
+        BIZ_NO AS bizNo,
+        <!--AFFIL_JSON AS affiliates,-->
+        KEYWORDS_JSON AS keywords,
+        GPT_SUMMARY AS gptSummary
+    FROM SEARCH_LIST_CACHE
+    WHERE CORP_NAME LIKE '%' || #{corpName} || '%'
+</select>
+
+
+
+</mapper>
