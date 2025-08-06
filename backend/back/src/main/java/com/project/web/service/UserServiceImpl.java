@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 //        UserVO vo = userdto.getUservo();
 //        usermapper.signup(vo);
     	
-    	int ok = usermapper.signup(request);
+    	int ok = userMapper.signup(request);
     	
     	// if usermapper.signup(userdto) = 0일때??? 실패
 	    	if(ok == 0) {
