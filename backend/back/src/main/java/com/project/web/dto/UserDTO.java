@@ -19,5 +19,7 @@ public class UserDTO {
     private String userPw;
 	
     
+    private String token;  // JWT 토큰 (로그인 성공 시에만)
+
 	 
 }

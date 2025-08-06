@@ -21,6 +21,10 @@ import com.project.web.vo.UserVO;
 import io.swagger.v3.oas.annotations.Operation;
 import com.project.web.vo.UserVO;
 
+import com.project.web.vo.UserVO;
+
+import io.swagger.v3.oas.annotations.Operation;
+
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -48,11 +52,21 @@ public class UserController {
 		UserDTO response = userService.checkId(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+
 	
-   @Operation(summary = "회원정보수정")
-   @PatchMapping("/update")
-   public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserVO request) {
-   UserDTO result = userService.updateUser(request);
-   return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+	@Operation(summary = "회원정보수정")
+	@PatchMapping("/update")
+	public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserVO request) {
+	    UserDTO result = userService.updateUser(request);
+	    return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+	}
+	
+	@Operation(summary = "회원 정보 조회")
+	@GetMapping("/info/{userId}")
+	public ResponseEntity<UserDTO> getUserInfo(@PathVariable String userId) {
+	    UserDTO result = userService.getUserInfo(userId);
+	    return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+	}
+
 }
 	

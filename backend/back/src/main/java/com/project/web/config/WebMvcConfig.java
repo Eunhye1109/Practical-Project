@@ -11,7 +11,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
 				.allowedOrigins("http://localhost:3000","http://localhost:8087") // React 개발용, swagger
+<<<<<<< HEAD
 				.allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE","OPTIONS")
+=======
+				.allowedMethods("GET", "POST", "PUT", "DELETE")
+>>>>>>> ff40fe6 (feat: search FASTAPI 연동중)
 				.allowedHeaders("*")
 				.allowCredentials(true);
 	}
