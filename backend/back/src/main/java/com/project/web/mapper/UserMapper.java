@@ -16,6 +16,6 @@ public interface UserMapper {
 
 	int updateUser(UpdateUserVO request);   
 	
-	
+	UserVO getUserInfo(String userId);
 	
 }
