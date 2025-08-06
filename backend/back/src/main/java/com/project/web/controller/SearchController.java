@@ -8,10 +8,8 @@ import com.project.web.dto.SearchResultDTO;
 import com.project.web.service.SearchCacheService;
 import com.project.web.service.SearchService;
 
-import com.project.web.service.SearchCacheService;
-import com.project.web.service.SearchService;
+import io.swagger.v3.oas.annotations.Operation;
 
-import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,6 +20,7 @@ public class SearchController {
 	@Autowired
 	private SearchCacheService searchCacheService;
 
+	@Operation(summary = "기업 보고서 출력")
     @GetMapping("/search/{corp_name}")
     public ResponseEntity<SearchResultDTO> search(@PathVariable("corp_name") String corpName) {
     	
