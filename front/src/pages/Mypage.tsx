@@ -8,7 +8,7 @@ import Withdrawal from 'components/organism/Withdrawal';
 import { typoStyle } from 'styles/typoStyle';
 import { Line } from 'components/atoms';
 import { useTheme } from '@emotion/react';
-import { nullList, corWidthList, corHeaderList, corAllItemList, docsWidthList, docsHeaderList, docsAllItemList } from '../constants/mypageDummyData';
+import { nullList, corWidthList, corHeaderList, corDummyDataList, docsWidthList, docsHeaderList, logoDummyData, corTypeList, docsTypeList, docsDummyDataList } from '../constants/mypageDummyData';
 
 const Container = styled.div`
     // 크기
@@ -123,8 +123,8 @@ const Mypage = () => {
             </TabBox>
         </TopPanner>
         <Content width='80%'>
-            {activeTab === 0 && <Corporation headerList={corHeaderList} allItemList={corAllItemList} widthList={corWidthList} notiLabel='아직 등록된 관심기업이 없습니다.' />}
-            {activeTab === 1 && <DocsHistory headerList={docsHeaderList} allItemList={nullList} widthList={docsWidthList} notiLabel='최근 3개월 이내에 조회한 기업이 없습니다.' />}
+            {activeTab === 0 && <Corporation headerList={corHeaderList} dataList={corDummyDataList} widthList={corWidthList} notiLabel='아직 등록된 관심기업이 없습니다.' typeList={corTypeList} logoList={logoDummyData} />}
+            {activeTab === 1 && <DocsHistory headerList={docsHeaderList} dataList={docsDummyDataList} widthList={docsWidthList} notiLabel='최근 3개월 이내에 조회한 기업이 없습니다.' typeList={docsTypeList} logoList={logoDummyData} />}
             {activeTab === 2 && <UserInfoSetting />}
             {activeTab === 3 && <Withdrawal />}
         </Content>

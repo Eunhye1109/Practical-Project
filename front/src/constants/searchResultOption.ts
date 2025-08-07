@@ -15,16 +15,16 @@ type mode = 'radio' | 'checkBox';
 export const modeOption: mode[] = ['checkBox', 'radio', 'radio']
 
 // 리스트 더미 데이터
-export const widthList = ['25%', '8%', '8%', '8%', '18%', '18%']
+export const widthList = ['30%', '10%', '20%', '20%']
 export const headerList = [
-    {label: '기업명', width: '15%'},
+    {label: '기업명', width: '20%'},
     {label: '기업소개', width: '25%'},
-    {label: '상장여부', width: '8%'},
-    {label: '매출', width: '8%'},
-    {label: '인원', width: '8%'},
-    {label: '분야', width: '18%'},
-    {label: '키워드', width: '18%'},
+    {label: '상장여부', width: '10%'},
+    {label: '분야', width: '20%'},
+    {label: '키워드', width: '20%'},
 ]
+
+export const typeList = ['text', 'text', 'tag', 'tag']
 
 export const allItemList = [
     {

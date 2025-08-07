@@ -6,11 +6,13 @@ import { List } from 'components/molecules';
 
 interface Props {
   readonly headerList: Array<{label: string, width: string}>;
-  readonly allItemList: Array<{name: string, src: string, itemList: Array<{type: string, data: string[]}>}>;
   readonly widthList: string[];
   readonly notiLabel: string;
   readonly onClick?: (value: React.ReactNode) => void;
   readonly btnOnClick?: () => void;
+  readonly typeList: string[];
+  readonly dataList: string[][];
+  readonly logoList: string[];
 }
 
 const Container = styled.div`
@@ -45,16 +47,27 @@ const ListBox = styled.div`
   overflow: hidden;
 `;
 
-const DocsHistory = ({headerList, allItemList, widthList, notiLabel, onClick, btnOnClick}: Props) => {
+const DocsHistory = ({headerList, widthList, notiLabel, onClick, btnOnClick, dataList, logoList, typeList}: Props) => {
   const navigate = useNavigate();
 
   return (
     <Container>
       <ListCountBox>
-        <ListCount thickness={false}>최근 3개월 이내에 <ListCount thickness={true}>{allItemList.length}</ListCount>개 기업을 조회했습니다.</ListCount>
+        <ListCount thickness={false}>최근 3개월 이내에 <ListCount thickness={true}>{dataList.length}</ListCount>개 기업을 조회했습니다.</ListCount>
       </ListCountBox>
       <ListBox>
-        <List headerList={headerList} allItemList={allItemList} widthList={widthList} btnLabel='기업 검색하러 가기' notiLabel={notiLabel} onClick={() => onClick} btnOnClick={() => btnOnClick} nullBtnOnClick={() => navigate('/')} />
+        <List
+          headerList={headerList}
+          widthList={widthList}
+          btnLabel='기업 검색하러 가기'
+          notiLabel={notiLabel}
+          onClick={() => onClick}
+          btnOnClick={() => btnOnClick}
+          nullBtnOnClick={() => navigate('/')}
+          dataList={dataList}
+          typeList={typeList}
+          logoList={logoList}
+        />
       </ListBox>
     </Container>
   )

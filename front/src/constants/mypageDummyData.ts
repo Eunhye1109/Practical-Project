@@ -4,103 +4,37 @@ import React from "react";
 export const nullList = []
 
 // 관심기업 더미 데이터
-export const corWidthList = ['25%', '55%', '5%']
+export const corWidthList = ['25%', '50%', '5%']
+export const corTypeList = ['text', 'text', 'btn']
 export const corHeaderList = [
-    {label: '기업명', width: '15%'},
+    {label: '기업명', width: '20%'},
     {label: '기업소개', width: '25%'},
-    {label: '메모', width: '55%'},
+    {label: '메모', width: '50%'},
     {label: '저장', width: '5%'}
 ]
 
-export const corAllItemList = [
-    {
-        name: '무신사 스탠다드 어쩌구저쩌구',
-        src: 'https://res.cloudinary.com/zuzu-homepage/image/upload/f_auto,q_auto/v1739446680/p4rn9qxymke0lda94pzk.jpg',
-        itemList: [
-            {
-                type: 'text',
-                data: ['이 기업은 어쩌구저쩌구 아진짜 집에 가고 싶ㅁ랑로밍나ㅓ론ㅁ아ㅣ러ㅗㅇㅁ니ㅏㅓ롱니ㅏ러'],
-            },
-            {
-                type: 'text',
-                data: ['내가 이 기업을 저장한 이유는 ㅁ니ㅏ얼민아ㅓㄹ미ㅏ너리ㅏㅁㄴ어리ㅏㅁㄴㅓ리ㅏㅁㄴ어리ㅏㅓㅁㄴ이라ㅓㄴ이럼ㄴ이ㅏ렁니ㅓㄹ미나얼미ㅏㄴ얼'],
-            },
-            {
-                type: 'btn',
-                data: ['해제'],
-            }
-        ]
-    },
-    {
-        name: '무신사 스탠다드 어쩌구저쩌구',
-        src: 'https://res.cloudinary.com/zuzu-homepage/image/upload/f_auto,q_auto/v1739446680/p4rn9qxymke0lda94pzk.jpg',
-        itemList: [
-            {
-                type: 'text',
-                data: ['이 기업은 어쩌구저쩌구 아진짜 집에 가고 싶ㅁ랑로밍나ㅓ론ㅁ아ㅣ러ㅗㅇㅁ니ㅏㅓ롱니ㅏ러'],
-            },
-            {
-                type: 'text',
-                data: ['내가 이 기업을 저장한 이유는 ㅁ니ㅏ얼민아ㅓㄹ미ㅏ너리ㅏㅁㄴ어리ㅏㅁㄴㅓ리ㅏㅁㄴ어리ㅏㅓㅁㄴ이라ㅓㄴ이럼ㄴ이ㅏ렁니ㅓㄹ미나얼미ㅏㄴ얼'],
-            },
-            {
-                type: 'btn',
-                data: ['해제'],
-            }
-        ]
-    },
-    {
-        name: '무신사 스탠다드 어쩌구저쩌구',
-        src: 'https://res.cloudinary.com/zuzu-homepage/image/upload/f_auto,q_auto/v1739446680/p4rn9qxymke0lda94pzk.jpg',
-        itemList: [
-            {
-                type: 'text',
-                data: ['이 기업은 어쩌구저쩌구 아진짜 집에 가고 싶ㅁ랑로밍나ㅓ론ㅁ아ㅣ러ㅗㅇㅁ니ㅏㅓ롱니ㅏ러'],
-            },
-            {
-                type: 'text',
-                data: ['내가 이 기업을 저장한 이유는 ㅁ니ㅏ얼민아ㅓㄹ미ㅏ너리ㅏㅁㄴ어리ㅏㅁㄴㅓ리ㅏㅁㄴ어리ㅏㅓㅁㄴ이라ㅓㄴ이럼ㄴ이ㅏ렁니ㅓㄹ미나얼미ㅏㄴ얼'],
-            },
-            {
-                type: 'btn',
-                data: ['해제'],
-            }
-        ]
-    },
+export const logoDummyData = [
+    'https://newneek.imgix.net/images/2019/08/09/1565318342_CCSqIYO811XXnjlYj1ssxZ6ycOrvrmPdibnprXuA.jpeg?fm=pjpg',
+    'https://newneek.imgix.net/images/2019/08/09/1565318342_CCSqIYO811XXnjlYj1ssxZ6ycOrvrmPdibnprXuA.jpeg?fm=pjpg',
+]
+
+export const corDummyDataList = [
+    ['무신사', '엉어엉리멍ㄴ리;ㅏㄴㅁㅓ리;ㅏ', 'ㅁㄴㅇㄹㅁㅇㄴㄹㅁㄴㅇㄹㅇㄴㄹㄴㅇ', '해제'],
+    ['무신사', '엉어엉리멍ㄴ리;ㅏㄴㅁㅓ리;ㅏ', 'ㅁㄴㅇㄹㅁㅇㄴㄹㅁㄴㅇㄹㅇㄴㄹㄴㅇ', '해제'],
 ]
 
 //  더미 데이터
-export const docsWidthList = ['55%', '15%', '5%', '10%']
+export const docsWidthList = ['50%', '15%', '5%', '10%']
+export const docsTypeList = ['text', 'text', 'text', 'btn', 'btn']
 export const docsHeaderList = [
-    {label: '기업명', width: '15%'},
-    {label: '기업소개', width: '55%'},
+    {label: '기업명', width: '20%'},
+    {label: '기업소개', width: '50%'},
     {label: '조회일자', width: '15%'},
     {label: '관심', width: '5%'},
     {label: '보고서', width: '10%'}
 ]
 
-export const docsAllItemList = [
-    {
-        name: '무신사 스탠다드 어쩌구저쩌구',
-        src: 'https://res.cloudinary.com/zuzu-homepage/image/upload/f_auto,q_auto/v1739446680/p4rn9qxymke0lda94pzk.jpg',
-        itemList: [
-            {
-                type: 'text',
-                data: ['이 기업은 어쩌구저쩌구 아진짜 집에 가고 싶ㅁ랑로밍나ㅓ론ㅁ아ㅣ러ㅗㅇㅁ니ㅏㅓ롱니ㅏ러'],
-            },
-            {
-                type: 'text',
-                data: ['2025-07-18'],
-            },
-            {
-                type: 'btn',
-                data: ['등록'],
-            }
-            ,
-            {
-                type: 'btn',
-                data: ['다운로드'],
-            }
-        ]
-    },
+export const docsDummyDataList = [
+    ['무신사', '엉어엉리멍ㄴ리;ㅏㄴㅁㅓ리;ㅏ', '2025.08.14', '해제', '출력'],
+    ['무신사', '엉어엉리멍ㄴ리;ㅏㄴㅁㅓ리;ㅏ', '2025.08.14', '해제', '출력'],
 ]

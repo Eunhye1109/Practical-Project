@@ -1,15 +1,15 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { css, Theme } from '@emotion/react';
-import { typoStyle } from 'styles/typoStyle';
+import { SearchListDTO } from 'types/search.types';
 
 interface Props {
     readonly onClick?: (value: React.ReactNode) => void;
     readonly btnOnClick?: (value: React.ReactNode) => void;
-    readonly src: string;
-    readonly name: string;
-    readonly itemList: Array<{type: string, data: string[]}>;
     readonly widthList: string[];
+    readonly data: string[];
+    readonly typeList: string[];
+    readonly logo: string;
 }
 
 const Container = styled.div`
@@ -96,7 +96,7 @@ const Item = styled.span<{type: string}>`
 
 const LogoTitle = styled.div`
     // 크기
-    width: 15%;
+    width: 20%;
     // 디스플레이
     display: flex;
     justify-content: start;
@@ -114,13 +114,6 @@ const Logo = styled.img<{src: string}>`
     background-color: white;
 `;
 
-const TitleBox = styled.div`
-    // 디스플레이
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-`;
-
 const Title = styled.p<{thickness: boolean}>`
     ${({thickness, theme}) => thickness ? theme.typo.caption1Regular : theme.typo.caption1Light};
     // 텍스트 관리
@@ -130,20 +123,23 @@ const Title = styled.p<{thickness: boolean}>`
     overflow: hidden;
 `;
 
-const ListItem = ({itemList, onClick, src, name, btnOnClick, widthList}: Props) => {
+const ListItem = ({onClick, btnOnClick, widthList, typeList, data, logo}: Props) => {
   return (
     <Container onClick={() => onClick}>
         <LogoTitle>
-            <Logo src={src} />
+            <Logo src={logo} />
             <div>
-                <Title thickness={true}>{name}</Title>
+                <Title thickness={true}>{data[0]}</Title>
             </div>
         </LogoTitle>
-        {itemList.map((item, i) => (
-            <ItemContent key={i} width={widthList[i]}>
-                {item.data.length > 0 ? item.data.map((data, j) => (
-                    <Item key={j} type={item.type} onClick={item.type === 'btn' && btnOnClick ? () => btnOnClick(data) : undefined}>{(!data || data.trim?.() === '') ? '-' : data}</Item>
-                )) : <Item type={item.type !== 'text' ? 'text' : item.type}>-</Item>}
+        {widthList.map((item, index) => (
+            index !== 0 &&
+            <ItemContent key={index} width={item}>
+                {typeList.map((type) => (
+                    <Item type={type} onClick={type === 'btn' && btnOnClick ? () => btnOnClick(data) : undefined}>
+                        {(!data[index] || data[index].trim?.() === '') ? '-' : data[index]}
+                    </Item>
+                ))}
             </ItemContent>
         ))}
     </Container>

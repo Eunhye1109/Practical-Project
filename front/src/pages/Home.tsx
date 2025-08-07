@@ -5,6 +5,7 @@ import { SearchInput } from 'components/molecules';
 import { Search } from 'assets/icons';
 import bg from '../assets/images/bg/background06.png';
 import { useNavigate } from 'react-router-dom';
+import { searchCorp } from 'api/searchApi';
 
 interface Props {
   readonly bgImg: string;
@@ -71,13 +72,22 @@ const SubText = styled.p`
 
 const Home = () => {
   // 검색어
-  const [searchWord, setSearchWord] = useState('');
+  const [corpName, setCorpName] = useState('');
   // 네비게이션
   const navigate = useNavigate();
 
   // 검색 실행
-  const handleSearchClick = () => {
-    navigate('/searchResult');
+  const handleSearchClick = async () => {
+    try {
+      const searchDataList = await searchCorp(corpName);
+      if(searchDataList[0]) {
+        navigate('/searchResult', { state: { res: searchDataList } });
+      }
+    } catch (e) {
+      alert('실패~~~');
+      console.log(e);
+      console.log(corpName);
+    }
   }
   return (
     <Container>
@@ -91,7 +101,7 @@ const Home = () => {
           label='기업명을 입력해주세요.'
           icon={<Search width='100%' height='100%' />}
           onClick={handleSearchClick}
-          onChange={(e) => {setSearchWord(e.target.value)}}
+          onChange={(e) => {setCorpName(e.target.value)}}
         />
       </Content>
     </Container>

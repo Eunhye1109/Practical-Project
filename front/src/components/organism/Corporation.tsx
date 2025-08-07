@@ -6,11 +6,13 @@ import { useNavigate } from 'react-router-dom';
 
 interface Props {
   readonly headerList: Array<{label: string, width: string}>;
-  readonly allItemList: Array<{name: string, src: string, itemList: Array<{type: string, data: string[]}>}>;
   readonly widthList: string[];
   readonly notiLabel: string;
   readonly onClick?: (value: React.ReactNode) => void;
   readonly btnOnClick?: () => void;
+  readonly typeList: string[];
+  readonly dataList: string[][];
+  readonly logoList: string[];
 }
 
 const Container = styled.div`
@@ -45,16 +47,28 @@ const ListBox = styled.div`
   overflow: hidden;
 `;
 
-const Corporation = ({headerList, allItemList, widthList, notiLabel, onClick, btnOnClick}: Props) => {
+const Corporation = ({headerList, widthList, notiLabel, onClick, btnOnClick, typeList, logoList, dataList}: Props) => {
   const navigate = useNavigate();
 
   return (
     <Container>
       <ListCountBox>
-        <ListCount thickness={true}>{allItemList.length}</ListCount><ListCount thickness={false}>개의 관심기업이 있습니다.</ListCount>
+        <ListCount thickness={true}>{dataList.length}</ListCount>
+        <ListCount thickness={false}>개의 관심기업이 있습니다.</ListCount>
       </ListCountBox>
       <ListBox>
-        <List headerList={headerList} allItemList={allItemList} widthList={widthList} btnLabel='기업 검색하러 가기' notiLabel={notiLabel} onClick={() => onClick} btnOnClick={() => btnOnClick} nullBtnOnClick={() => navigate('/')} />
+        <List
+          headerList={headerList}
+          widthList={widthList}
+          btnLabel='기업 검색하러 가기'
+          notiLabel={notiLabel}
+          onClick={() => onClick}
+          btnOnClick={() => btnOnClick}
+          nullBtnOnClick={() => navigate('/')}
+          typeList={typeList}
+          dataList={dataList}
+          logoList={logoList}
+        />
       </ListBox>
     </Container>
   )

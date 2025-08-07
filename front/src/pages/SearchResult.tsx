@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
 import { List, SearchBar } from 'components/molecules';
-import { dropdownOption, modeOption, headerList, allItemList, widthList } from '../constants/searchResultOption';
+import { dropdownOption, modeOption, headerList, typeList, widthList } from '../constants/searchResultOption';
 import TextButton from 'components/atoms/textButton/TextButton';
+import { logoDummyData } from 'constants/mypageDummyData';
 
 const Container = styled.div`
     // 크기
@@ -116,6 +118,11 @@ const SearchListBox = styled.div`
 `;
 
 const SearchResult = () => {
+    // 검색 결과 관련
+    const location = useLocation();
+    const navigate = useNavigate();
+    const searchRes = location.state?.res;
+
     // 스크롤 이벤트 관리
     const [scrolled, setScrolled] = useState(false);
     // 검색 결과 건수
@@ -177,7 +184,13 @@ const SearchResult = () => {
                 </SortBox>
             </SearchControllBar>
             <SearchListBox>
-                <List headerList={headerList} allItemList={allItemList} widthList={widthList} />
+                <List
+                    typeList={typeList}
+                    headerList={headerList}
+                    widthList={widthList}
+                    dataList={searchRes}
+                    logoList={logoDummyData}
+                />
             </SearchListBox>
         </Content>
     </Container>
