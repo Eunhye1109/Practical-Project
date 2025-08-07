@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { css, Theme } from '@emotion/react';
-import { SearchListDTO } from 'types/search.types';
 
 interface Props {
     readonly onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -133,13 +132,10 @@ const ListItem = ({onClick, btnOnClick, widthList, typeList, data, logo}: Props)
             </div>
         </LogoTitle>
         {widthList.map((item, index) => (
-            index !== 0 &&
             <ItemContent key={index} width={item}>
-                {typeList.map((type) => (
-                    <Item type={type} onClick={type === 'btn' && btnOnClick ? () => btnOnClick : undefined}>
-                        {(!data[index] || data[index].trim?.() === '') ? '-' : data[index]}
-                    </Item>
-                ))}
+                <Item type={typeList[index]} onClick={typeList[index] === 'btn' && btnOnClick ? () => btnOnClick : undefined}>
+                    {(!data[index + 1] || data[index + 1].trim?.() === '') ? '-' : data[index + 1]}
+                </Item>
             </ItemContent>
         ))}
     </Container>

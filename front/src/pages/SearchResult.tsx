@@ -191,10 +191,8 @@ const SearchResult = () => {
                     widthList={widthList}
                     dataList={searchRes}
                     logoList={logoDummyData}
-                    onClick={(e) => {
-                        const id = e?.currentTarget.getAttribute('data-id');
-                        alert(id);
-                        ;
+                    onClick={() => {
+                        alert('id');
                     }}
                 />
             </SearchListBox>

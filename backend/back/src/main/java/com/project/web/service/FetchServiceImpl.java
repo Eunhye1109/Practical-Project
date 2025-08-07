@@ -14,8 +14,11 @@ public class FetchServiceImpl implements FetchService{
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public Map<String, Object> fetchColumns(String corpCode) {
+    public Map<String, Object> fetchColumns(String corpCode, String userPurpose) {
         String url = "http://localhost:8000/fetch?corp_code=" + corpCode;
+        if (userPurpose != null && !userPurpose.isBlank()) {
+            url += "&user_purpose=" + userPurpose;  // ✅ URL에 쿼리파라미터 추가
+        }
         ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
             return response.getBody(); 

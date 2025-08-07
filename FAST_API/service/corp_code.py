@@ -52,10 +52,12 @@ def get_corp_list(keyword: str):
     root = load_corp_code_xml()
 
     matched = []
+    total_count = 0
 
     for node in root.iter("list"):
         name_elem = node.find("corp_name")
         code_elem = node.find("corp_code")
+        total_count += 1
 
         if name_elem is not None and code_elem is not None:
             name = name_elem.text.strip()
@@ -66,5 +68,5 @@ def get_corp_list(keyword: str):
                     "corp_name": name,
                     "corp_code": code_elem.text.strip()
                 })
-    print(f"🔍 [get_corp_list] keyword='{keyword}', matched={len(matched)}건")
+    print(f"🔍 [get_corp_list] keyword='{keyword}', matched={len(matched)}건",total_count)
     return matched
