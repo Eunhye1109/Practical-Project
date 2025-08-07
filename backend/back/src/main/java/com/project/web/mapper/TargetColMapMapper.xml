@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.web.mapper.TargetColMapMapper">
+
+  <!-- DB에 존재하는 매핑인지 확인 (1개만 반환) -->
+  <select id="findMappedCol" resultType="string" parameterType="map">
+  SELECT MATCHED_COL
+  FROM TARGET_COL_MAP
+  WHERE TARGET_NAME = #{targetName}
+    AND MATCHED_COL IN
+    <foreach item="col" collection="candidateCols" open="(" separator="," close=")">
+      #{col}
+    </foreach>
+    AND ROWNUM = 1
+  </select>
+
+
+  <!-- 새 매핑 저장 -->
+  <insert id="saveMapping">
+    INSERT INTO TARGET_COL_MAP (TARGET_NAME, MATCHED_COL, SIMILARITY)
+    VALUES (#{targetName}, #{matchedCol}, #{similarity})
+  </insert>
+
+</mapper>

@@ -1,7 +1,5 @@
 package com.project.web.controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +17,7 @@ import com.project.web.dto.UserDTO;
 import com.project.web.service.UserService;
 import com.project.web.vo.UpdateUserVO;
 import com.project.web.vo.UserVO;
-
 import io.swagger.v3.oas.annotations.Operation;
-
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -29,11 +25,12 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
 	@Operation(summary = "회원가입")
 	@PostMapping("/signup")
-	public ResponseEntity<UserDTO> signup(@RequestBody  UserVO request) {
-    	UserDTO response = userService.signup(request);
-	    return new ResponseEntity<>(response, HttpStatus.CREATED);
+	public ResponseEntity<UserDTO> signup(@RequestBody UserVO request) {
+		UserDTO response = userService.signup(request);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
 	@Operation(summary = "로그인")
@@ -49,13 +46,11 @@ public class UserController {
 		UserDTO response = userService.checkId(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
 	@Operation(summary = "회원정보수정")
 	@PatchMapping("/update")
 	public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserVO request) {
-	    UserDTO result = userService.updateUser(request);
-	    return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+		UserDTO result = userService.updateUser(request);
+		return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
-	
 }
-	
