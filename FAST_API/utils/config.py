@@ -2,7 +2,7 @@
 
 from dotenv import load_dotenv
 from openai import OpenAI
-from utils.prompt_loader import load_prompt
+from prompts.prompt_loader import load_prompt
 import os
 
 load_dotenv(dotenv_path="Keys.env")

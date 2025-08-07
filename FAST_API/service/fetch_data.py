@@ -3,6 +3,7 @@
 import os
 import requests
 import xml.etree.ElementTree as ET
+from typing import Optional
 from fastapi import HTTPException
 from utils.config import DARTAPI_KEY, YEARS, REPRT_CODE
 import logging
@@ -43,7 +44,8 @@ def get_corp_name(corp_code: str) -> str:
     raise HTTPException(status_code=404, detail=f"corp_code '{corp_code}'에 해당하는 기업명을 찾지 못했습니다.")
 
 
-def fetch_corp_data(corp_code: str):
+def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
+    print(f"📦 [fetch_corp_data] corp_code={corp_code}, user_purpose={user_purpose}")
     """
     corp_code을 기준으로 DART에서 재무정보를 연도별로 가져와 dict로 반환
     """

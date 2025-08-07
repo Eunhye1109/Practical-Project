@@ -8,17 +8,13 @@ def build_summary_prompt(profile: dict, investor_type: str) -> str:
     }
 
     prompt = f"""
-다음은 한 기업의 개요입니다. 산업 특징, 주요 사업영역, 규모, R&D 투자, 리스크 등을 요약하고,
-'{investor_type}' 투자자에게 적합한 전략을 제시하세요.
+다음은 한 기업의 개요입니다.
+'{investor_type}' 투자자에게 적합한 전략을 
+한줄 제시하세요.
 
 [기업 개요]
 - 회사명: {profile.get("회사명")}
-- 대표자: {profile.get("대표자")}
-- 업종코드: {profile.get("업종코드")}
 - 상장여부: {profile.get("상장여부")}
-- 설립일: {profile.get("설립일")}
-- 주소: {profile.get("주소")}
-- 지주회사: {profile.get("지주회사") or '없음'}
 
 [투자자 유형: {investor_type}]
 {guide[investor_type]}

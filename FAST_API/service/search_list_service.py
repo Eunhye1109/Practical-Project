@@ -4,8 +4,10 @@ import requests
 from openai import OpenAI
 from urllib.parse import unquote
 
+from typing import Optional
 from service.corp_code import get_corp_list
 from fastapi.responses import JSONResponse
+from prompts.gpt_prompts import build_summary_prompt
 from utils.format_date import format_date
 from utils.logo_utils import get_logo_url
 from utils.config import (
@@ -35,18 +37,13 @@ def collect_profile(corp_code):
 
 
 # ✅ GPT 요약 생성
-def gpt_summary(profile):
+def gpt_summary(profile: dict, user_purpose: str = "안정형"):
     print("🧠 [DEBUG] gpt_summary 시작")
     categories = "패션, 물류, 핀테크, 유통, 콘텐츠, 플랫폼, 커머스, IT, 미디어, 제조, 기타"
-    investors = "혼합형, 공격형, 안정형"
-
+    
     try:
-        filled_prompt = SUMMARY_PROMPT_TEMPLATE.format(
-        categories=categories,
-        investors=investors,
-        profile=profile,
-        **profile
-    )
+        filled_prompt = build_summary_prompt(profile, user_purpose)
+    
         print(f"📝 프롬프트 길이: {len(filled_prompt)}")
 
         res = client.chat.completions.create(
@@ -68,7 +65,8 @@ def gpt_summary(profile):
         }
 
 # ✅ 전체 요약 수행 함수
-def search_list_summary(keyword):
+def search_list_summary(keyword: str, user_purpose: Optional[str] = None):
+    print(f"📦 [search_list_summary] keyword={keyword}, user_purpose={user_purpose}")
     print(f"\n🔍 [FastAPI] 기업 요약 요청 시작 — keyword: '{keyword}'")
     
     keyword = unquote(keyword)
