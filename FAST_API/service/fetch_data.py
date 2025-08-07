@@ -4,7 +4,7 @@ import os
 import requests
 import xml.etree.ElementTree as ET
 from fastapi import HTTPException
-from utils.config import API_KEY, YEARS
+from utils.config import DARTAPI_KEY, YEARS
 import logging
 
 def get_corp_name(corp_code: str) -> str:
@@ -56,7 +56,7 @@ def fetch_corp_data(corp_code: str):
     for year in YEARS:
         url = (
             f"https://opendart.fss.or.kr/api/fnlttSinglAcnt.json?"
-            f"crtfc_key={API_KEY}&corp_code={corp_code}&bsns_year={year}"
+            f"crtfc_key={DARTAPI_KEY}&corp_code={corp_code}&bsns_year={year}"
             f"&reprt_code=11011&fs_div=CFS"
         )
 
