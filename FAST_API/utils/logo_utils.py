@@ -1,8 +1,7 @@
 
 # GPT 기반 slug 추론 함수 (프롬프트 외부 정의 사용)
 from prompts.gpt_logo_prompt import build_logo_slug_prompt
-from service.search_list_service import client
-from utils.config import LOGO_API_TOKEN,LOGO_CACHE_PATH
+from utils.config import client,LOGO_API_TOKEN,LOGO_CACHE_PATH
 import os
 import json
 

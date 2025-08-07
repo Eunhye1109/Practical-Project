@@ -4,7 +4,7 @@ import os
 import requests
 import xml.etree.ElementTree as ET
 from fastapi import HTTPException
-from utils.config import DARTAPI_KEY, YEARS
+from utils.config import DARTAPI_KEY, YEARS, REPRT_CODE
 import logging
 
 def get_corp_name(corp_code: str) -> str:
@@ -57,7 +57,7 @@ def fetch_corp_data(corp_code: str):
         url = (
             f"https://opendart.fss.or.kr/api/fnlttSinglAcnt.json?"
             f"crtfc_key={DARTAPI_KEY}&corp_code={corp_code}&bsns_year={year}"
-            f"&reprt_code=11011&fs_div=CFS"
+            f"&reprt_code={REPRT_CODE}&fs_div=CFS"
         )
 
         try:
@@ -69,3 +69,11 @@ def fetch_corp_data(corp_code: str):
                 }
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"{year}년도 데이터 조회 실패: {str(e)}")
+    if not result:
+        raise HTTPException(status_code=404, detail="DART에 등록된 재무정보가 없습니다.")
+
+    return {
+        "corpName": corp_name,
+        "corpCode": corp_code,
+        "financials": result
+    }
