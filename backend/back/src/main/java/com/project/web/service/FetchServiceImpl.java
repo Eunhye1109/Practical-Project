@@ -14,11 +14,11 @@ public class FetchServiceImpl implements FetchService{
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public Map<String, Object> fetchColumns(String corpName) {
-        String url = "http://localhost:8000/fetch?corp_name=" + corpName;
+    public Map<String, Object> fetchColumns(String corpCode) {
+        String url = "http://localhost:8000/fetch?corp_name=" + corpCode;
         ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return response.getBody();
+        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+            return response.getBody(); 
         }
         throw new RuntimeException("FastAPI fetch 호출 실패");
     }

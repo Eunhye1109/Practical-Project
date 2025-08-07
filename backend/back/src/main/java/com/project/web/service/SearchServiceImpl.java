@@ -30,11 +30,11 @@ public class SearchServiceImpl implements SearchService {
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
     @Override
-    public SearchResultDTO search(String corpName) {
+    public SearchResultDTO search(String corpCode) {
 
     	// 1. FastAPI에서 기업 컬럼 수집
-        System.out.println("📦 [1] FastAPI fetch 시작 → corpName = " + corpName);
-        Map<String, Object> allYearData = fetchService.fetchColumns(corpName);
+        System.out.println("📦 [1] FastAPI fetch 시작 → corpName = " + corpCode);
+        Map<String, Object> allYearData = fetchService.fetchColumns(corpCode);
         System.out.println("📦 [1] allYearData.keys = " + allYearData.keySet());
 
         // 2. 전체 rawCols 수집 (3개년 통합)
@@ -101,6 +101,7 @@ public class SearchServiceImpl implements SearchService {
             if (matched != null) {
                 for (String year : YEARS) {
                     Map<String, Object> yearData = (Map<String, Object>) allYearData.get(year);
+                    String corpName = (String) yearData.get("corpName");
                     if (yearData != null && yearData.containsKey(matched)) {
                         yearValues.put(year, String.valueOf(yearData.get(matched)));
                     } else {
@@ -122,8 +123,10 @@ public class SearchServiceImpl implements SearchService {
 
         Map<String, Map<String, String>> ratios = financialRatioService.calculate(columnList);
         List<Map<String, Object>> flatColumns = ConvertToFlatYearlyListUtil.convert(columnList, ratios);
-
+        String corpName = (String) allYearData.get("corpName");
+        
         return SearchResultDTO.builder()
+            .corpCode(corpCode)
             .corpName(corpName)
             .columns(flatColumns)
             .build();

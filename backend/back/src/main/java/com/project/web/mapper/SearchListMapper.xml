@@ -11,8 +11,6 @@
         CEO_NAME,
         STOCK_TYPE,
         ESTABLISH_DATE,
-        ADDRESS,
-        BIZ_NO,
         <!-- AFFIL_JSON,-->
         KEYWORDS_JSON,
         GPT_SUMMARY
@@ -21,8 +19,6 @@
         #{ceoName, jdbcType=VARCHAR},
         #{stockType, jdbcType=VARCHAR},
         TO_DATE(#{establishDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
-        #{address, jdbcType=VARCHAR},
-        #{bizNo, jdbcType=VARCHAR},
         <!-- #{affiliates, jdbcType=CLOB, typeHandler=com.project.web.handler.JsonTypeHandler},-->
         #{keywords, jdbcType=CLOB, typeHandler=com.project.web.handler.JsonTypeHandler},
         #{gptSummary, jdbcType=CLOB}

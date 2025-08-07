@@ -24,14 +24,21 @@ public class SearchCacheServiceImpl implements SearchCacheService {
     private final SearchCacheMapper searchCacheMapper;
 
     @Override
-    public boolean existsValidCache(String corpName) {
-        return searchCacheMapper.existsValidCache(corpName);
+    public boolean existsValidCache(String corpCode) {
+        return searchCacheMapper.existsValidCache(corpCode);
     }
 
     @Override
-    public SearchResultDTO getCachedResult(String corpName) {
-        List<SearchCacheVO> cachedList  = searchCacheMapper.getCachedResult(corpName);
+    public SearchResultDTO getCachedResult(String corpCode) {
+        List<SearchCacheVO> cachedList  = searchCacheMapper.getCachedResult(corpCode);
      // targetCol별로 연도별 값 모으기
+        
+        String corpName = cachedList.stream()
+        		.map(SearchCacheVO::getCorpName)
+    	        .filter(name -> name != null && !name.isBlank())
+    	        .findFirst()
+	        	.orElse("정보없음");
+        
         Map<String, Map<String, String>> grouped = new LinkedHashMap<>();
         for (SearchCacheVO vo : cachedList) {
             if (vo == null || vo.getColName() == null) continue;
@@ -50,17 +57,19 @@ public class SearchCacheServiceImpl implements SearchCacheService {
                 .build())
             .toList();
         List<Map<String, Object>> flatList = ConvertToFlatYearlyListUtil.convert(columns, grouped);
-
+        
         return SearchResultDTO.builder()
+        		.corpCode(corpCode)
             .corpName(corpName)
             .columns(flatList)
             .build();
     }
 
     @Override
-    public SearchResultDTO save(String corpName, SearchResultDTO result) {
+    public SearchResultDTO save(String corpCode, SearchResultDTO result) {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-
+        String corpName = result.getCorpName();
+        
         for (Map<String, Object> row : result.getColumns()) {
             String year = String.valueOf(row.get("year"));
             for (Map.Entry<String, Object> entry : row.entrySet()) {
@@ -71,6 +80,7 @@ public class SearchCacheServiceImpl implements SearchCacheService {
                 if (val == null) continue;
 
                 SearchCacheVO vo = SearchCacheVO.builder()
+                		.corpCode(corpCode)
                     .corpName(corpName)
                     .colName(colName)
                     .colValue(String.valueOf(val))
