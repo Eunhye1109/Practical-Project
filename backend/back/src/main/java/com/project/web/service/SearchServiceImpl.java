@@ -30,11 +30,11 @@ public class SearchServiceImpl implements SearchService {
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
     @Override
-    public SearchResultDTO search(String corpCode) {
+    public SearchResultDTO search(String corpCode, String userPurpose) {
 
     	// 1. FastAPI에서 기업 컬럼 수집
         System.out.println("📦 [1] FastAPI fetch 시작 → corpName = " + corpCode);
-        Map<String, Object> allYearData = fetchService.fetchColumns(corpCode);
+        Map<String, Object> allYearData = fetchService.fetchColumns(corpCode, userPurpose);
         System.out.println("📦 [1] allYearData.keys = " + allYearData.keySet());
 
         // 2. 전체 rawCols 수집 (3개년 통합)
