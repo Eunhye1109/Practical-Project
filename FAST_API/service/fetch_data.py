@@ -72,8 +72,6 @@ def fetch_corp_data(corp_code: str):
     if not result:
         raise HTTPException(status_code=404, detail="DART에 등록된 재무정보가 없습니다.")
 
-    return {
-        "corpName": corp_name,
-        "corpCode": corp_code,
-        "financials": result
-    }
+    result["corpName"] = corp_name
+    result["corpCode"] = corp_code
+    return result
