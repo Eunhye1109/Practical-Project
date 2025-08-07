@@ -16,7 +16,7 @@ const Container = styled.div`
     align-items: center;
     flex-direction: column;
     // 스타일
-    background-color: ${({theme}) => theme.colors.primary[10]};
+    background-color: ${({theme}) => theme.colors.primary[20]};
 `;
 
 const TopPanner = styled.div<{fixed: boolean}>`
@@ -69,7 +69,7 @@ const SearchBarBox = styled.div<{fixed: boolean}>`
 
 const Content = styled.div<{fixed: boolean}>`
     // 크기
-    width: 80%;
+    width: 85%;
     // 디스플레이
     display: flex;
     justify-content: center;
@@ -133,19 +133,17 @@ const SearchResult = () => {
     // SearchBar 위치 조정
     useEffect(() => {
         const handleSearchBar = () => {
-            const scrollTop = window.scrollY;
+        const scrollTop = window.scrollY;
+        setScrolled(scrollTop >= 80);  // 스크롤 80 이하일 때 true, 초과면 false
+    };
 
-            if(scrollTop > 80) {
-                setScrolled(true);
-            } else {
-                setScrolled(false);
-            }
-        }
-        window.addEventListener('scroll', handleSearchBar);
+    // 초기 상태 설정
+    handleSearchBar();
+    window.addEventListener('scroll', handleSearchBar);
 
-        return () => {
-            window.removeEventListener('scroll', handleSearchBar)
-        }
+    return () => {
+        window.removeEventListener('scroll', handleSearchBar)
+    }
     }, []);
 
     // 정렬 변경 반영

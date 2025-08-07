@@ -52,7 +52,7 @@ const Content = styled.div`
   /* background-color: rgba(255, 255, 255, 0.3);
   border: 1px solid white; */
   background-color: white;
-  border: 1px solid ${({theme}) => theme.colors.natural[20]};
+  border: 1px solid ${({theme}) => theme.colors.primary[40]};
 `;
 
 const Logo = styled.img`
@@ -129,7 +129,7 @@ const JoinLink = styled(Link)`
 `;
 
 const Login = () => {
-  const {login} = useLogin();
+  const {login, user} = useLogin();
   const navigate = useNavigate();
   const theme = useTheme();
   // 아이디/비번 값 관리
@@ -157,6 +157,7 @@ const Login = () => {
         alert('환영합니다.');
         navigate('/');
         console.log(userData);
+        
       } else {
         alert('아이디 또는 패스워드가 일치하지 않습니다.');
         console.log(userData);
@@ -174,7 +175,7 @@ const Login = () => {
           <MainText>로그인</MainText>
           <SubText>어서오세요, 환영합니다!</SubText>
         </Title>
-        <Line width='60%' color={theme.colors.primary[50]} margin='30px' />
+        <Line width='60%' color={theme.colors.primary[40]} margin='30px' />
         <InputContent>
           <InputBox
             inputLabel='아이디를 입력해주세요.'
@@ -199,7 +200,7 @@ const Login = () => {
             지금 바로 <JoinLink to='/join'>[회원가입]</JoinLink>하고 서비스를 이용해보세요!
           </JoinText>
         </JoinContent>
-        <Line width='60%' color={theme.colors.primary[50]} margin='30px' />
+        <Line width='60%' color={theme.colors.primary[40]} margin='30px' />
         <Link to='/'>
           <Logo src={logo} />
         </Link>

@@ -38,6 +38,16 @@ export const typoStyle = {
             font-family: ${theme.typo.title3Regular.fontFamily};
         `
     },
+    bodyTitle: {
+        semiBold: (theme: AppTheme) => css`
+            font-size: ${theme.typo.bodyTitle1SemiBold.fontSize};
+            font-weight: ${theme.typo.bodyTitle1SemiBold.fontWeight};
+        `,
+        regular: (theme: AppTheme) => css`
+            font-size: ${theme.typo.bodyTitle1Regular.fontSize};
+            font-weight: ${theme.typo.bodyTitle1Regular.fontWeight};
+        `
+    },
     body: {
         semiBold: (theme: AppTheme) => css`
             font-size: ${theme.typo.body1SemiBold.fontSize};

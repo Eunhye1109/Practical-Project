@@ -9,7 +9,7 @@ export const purposeList = ['목적1', '목적2', '목적3', '목적4', '목적5
 export type PurposeType = (typeof purposeList)[number];
 
 // 투자유형 카테고리
-export const investmentTypeList = ['유형1', '유형2', '유형3'];
+export const investmentTypeList = ['안정형', '혼합형', '공격형'];
 export type InvestmentType = (typeof investmentTypeList)[number];
 
 // inputBox 데이터

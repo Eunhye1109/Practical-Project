@@ -15,3 +15,5 @@ export { ReactComponent as RadioButtonUnchecked } from './radio_button_unchecked
 export { ReactComponent as Search } from './search.svg';
 export { ReactComponent as Share } from './share.svg';
 export { ReactComponent as Check } from './check.svg';
+export { ReactComponent as ThumbDown } from './thumb_down.svg';
+export { ReactComponent as ThumbUp } from './thumb_up.svg';

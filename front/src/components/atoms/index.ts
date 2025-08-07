@@ -1,5 +1,6 @@
 export { default as Input } from './input/Input';
 export { default as IconButton } from './iconButton/IconButton';
+export { default as IconTextButton } from './iconTextButton/IconTextButton';
 export { default as Line } from './line/Line';
 export { default as WarningText } from './warningText/WarningText';
 export { default as Button } from './button/Button';
@@ -7,3 +8,7 @@ export { default as DropdownItem } from './dropdownItem/DropdownItem';
 export { default as TextButton } from './textButton/TextButton';
 export { default as ListHeader } from './listHeader/ListHeader';
 export { default as ListItem } from './listItem/ListItem';
+export { default as GroupBarGraph } from './groupBarGraph/GroupBarGraph';
+export { default as CompositeGraph } from './compositeGraph/CompositeGraph';
+export { default as StackedGraph } from './stackedGraph/StackedGraph';
+export { default as LineGraph } from './lineGraph/LineGraph';

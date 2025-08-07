@@ -23,7 +23,7 @@ const Container = styled.div`
   padding-bottom: 20px;
   margin-top: 50px;
   // 배경 스타일 세팅
-  background-color: ${({theme}) => theme.colors.primary[10]};
+  background-color: ${({theme}) => theme.colors.primary[20]};
 `;
 
 const Content = styled.div<Props>`

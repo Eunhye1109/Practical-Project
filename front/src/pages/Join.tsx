@@ -22,7 +22,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: start;
   // 스타일
-  background-color: ${({theme}) => theme.colors.primary[10]};
+  background-color: ${({theme}) => theme.colors.primary[20]};
 `;
 
 const Content = styled.div`
@@ -40,12 +40,12 @@ const Content = styled.div`
   // 스타일
   background-color: white;
   border-radius: 10px;
-  border: 1px solid ${({theme}) => theme.colors.natural[20]};
+  border: 1px solid ${({theme}) => theme.colors.primary[40]};
 `;
 
 const Title = styled.p`
   ${({theme}) => typoStyle.subTitle.bold(theme)};
-  color: ${({theme}) => theme.colors.natural[90]};
+  color: ${({theme}) => theme.colors.natural[80]};
   margin-bottom: 60px;
 `;
 

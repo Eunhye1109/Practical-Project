@@ -9,7 +9,7 @@ import whiteLogo from '../assets/images/logo/logo_vertical_white.png';
 const Container = styled.header<{change: boolean}>`
     height: 50px;
     width: 100%;
-    background-color: ${({theme, change}) => change ? theme.colors.primary[100] : theme.colors.primary[10]};
+    background-color: ${({theme, change}) => change ? theme.colors.primary[100] : theme.colors.primary[20]};
     display: flex;
     justify-content: center;
     align-items: center;

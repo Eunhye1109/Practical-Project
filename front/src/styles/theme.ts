@@ -10,18 +10,39 @@ export const theme = {
             40: '#999999',
             30: '#B3B3B3',
             20: '#CCCCCC',
+            15: '#e5e5e5ff',
             10: '#f5f5f5ff',
             5: '#fafafaff',
             0: '#FFFFFF'
         },
-        primary: {
-            100: '#755FFF',
-            50: '#aea2ffff',
-            10: '#f0f1ffff',
+        primary: { 
+            110: '#4c3bb9ff',
+            100: '#745FFF',
+            80: '#907FFF',
+            60: '#AC9FFF',
+            40: '#C7BFFF',
+            30: '#d8d2ffff',
+            20: '#f3f1ffff',
+        },
+        primaryBlue: {
+            100: '#8298FF',
+            80: '#9BADFF',
+            60: '#B4C1FF',
+            40: '#CDD6FF',
+            20: '#E6EAFF',
+        },
+        primaryGreen: {
+            100: '#AEDB00',
+            80: '#BEE233',
+            60: '#CEE966',
+            40: '#DFF199',
+            20: '#EFF8CC',
         },
         gradient: {
             cross: 'linear-gradient(225deg, #8B69F4 0%, #849AFF 100%)',
-            crossOpacity: 'linear-gradient(225deg, rgba(139, 105, 244, 0.4) 0%, rgba(132, 154, 255, 0.4) 100%)'
+            greenCross: 'linear-gradient(-45deg, #8B69F4 0%, #9BADFF 100%)',
+            crossOpacity: 'linear-gradient(225deg, rgba(139, 105, 244, 0.4) 0%, rgba(132, 154, 255, 0.4) 100%)',
+            crossOpacityHigh: 'linear-gradient(-45deg, rgba(139, 105, 244, 0.1) 0%, rgba(132, 154, 255, 0.1) 100%)',
         }
     },
     typo: {
@@ -55,6 +76,14 @@ export const theme = {
             fontWeight: 200,
             fontFamily: 'SB어그로'
         },
+        bodyTitle1SemiBold: {
+            fontSize: '23px',
+            fontWeight: 700,
+        },
+        bodyTitle1Regular: {
+            fontSize: '23px',
+            fontWeight: 300,
+        },
         body1SemiBold: {
             fontSize: '20px',
             fontWeight: 500,
@@ -77,7 +106,7 @@ export const theme = {
         },
         caption1Light: {
             fontSize: '16px',
-            fontWeight: 500,
+            fontWeight: 400,
         },
         caption2Regular: {
             fontSize: '14px',
@@ -85,7 +114,7 @@ export const theme = {
         },
         caption2Light: {
             fontSize: '14px',
-            fontWeight: 500,
+            fontWeight: 400,
         }
     }
 }

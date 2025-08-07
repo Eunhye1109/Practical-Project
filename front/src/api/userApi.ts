@@ -30,5 +30,6 @@ export const deleteId = async (userData: DeleteUserType) => {
 
 // 회원정보 수정
 export const updateUser = async (userData: UserDTO) => {
-    const res = await axios.get
+    const res = await axios.post(`${BASE_URL}/v1/auth/update`);
+    return res.data;
 }
