@@ -7,7 +7,7 @@ from urllib.parse import unquote
 from service.corp_code import get_corp_list
 from fastapi.responses import JSONResponse
 from utils.format_date import format_date
-from prompts.gpt_prompts import build_summary_prompt
+from utils.logo_utils import get_logo_url
 from utils.config import (
     DARTAPI_KEY,
     OPENAI_MODEL,
@@ -24,7 +24,9 @@ def collect_profile(corp_code):
     url = "https://opendart.fss.or.kr/api/company.json"
     params = {"crtfc_key": DARTAPI_KEY, "corp_code": corp_code}
     res = requests.get(url, params=params).json()
+    print(f"🧾 DART 응답: {res}")
     if res.get("status") != "000":
+        print(f"⚠️ 기업 개요 수집 실패: {corp_code}")
         return {}
     return {
         "회사명": res.get("corp_name"),
@@ -34,7 +36,6 @@ def collect_profile(corp_code):
         "업종코드": res.get("industry_code"),
         "주소": res.get("adres"),
         "상장여부": "상장" if res.get("stock_code") else "비상장",
-        "지주회사": None
     }
 
 
@@ -79,6 +80,7 @@ def search_list_summary(keyword):
     corp_list = get_corp_list(keyword)
     print(f"📄 전체 기업 수집 완료: {len(corp_list)}건")
 
+
     keyword_lower = keyword.lower()
     matches = [c for c in corp_list if keyword_lower in c["corp_name"].lower()]
     print(f"🔎 keyword 포함 기업 필터링 완료: {len(matches)}건")
@@ -104,13 +106,12 @@ def search_list_summary(keyword):
                 keywords = ["#정보없음"]
                 gpt_summary_text = f"❌ GPT 요약 실패: {e}"
             
+
             print("📦 [DEBUG] append data →", {
                 "corpName": profile.get("회사명"),
                 "ceoName": profile.get("대표자"),
                 "stockType": profile.get("상장여부"),
                 "establishDate": profile.get("설립일"),
-                # "address": profile.get("주소"),
-                # "bizNo": profile.get("사업자등록번호"),
                 "keywords": summary.get("키워드"),
                 "gptSummary": summary.get("한 문장 요약")
             })
@@ -120,8 +121,6 @@ def search_list_summary(keyword):
                 "ceoName": profile.get("대표자"),
                 "stockType": profile.get("상장여부"),
                 "establishDate": profile.get("설립일"),
-                # "address": profile.get("주소"),
-                # "bizNo": profile.get("사업자등록번호"),
                 "keywords": summary.get("키워드"),
                 "gptSummary": summary.get("한 문장 요약")
                 

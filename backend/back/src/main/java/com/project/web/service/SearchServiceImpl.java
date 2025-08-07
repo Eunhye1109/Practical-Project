@@ -47,7 +47,12 @@ public class SearchServiceImpl implements SearchService {
         }
         if (rawCols.isEmpty()) {
             System.out.println("❌ [1] 최근 3개년 데이터 없음");
-            throw new RuntimeException("해당 기업의 최근 3개년 데이터가 존재하지 않습니다.");
+            return SearchResultDTO.builder()
+                    .corpCode(corpCode)
+                    .corpName((String) allYearData.get("corpName"))
+                    .columns(Collections.emptyList())
+                    .message("최근 3개년 재무데이터가 존재하지 않습니다.")
+                    .build();
         }
 
         // 3. 대표 컬럼 조회

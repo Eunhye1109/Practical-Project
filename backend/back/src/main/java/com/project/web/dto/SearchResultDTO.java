@@ -17,5 +17,6 @@ public class SearchResultDTO {
     private String corpName;
     private String corpCode;
     private List<Map<String, Object>> columns;
+    private String message;
 
 }

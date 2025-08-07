@@ -12,11 +12,11 @@ def build_summary_prompt(profile: dict, investor_type: str) -> str:
 '{investor_type}' 투자자에게 적합한 전략을 제시하세요.
 
 [기업 개요]
-- 기업명: {profile.get("기업명")}
-- 대표자명: {profile.get("대표자명")}
+- 회사명: {profile.get("회사명")}
+- 대표자: {profile.get("대표자")}
 - 업종코드: {profile.get("업종코드")}
 - 상장여부: {profile.get("상장여부")}
-- 설립일자: {profile.get("설립일자")}
+- 설립일: {profile.get("설립일")}
 - 주소: {profile.get("주소")}
 - 지주회사: {profile.get("지주회사") or '없음'}
 
