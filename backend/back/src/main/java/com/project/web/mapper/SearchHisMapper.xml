@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.web.mapper.SearchHisMapper">
+
+	<insert id="hisInsert" parameterType="com.project.web.vo.SearchwordVO">
+	INSERT INTO T_SEARCH_WORD (
+      USER_ID,
+      SEARCH_WORD,
+      CREATED_AT
+	  )
+	  VALUES (
+	      #{userId},
+	      #{searchWord},
+	      SYSDATE
+	  )
+	</insert>
+
+</mapper>

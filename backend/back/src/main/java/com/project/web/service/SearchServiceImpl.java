@@ -5,10 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.project.web.dto.MatchResultDTO;
+import com.project.web.dto.ResponseDTO;
 import com.project.web.dto.SearchResultDTO;
+import com.project.web.mapper.SearchHisMapper;
 import com.project.web.mapper.TargetColMapper;
 import com.project.web.utils.ConvertToFlatYearlyListUtil;
 import com.project.web.vo.ColumnMatchVO;
+import com.project.web.vo.SearchwordVO;
 import com.project.web.vo.TargetColVO;
 
 import java.util.*;
@@ -22,6 +25,7 @@ public class SearchServiceImpl implements SearchService {
     private final ColumnMapperService columnMapperService;
     private final TargetColMapper targetColMapper;
     private final FinancialRatioService financialRatioService;
+    private final SearchHisMapper searchHisMapper;
 
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
@@ -136,5 +140,15 @@ public class SearchServiceImpl implements SearchService {
         }
         return null;
     }
+
+
+	@Override
+	public ResponseDTO hisInsert(SearchwordVO searchHis) {
+		int ok = searchHisMapper.hisInsert(searchHis);
+		if(ok == 0) {return ResponseDTO.builder().success(false).message("등록실패").build();}
+		return ResponseDTO.builder().success(true).message("등록완료").build();
+	}
+    
+    
 
 }
