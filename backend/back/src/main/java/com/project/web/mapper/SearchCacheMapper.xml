@@ -30,7 +30,7 @@
   <insert id="save" parameterType="com.project.web.vo.SearchCacheVO">
   INSERT INTO search_cache (
     search_cache_idx,  <!-- auto increment라면 생략 가능 --> 
-    corp_code
+    corp_code,
     corp_name,
     col_name,
     col_value,

@@ -80,13 +80,22 @@ const Home = () => {
   const handleSearchClick = async () => {
     try {
       const searchDataList = await searchCorp(corpName);
+      const dataList: any[][] = [];
+      const codeList: any[] = [];
+
+      searchDataList.forEach(item => {
+        const values = Object.values(item);
+        const lastValue = values[values.length - 1];
+
+        dataList.push(values.slice(0, values.length - 1));
+        codeList.push(lastValue);
+      });
       if(searchDataList[0]) {
-        navigate('/searchResult', { state: { res: searchDataList } });
+        navigate('/searchResult', { state: { res: dataList, code: codeList } });
+        console.log(dataList);
       }
     } catch (e) {
       alert('실패~~~');
-      console.log(e);
-      console.log(corpName);
     }
   }
   return (

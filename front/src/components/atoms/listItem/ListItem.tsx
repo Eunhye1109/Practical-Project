@@ -4,8 +4,8 @@ import { css, Theme } from '@emotion/react';
 import { SearchListDTO } from 'types/search.types';
 
 interface Props {
-    readonly onClick?: (value: React.ReactNode) => void;
-    readonly btnOnClick?: (value: React.ReactNode) => void;
+    readonly onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+    readonly btnOnClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
     readonly widthList: string[];
     readonly data: string[];
     readonly typeList: string[];
@@ -136,7 +136,7 @@ const ListItem = ({onClick, btnOnClick, widthList, typeList, data, logo}: Props)
             index !== 0 &&
             <ItemContent key={index} width={item}>
                 {typeList.map((type) => (
-                    <Item type={type} onClick={type === 'btn' && btnOnClick ? () => btnOnClick(data) : undefined}>
+                    <Item type={type} onClick={type === 'btn' && btnOnClick ? () => btnOnClick : undefined}>
                         {(!data[index] || data[index].trim?.() === '') ? '-' : data[index]}
                     </Item>
                 ))}

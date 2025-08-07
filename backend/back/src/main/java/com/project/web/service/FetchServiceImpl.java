@@ -15,7 +15,7 @@ public class FetchServiceImpl implements FetchService{
     private final RestTemplate restTemplate = new RestTemplate();
 
     public Map<String, Object> fetchColumns(String corpCode) {
-        String url = "http://localhost:8000/fetch?corp_name=" + corpCode;
+        String url = "http://localhost:8000/fetch?corp_code=" + corpCode;
         ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
             return response.getBody(); 

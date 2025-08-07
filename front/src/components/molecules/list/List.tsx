@@ -9,8 +9,8 @@ interface Props {
     readonly headerList: Array<{label: string, width: string}>;
     readonly dataList: string[][];
     readonly widthList: string[];
-    readonly onClick?: (value: React.ReactNode) => void;
-    readonly btnOnClick?: (value: React.ReactNode) => void;
+    readonly onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+    readonly btnOnClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
     readonly nullBtnOnClick?: () => void;
     readonly btnLabel?: string;
     readonly notiLabel?: string;

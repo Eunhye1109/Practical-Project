@@ -122,6 +122,7 @@ const SearchResult = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const searchRes = location.state?.res;
+    const codeList = location.state?.code;
 
     // 스크롤 이벤트 관리
     const [scrolled, setScrolled] = useState(false);
@@ -176,7 +177,7 @@ const SearchResult = () => {
         </SearchBarBox>
         <Content fixed={scrolled}>
             <SearchControllBar>
-                <SearchCount>검색 결과 <SearchCountBold>{searchCount}</SearchCountBold> 건</SearchCount>
+                <SearchCount>검색 결과 <SearchCountBold>{searchRes.length}</SearchCountBold> 건</SearchCount>
                 <SortBox>
                     {sortList.map((sort, index) => (
                         <TextButton key={index} label={sort} mode={sortBtn[index]} onClick={() => handleSortClick(index)} />
@@ -190,6 +191,11 @@ const SearchResult = () => {
                     widthList={widthList}
                     dataList={searchRes}
                     logoList={logoDummyData}
+                    onClick={(e) => {
+                        const id = e?.currentTarget.getAttribute('data-id');
+                        alert(id);
+                        ;
+                    }}
                 />
             </SearchListBox>
         </Content>
