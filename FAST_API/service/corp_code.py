@@ -59,6 +59,8 @@ def get_corp_list(keyword: str):
 
         if name_elem is not None and code_elem is not None:
             name = name_elem.text.strip()
+            code = code_elem.text.strip()       
+            print(f"🔍 [DEBUG] corp_name={name}, corp_code={code}")
             if keyword_lower in name.lower():
                 matched.append({
                     "corp_name": name,

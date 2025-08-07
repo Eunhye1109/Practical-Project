@@ -10,7 +10,7 @@ import com.project.web.vo.SearchwordVO;
 public interface SearchService {
 
 	// 찾고자 하는 컬럼을 서치해라
-	SearchResultDTO search(String corpName);
+	SearchResultDTO search(String corpCode);
 
 	ResponseDTO insertHis(SearchwordVO searchHis);
 

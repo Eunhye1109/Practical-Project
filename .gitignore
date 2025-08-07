@@ -218,3 +218,4 @@ FAST_API/utils/__pycache__/
 *.pyc
 "@
 .env
+FAST_API/keys.env

@@ -7,6 +7,7 @@ from urllib.parse import unquote
 from service.corp_code import get_corp_list
 from fastapi.responses import JSONResponse
 from utils.prompt_loader import load_prompt
+from utils.format_date import format_date
 from utils.config import (
     API_KEY,
     OPENAI_API_KEY,
@@ -31,10 +32,10 @@ def collect_profile(corp_code):
     return {
         "회사명": res.get("corp_name"),
         "대표자": res.get("ceo_nm"),
-        "사업자등록번호": res.get("bizr_no"),
-        "설립일": res.get("est_dt"),
+        # "사업자등록번호": res.get("bizr_no"),
+        "설립일": format_date(res.get("est_dt")),
         "업종코드": res.get("industry_code"),
-        "주소": res.get("adres"),
+        # "주소": res.get("adres"),
         "상장여부": "상장" if res.get("stock_code") else "비상장"
     }
 
@@ -110,8 +111,8 @@ def search_list_summary(keyword):
                 "ceoName": profile.get("대표자"),
                 "stockType": profile.get("상장여부"),
                 "establishDate": profile.get("설립일"),
-                "address": profile.get("주소"),
-                "bizNo": profile.get("사업자등록번호"),
+                # "address": profile.get("주소"),
+                # "bizNo": profile.get("사업자등록번호"),
                 "keywords": summary.get("키워드"),
                 "gptSummary": summary.get("한 문장 요약")
             })
@@ -121,8 +122,8 @@ def search_list_summary(keyword):
                 "ceoName": profile.get("대표자"),
                 "stockType": profile.get("상장여부"),
                 "establishDate": profile.get("설립일"),
-                "address": profile.get("주소"),
-                "bizNo": profile.get("사업자등록번호"),
+                # "address": profile.get("주소"),
+                # "bizNo": profile.get("사업자등록번호"),
                 "keywords": summary.get("키워드"),
                 "gptSummary": summary.get("한 문장 요약")
                 

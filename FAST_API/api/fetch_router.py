@@ -6,5 +6,5 @@ from service.fetch_data import fetch_corp_data
 router = APIRouter()
 
 @router.get("/fetch")
-async def fetch_columns(corp_name: str = Query(..., description="기업명")):
-    return fetch_corp_data(corp_name)
+async def fetch_columns(corp_code: str = Query(..., description="기업코드")):
+    return fetch_corp_data(corp_code)

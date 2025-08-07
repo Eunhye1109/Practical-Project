@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class SearchCacheVO {
     private Long searchCacheIdx;       // search_cache_idx (PK)
+    private String corpCode;
     private String corpName;           // 기업명
     private String colName;            // 컬럼명 (대표 컬럼명)
     private String colValue;           // 실제 값 (latestData.get(matchedCol))
