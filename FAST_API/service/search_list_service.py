@@ -30,11 +30,6 @@ def collect_profile(corp_code):
         return {}
     return {
         "회사명": res.get("corp_name"),
-        "대표자": res.get("ceo_nm"),
-        "사업자등록번호": res.get("bizr_no"),
-        "설립일": format_date(res.get("est_dt")),
-        "업종코드": res.get("industry_code"),
-        "주소": res.get("adres"),
         "상장여부": "상장" if res.get("stock_code") else "비상장",
     }
 
@@ -59,7 +54,9 @@ def gpt_summary(profile):
             messages=[{"role": "user", "content": filled_prompt}],
             temperature=DEFAULT_TEMPERATURE
         )
-        print("🤖 GPT 응답 원문:", res)
+        response_text = res.choices[0].message.content.strip()
+        print("📄 GPT 응답 텍스트:\n", response_text)
+
         
 
         return json.loads(res.choices[0].message.content.strip())
@@ -109,18 +106,14 @@ def search_list_summary(keyword):
 
             print("📦 [DEBUG] append data →", {
                 "corpName": profile.get("회사명"),
-                "ceoName": profile.get("대표자"),
                 "stockType": profile.get("상장여부"),
-                "establishDate": profile.get("설립일"),
                 "keywords": summary.get("키워드"),
                 "gptSummary": summary.get("한 문장 요약")
             })
             results.append({
                 "corpCode": corp["corp_code"],
                 "corpName": profile.get("회사명"),
-                "ceoName": profile.get("대표자"),
                 "stockType": profile.get("상장여부"),
-                "establishDate": profile.get("설립일"),
                 "keywords": summary.get("키워드"),
                 "gptSummary": summary.get("한 문장 요약")
                 
