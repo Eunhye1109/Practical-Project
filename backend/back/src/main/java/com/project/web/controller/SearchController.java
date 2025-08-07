@@ -1,12 +1,16 @@
 package com.project.web.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import com.project.web.dto.ResponseDTO;
 import com.project.web.dto.SearchResultDTO;
 import com.project.web.service.SearchCacheService;
 import com.project.web.service.SearchService;
+import com.project.web.vo.SearchwordVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -33,4 +37,18 @@ public class SearchController {
         searchCacheService.save(corpName, result);                   // ✅ 캐시 저장 (최초 or 오래된 경우)
         return ResponseEntity.ok(result);
     }
+	
+	@Operation(summary = "검색 기록 등록")
+	@PostMapping("/search/history")
+	public ResponseEntity<ResponseDTO> insertHis(@RequestBody SearchwordVO searchHis){
+		ResponseDTO response = searchService.insertHis(searchHis);
+		return ResponseEntity.ok(response);
+	}
+	
+	@Operation(summary = "검색 기록 조회(3개)")
+	@GetMapping("/search/getHis")
+	public ResponseEntity<List<SearchwordVO>> getHis(@RequestParam("user_id")String userId){
+		List<SearchwordVO> response = searchService.getHis(userId);
+		return ResponseEntity.ok(response);
+	}
 }
