@@ -143,10 +143,19 @@ public class SearchServiceImpl implements SearchService {
 
 
 	@Override
-	public ResponseDTO hisInsert(SearchwordVO searchHis) {
-		int ok = searchHisMapper.hisInsert(searchHis);
+	public ResponseDTO insertHis(SearchwordVO searchHis) {
+		int ok = searchHisMapper.insertHis(searchHis);
 		if(ok == 0) {return ResponseDTO.builder().success(false).message("등록실패").build();}
 		return ResponseDTO.builder().success(true).message("등록완료").build();
+	}
+
+
+
+	@Override
+	public List<SearchwordVO> getHis(String userId) {
+		List<SearchwordVO> vo = searchHisMapper.getHis(userId);
+		if(vo == null) {return null;}
+		return vo;
 	}
     
     

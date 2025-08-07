@@ -1,5 +1,7 @@
 package com.project.web.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +40,15 @@ public class SearchController {
 	
 	@Operation(summary = "검색 기록 등록")
 	@PostMapping("/search/history")
-	public ResponseEntity<ResponseDTO> hisInsert(@RequestBody SearchwordVO searchHis){
-		ResponseDTO response = searchService.hisInsert(searchHis);
+	public ResponseEntity<ResponseDTO> insertHis(@RequestBody SearchwordVO searchHis){
+		ResponseDTO response = searchService.insertHis(searchHis);
+		return ResponseEntity.ok(response);
+	}
+	
+	@Operation(summary = "검색 기록 조회(3개)")
+	@GetMapping("/search/getHis")
+	public ResponseEntity<List<SearchwordVO>> getHis(@RequestParam("user_id")String userId){
+		List<SearchwordVO> response = searchService.getHis(userId);
 		return ResponseEntity.ok(response);
 	}
 }

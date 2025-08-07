@@ -5,7 +5,7 @@
 
 <mapper namespace="com.project.web.mapper.SearchHisMapper">
 
-	<insert id="hisInsert" parameterType="com.project.web.vo.SearchwordVO">
+	<insert id="insertHis" parameterType="com.project.web.vo.SearchwordVO">
 	INSERT INTO T_SEARCH_WORD (
       USER_ID,
       SEARCH_WORD,
@@ -17,5 +17,17 @@
 	      SYSDATE
 	  )
 	</insert>
+	
+	<select id="getHis" parameterType="string" resultType="com.project.web.vo.SearchwordVO">
+	   SELECT USER_ID AS userId,
+         SEARCH_WORD AS searchWord
+	  FROM (
+	    SELECT *
+	    FROM T_SEARCH_WORD
+	    WHERE USER_ID = #{userId}
+	    ORDER BY CREATED_AT DESC
+	  )
+	  WHERE ROWNUM &lt;= 3
+	</select>
 
 </mapper>
