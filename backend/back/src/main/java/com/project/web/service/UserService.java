@@ -14,5 +14,4 @@ public interface UserService {
 
 	public UserDTO updateUser(UpdateUserVO request);
 	
-	UserDTO getUserInfo(String userId);
 }

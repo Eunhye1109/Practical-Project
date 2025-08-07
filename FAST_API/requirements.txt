@@ -4,5 +4,3 @@ requests
 sentence-transformers
 transformers
 pydantic
-openai>=1.0.0
-dotenv
