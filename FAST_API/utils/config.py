@@ -30,7 +30,7 @@ SUMMARY_PROMPT_TEMPLATE = load_prompt("prompts/gpt_summary_prompt.txt")
 SIM_THRESHOLD = 0.8
 YEARS = ["2024", "2023", "2022"]
 DEFAULT_YEAR = "2023"
-MAX_COMPANY_COUNT = 2 # 응답 제한
+MAX_COMPANY_COUNT = 3 # 응답 제한
 
 # DART
 REPRT_CODE=11011
