@@ -18,7 +18,7 @@ public class SearchListServiceImpl implements SearchListService{
 
 	
 	@Override
-	public List<SearchListDTO> searchList(String corpName) {
+	public List<SearchListDTO> searchList(String corpName, String userPurpose) {
 		List<SearchListDTO> cachedList = searchListMapper.selectByCorpName(corpName);
 
 		if (cachedList != null && !cachedList.isEmpty()) {
@@ -28,7 +28,7 @@ public class SearchListServiceImpl implements SearchListService{
 
 	    // ✅ 없으면 FastAPI 호출
 		System.out.println("❌ 캐시 결과 없음 → FastAPI 호출");
-	    List<SearchListDTO> fromFastApi = searchListApiClient.fetchCompanySummaries(corpName);
+	    List<SearchListDTO> fromFastApi = searchListApiClient.fetchCompanySummaries(corpName, userPurpose);
 
 	    for (SearchListDTO dto : fromFastApi) {
 	        // ✅ 저장

@@ -4,17 +4,15 @@ import requests
 from openai import OpenAI
 from urllib.parse import unquote
 
+from typing import Optional
 from service.corp_code import get_corp_list
 from fastapi.responses import JSONResponse
-from utils.format_date import format_date
+from prompts.gpt_prompts import build_summary_prompt
 from utils.logo_utils import get_logo_url
+from prompts.gpt_prompts import gpt_summary
 from utils.config import (
     DARTAPI_KEY,
-    OPENAI_MODEL,
-    DEFAULT_TEMPERATURE,
     MAX_COMPANY_COUNT,
-    client,
-    SUMMARY_PROMPT_TEMPLATE
 )
 
 
@@ -34,41 +32,9 @@ def collect_profile(corp_code):
     }
 
 
-# ✅ GPT 요약 생성
-def gpt_summary(profile):
-    print("🧠 [DEBUG] gpt_summary 시작")
-    categories = "패션, 물류, 핀테크, 유통, 콘텐츠, 플랫폼, 커머스, IT, 미디어, 제조, 기타"
-    investors = "혼합형, 공격형, 안정형"
-
-    try:
-        filled_prompt = SUMMARY_PROMPT_TEMPLATE.format(
-        categories=categories,
-        investors=investors,
-        profile=profile,
-        **profile
-    )
-        print(f"📝 프롬프트 길이: {len(filled_prompt)}")
-
-        res = client.chat.completions.create(
-            model=OPENAI_MODEL,
-            messages=[{"role": "user", "content": filled_prompt}],
-            temperature=DEFAULT_TEMPERATURE
-        )
-        response_text = res.choices[0].message.content.strip()
-        print("📄 GPT 응답 텍스트:\n", response_text)
-
-        
-
-        return json.loads(res.choices[0].message.content.strip())
-    except Exception as e:
-        print("❌ GPT 요약 실패:", e)
-        return {
-            "키워드": ["#정보없음"],
-            "한 문장 요약": f"❌ GPT 요약 실패: {e}"
-        }
-
 # ✅ 전체 요약 수행 함수
-def search_list_summary(keyword):
+def search_list_summary(keyword: str, user_purpose: Optional[str] = None):
+    print(f"📦 [search_list_summary] keyword={keyword}, user_purpose={user_purpose}")
     print(f"\n🔍 [FastAPI] 기업 요약 요청 시작 — keyword: '{keyword}'")
     
     keyword = unquote(keyword)
@@ -94,12 +60,14 @@ def search_list_summary(keyword):
             profile = collect_profile(corp["corp_code"])
             print(f"   🧾 기업 개요 수집 완료: {profile.get('회사명')}")
             try:
-                summary = gpt_summary(profile)
+                summary = gpt_summary(profile, user_purpose)
                 print(f"   🤖 GPT 요약 성공: {summary.get('한 문장 요약')}")
+                major = summary.get("주요 분야")
                 keywords = summary.get("키워드")
                 gpt_summary_text = summary.get("한 문장 요약")
             except Exception as e:
                 print(f"   ⚠️ GPT 요약 실패 (무시하고 진행): {e}")
+                major = ["#정보없음"]
                 keywords = ["#정보없음"]
                 gpt_summary_text = f"❌ GPT 요약 실패: {e}"
             
@@ -107,6 +75,7 @@ def search_list_summary(keyword):
             print("📦 [DEBUG] append data →", {
                 "corpName": profile.get("회사명"),
                 "stockType": profile.get("상장여부"),
+                "major":summary.get("주요 분야"),
                 "keywords": summary.get("키워드"),
                 "gptSummary": summary.get("한 문장 요약")
             })
@@ -114,6 +83,7 @@ def search_list_summary(keyword):
                 "corpCode": corp["corp_code"],
                 "corpName": profile.get("회사명"),
                 "stockType": profile.get("상장여부"),
+                "major":summary.get("주요 분야"),
                 "keywords": summary.get("키워드"),
                 "gptSummary": summary.get("한 문장 요약")
                 

@@ -6,6 +6,6 @@ import com.project.web.dto.SearchListDTO;
 
 public interface SearchListService {
 
-	List<SearchListDTO> searchList(String corpName);
+	List<SearchListDTO> searchList(String corpName, String userPurpose);
 
 }
