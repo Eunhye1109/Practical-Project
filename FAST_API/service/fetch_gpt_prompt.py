@@ -1,6 +1,6 @@
 # service/gpt_summary_service.py
-from prompts.gpt_prompts import gpt_summary
-from utils.api_util import collect_profile
+from prompts.gpt_prompts import gpt_summary, build_news_summary_prompt
+from utils.api_util import collect_profile, fetch_news_articles
 from utils.config import tokenizer, model
 import torch
 import torch.nn.functional as F
