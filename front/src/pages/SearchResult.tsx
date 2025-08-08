@@ -191,9 +191,9 @@ const SearchResult = () => {
                     widthList={widthList}
                     dataList={searchRes}
                     logoList={logoDummyData}
-                    onClick={() => {
-                        alert('id');
+                    listOnClick={() => {
                     }}
+                    corpCodeList={codeList}
                 />
             </SearchListBox>
         </Content>

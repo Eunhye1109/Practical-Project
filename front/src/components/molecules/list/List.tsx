@@ -3,19 +3,19 @@ import styled from '@emotion/styled'
 import { ListItem, ListHeader, Line, Button } from 'components/atoms'
 import { useTheme } from '@emotion/react';
 import { typoStyle } from 'styles/typoStyle';
-import { SearchListDTO } from 'types/search.types';
 
 interface Props {
     readonly headerList: Array<{label: string, width: string}>;
     readonly dataList: string[][];
     readonly widthList: string[];
-    readonly onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+    readonly listOnClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
     readonly btnOnClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
     readonly nullBtnOnClick?: () => void;
     readonly btnLabel?: string;
     readonly notiLabel?: string;
     readonly typeList: string[];
     readonly logoList: string[];
+    readonly corpCodeList: string[];
 }
 
 const Container = styled.div`
@@ -43,10 +43,10 @@ const NotiText = styled.p`
     color: ${({theme}) => theme.colors.natural[70]};
 `;
 
-const List = ({headerList, dataList, onClick, btnOnClick, nullBtnOnClick, widthList, btnLabel, notiLabel, typeList, logoList}: Props) => {
+const List = ({headerList, dataList, listOnClick, btnOnClick, nullBtnOnClick, widthList, btnLabel, notiLabel, typeList, logoList, corpCodeList}: Props) => {
     const theme = useTheme();
   return (
-    <Container onClick={() => onClick}>
+    <Container onClick={() => listOnClick}>
         <ListHeader headerList={headerList} />
         <Line width='100%' color={theme.colors.natural[20]} />
         {dataList.length === 0 || dataList === null || dataList === undefined ?
@@ -60,9 +60,10 @@ const List = ({headerList, dataList, onClick, btnOnClick, nullBtnOnClick, widthL
             <ListItem
                 logo={logoList[index]}
                 data={item}
-                onClick={typeList[index]  === 'btn' ? () => btnOnClick : undefined}
+                btnOnClick={typeList[index]  === 'btn' ? () => btnOnClick : undefined}
                 widthList={widthList}
                 typeList={typeList}
+                corpCode={corpCodeList[index]}
             />
             {index !== dataList.length - 1 && (
                 <Line width="100%" color={theme.colors.natural[20]} />

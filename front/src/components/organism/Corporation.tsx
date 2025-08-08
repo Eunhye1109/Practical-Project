@@ -62,12 +62,13 @@ const Corporation = ({headerList, widthList, notiLabel, onClick, btnOnClick, typ
           widthList={widthList}
           btnLabel='기업 검색하러 가기'
           notiLabel={notiLabel}
-          onClick={() => onClick}
+          listOnClick={() => onClick}
           btnOnClick={() => btnOnClick}
           nullBtnOnClick={() => navigate('/')}
           typeList={typeList}
           dataList={dataList}
           logoList={logoList}
+          corpCodeList={[]}
         />
       </ListBox>
     </Container>

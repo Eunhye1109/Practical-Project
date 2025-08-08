@@ -61,12 +61,13 @@ const DocsHistory = ({headerList, widthList, notiLabel, onClick, btnOnClick, dat
           widthList={widthList}
           btnLabel='기업 검색하러 가기'
           notiLabel={notiLabel}
-          onClick={() => onClick}
+          listOnClick={() => onClick}
           btnOnClick={() => btnOnClick}
           nullBtnOnClick={() => navigate('/')}
           dataList={dataList}
           typeList={typeList}
           logoList={logoList}
+          corpCodeList={[]}
         />
       </ListBox>
     </Container>
