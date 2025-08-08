@@ -1,9 +1,11 @@
 package com.project.web.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.web.dto.UserDTO;
+import com.project.web.dto.UserResultDTO;
 import com.project.web.mapper.UserInfoMapper;
 import com.project.web.vo.UserVO;
 
@@ -33,6 +35,15 @@ public class UserInfoServiceImpl implements UserInfoService{
 				.userId(userId)
 				.userPw(userPw)
 				.build();
+	}
+
+	@Override
+	public UserResultDTO getUserInfo(String userId) {
+		UserVO vo = userInfoMapper.getUserInfo(userId);
+		if(vo == null) {return UserResultDTO.builder().message("정보 조회 실패")
+				.success(false).build();}
+		return UserResultDTO.builder().message("정보 조회 성공")
+				.success(true).userInfo(vo).build();
 	}
 
 }
