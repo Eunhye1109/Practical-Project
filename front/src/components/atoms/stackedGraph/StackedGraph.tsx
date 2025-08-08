@@ -3,7 +3,7 @@ import { Bar, BarChart, XAxis, YAxis, Legend, Tooltip, ResponsiveContainer, Cart
 import { CustomLegend } from '../graphCustom/GraphCustom';
 import { useTheme } from '@emotion/react';
 import { dataFormat } from '../graphCustom/GraphCustom';
-import { GraphData } from 'types/search.types';
+import { GraphData } from 'types/report.types';
 
 interface Props {
     readonly data: GraphData[];

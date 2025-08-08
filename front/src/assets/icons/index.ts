@@ -1,4 +1,5 @@
 export { ReactComponent as Bookmark } from './bookmark.svg';
+export { ReactComponent as BookmarkStar } from './bookmark_star.svg';
 export { ReactComponent as CheckBoxOutline } from './check_box_outline_blank.svg';
 export { ReactComponent as CheckBox } from './check_box.svg';
 export { ReactComponent as Docs } from './docs.svg';

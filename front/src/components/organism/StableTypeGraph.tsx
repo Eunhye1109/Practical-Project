@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { stableType, stableTypeBodyText, stableTypeTitle } from 'constants/graphOption';
 import { GraphBox } from 'components/molecules';
-import { ReportFullData } from 'types/search.types';
+import { ReportFullData } from 'types/report.types';
 
 interface Prop {
   data: ReportFullData;

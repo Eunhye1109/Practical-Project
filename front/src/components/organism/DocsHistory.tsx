@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { typoStyle } from 'styles/typoStyle';
 import { useNavigate } from 'react-router-dom';
 import { List } from 'components/molecules';
+import { mypageData } from 'types/mypage.types';
 
 interface Props {
   readonly headerList: Array<{label: string, width: string}>;
@@ -11,8 +12,9 @@ interface Props {
   readonly onClick?: (value: React.ReactNode) => void;
   readonly btnOnClick?: () => void;
   readonly typeList: string[];
-  readonly dataList: string[][];
-  readonly logoList: string[];
+  // readonly dataList: string[][];
+  // readonly logoList: string[];
+  readonly fullData: mypageData;
 }
 
 const Container = styled.div`
@@ -47,13 +49,13 @@ const ListBox = styled.div`
   overflow: hidden;
 `;
 
-const DocsHistory = ({headerList, widthList, notiLabel, onClick, btnOnClick, dataList, logoList, typeList}: Props) => {
+const DocsHistory = ({headerList, widthList, notiLabel, onClick, btnOnClick, typeList, fullData}: Props) => {
   const navigate = useNavigate();
 
   return (
     <Container>
       <ListCountBox>
-        <ListCount thickness={false}>최근 3개월 이내에 <ListCount thickness={true}>{dataList.length}</ListCount>개 기업을 조회했습니다.</ListCount>
+        <ListCount thickness={false}>최근 3개월 이내에 <ListCount thickness={true}>{fullData.corpData.length}</ListCount>개 기업을 조회했습니다.</ListCount>
       </ListCountBox>
       <ListBox>
         <List
@@ -64,10 +66,10 @@ const DocsHistory = ({headerList, widthList, notiLabel, onClick, btnOnClick, dat
           listOnClick={() => onClick}
           btnOnClick={() => btnOnClick}
           nullBtnOnClick={() => navigate('/')}
-          dataList={dataList}
+          dataList={fullData.corpData}
           typeList={typeList}
-          logoList={logoList}
-          corpCodeList={[]}
+          logoList={fullData.logo}
+          corpCodeList={fullData.corpCode}
         />
       </ListBox>
     </Container>

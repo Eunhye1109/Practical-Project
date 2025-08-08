@@ -1,5 +1,5 @@
 import React from "react";
-import { ReportFullData } from "types/search.types";
+import { ReportFullData } from "types/report.types";
 
 export const reportFullDummyData: ReportFullData = {
   // 기업 기본 소개

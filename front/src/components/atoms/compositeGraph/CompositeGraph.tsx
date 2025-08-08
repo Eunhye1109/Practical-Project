@@ -3,7 +3,7 @@ import { useTheme } from '@emotion/react';
 import { Line, XAxis, YAxis, Bar, ComposedChart, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { CustomLegend } from '../graphCustom/GraphCustom';
 import { dataFormat } from '../graphCustom/GraphCustom';
-import { GraphData } from 'types/search.types';
+import { GraphData } from 'types/report.types';
 
 interface Props {
     readonly data: GraphData[];

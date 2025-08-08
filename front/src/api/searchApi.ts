@@ -10,3 +10,14 @@ export const searchCorp = async (corpName: string): Promise<SearchListDTO[]> => 
     return res.data;
 }
 
+// 검색어 저장
+export const saveKeyword = async (userId: string, searchWord: string) => {
+    const res = await axios.post(`${BASE_URL}v1/search/history`, {userId, searchWord});
+    return res.data.success;
+}
+
+// 검색어 조회
+export const hisKeyword = async (userId: string): Promise<{userId: string, searchWord: string}[]> => {
+    const res = await axios.get<{userId: string, searchWord: string}[]>(`${BASE_URL}v1/search/getHis?user_id=${userId}`);
+    return res.data;
+}

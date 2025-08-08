@@ -2,7 +2,7 @@ import React from 'react'
 import { Line, LineChart, XAxis, YAxis, Legend, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { CustomLegend, dataFormat } from '../graphCustom/GraphCustom';
 import { useTheme } from '@emotion/react';
-import { GraphData } from 'types/search.types';
+import { GraphData } from 'types/report.types';
 
 interface Props {
     readonly data: GraphData[];

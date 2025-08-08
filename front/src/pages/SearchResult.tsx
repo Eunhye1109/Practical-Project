@@ -8,6 +8,7 @@ import TextButton from 'components/atoms/textButton/TextButton';
 import { logoDummyData } from 'constants/mypageDummyData';
 import { reportOutput } from 'api/reportApi';
 import { useLogin } from 'contexts/LoginContext';
+import { hisKeyword, saveKeyword, searchCorp } from 'api/searchApi';
 
 const Container = styled.div`
     // 크기
@@ -123,18 +124,21 @@ const SearchResult = () => {
     // 검색 결과 관련
     const location = useLocation();
     const navigate = useNavigate();
-    const searchRes = location.state?.res;
-    const codeList = location.state?.code;
+    const [searchRes, setSearchRes] = useState(location.state?.res);
+    const [codeList, setCodeList] = useState(location.state?.code);
+    const [searchCorpName, setSearchCorpName] = useState(location.state?.corpName);
     const {user} = useLogin();
 
     // 스크롤 이벤트 관리
     const [scrolled, setScrolled] = useState(false);
-    // 검색 결과 건수
-    const [searchCount, setSearchCount] = useState('12312');
     // 정렬 버튼 컨트롤
     const [sortBtn, setSortBtn] = useState(['selected', 'default']);
     // 정렬 방식 리스트
     const sortList = ['정렬1', '정렬2'];
+    // 타이틀 검색어
+    const [searchTitle, setSearchTitle] = useState(searchCorpName);
+    // 최근 검색어 저장
+    const [recentKeywords, setRecentKeywords] = useState<string[]>([]);
 
     // 정렬 변경 함수
     const handleSortClick = (clickIndex: number) => {
@@ -144,17 +148,17 @@ const SearchResult = () => {
     // SearchBar 위치 조정
     useEffect(() => {
         const handleSearchBar = () => {
-        const scrollTop = window.scrollY;
-        setScrolled(scrollTop >= 80);  // 스크롤 80 이하일 때 true, 초과면 false
-    };
+            const scrollTop = window.scrollY;
+            setScrolled(scrollTop >= 80);  // 스크롤 80 이하일 때 true, 초과면 false
+        };
 
-    // 초기 상태 설정
-    handleSearchBar();
-    window.addEventListener('scroll', handleSearchBar);
+        // 초기 상태 설정
+        handleSearchBar();
+        window.addEventListener('scroll', handleSearchBar);
 
-    return () => {
-        window.removeEventListener('scroll', handleSearchBar)
-    }
+        return () => {
+            window.removeEventListener('scroll', handleSearchBar)
+        }
     }, []);
 
     // 정렬 변경 반영
@@ -166,11 +170,51 @@ const SearchResult = () => {
     const handleReportClick = async (corpCode: string) => {
         try {
             const reportData = await reportOutput(corpCode, user?.riskType ?? '비회원');
-            console.log(reportData);
             console.log(user?.riskType ?? '비회원');
-            alert('일단 클릭은 됨~~');
+            navigate('/report', {state: {reportData: reportData}});
         } catch (e) {
             alert('실패~~')
+        }
+    }
+
+    const fetchKeyword = async () => {
+          if(user?.userId) {
+            try {
+              const res = await hisKeyword(user.userId);
+              const list: string[] = [];
+              {res.map((item) => (
+                list.push(item.searchWord)
+              ))}
+              setRecentKeywords(list);
+            } catch (e) {
+              alert('불러오기 실패')
+            }
+          }
+        }
+
+    // 검색
+    const handleSearchClick = async () => {
+        try {
+            fetchKeyword();
+            const searchDataList = await searchCorp(searchCorpName);
+            if(user?.userId && recentKeywords.every(item => item !== searchCorpName)) {
+                const save = await saveKeyword(user?.userId, searchCorpName);
+            }
+            const dataList: any[][] = [];
+            const codeList: any[] = [];
+
+            searchDataList.forEach(item => {
+                const values = Object.values(item);
+                const lastValue = values[values.length - 1];
+
+                dataList.push(values.slice(0, values.length - 1));
+                codeList.push(lastValue);
+            });
+            setSearchRes(dataList);
+            setCodeList(codeList);
+            setSearchTitle(searchCorpName);
+        } catch (e) {
+            alert('실패~~~');
         }
     }
 
@@ -178,7 +222,7 @@ const SearchResult = () => {
     <Container>
         <TopPanner fixed={scrolled}>
             <PannerTitleBox>
-                <PannerTitle titleStyle={true} size={scrolled}>검색어</PannerTitle>
+                <PannerTitle titleStyle={true} size={scrolled}>{searchTitle}</PannerTitle>
                 <PannerTitle titleStyle={false} size={scrolled}>검색결과</PannerTitle>
             </PannerTitleBox>
         </TopPanner>
@@ -188,6 +232,9 @@ const SearchResult = () => {
                 modeList={modeOption}
                 label='기업명을 입력해주세요.'
                 width='85%'
+                value={searchCorpName}
+                onChange={(e) =>setSearchCorpName(e.target.value)}
+                onClick={handleSearchClick}
             />
         </SearchBarBox>
         <Content fixed={scrolled}>
@@ -206,7 +253,9 @@ const SearchResult = () => {
                     widthList={widthList}
                     dataList={searchRes}
                     logoList={logoDummyData}
-                    listOnClick={(e, corpCode) => {handleReportClick(corpCode)
+                    listOnClick={(e, corpCode) => {
+                        handleReportClick(corpCode);
+                        navigate('/report', {state: {corpCode: corpCode}});
                     }}
                     corpCodeList={codeList}
                 />

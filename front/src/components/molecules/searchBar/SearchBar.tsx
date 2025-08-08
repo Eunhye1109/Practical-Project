@@ -11,6 +11,7 @@ interface Props {
     readonly modeList: mode[];
     readonly label: string;
     readonly onClick?: () => void;
+    readonly onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     readonly width?: string;
     readonly value?: string;
 }
@@ -23,7 +24,7 @@ const Container = styled.div<{width?: string}>`
     gap: 5px;
 `;
 
-const SearchBar = ({itemList, modeList, label, onClick, width, value}: Props) => {
+const SearchBar = ({itemList, modeList, label, onClick, width, value, onChange}: Props) => {
   return (
     <Container width={width}>
         {itemList.map((item, index) => (
@@ -41,6 +42,7 @@ const SearchBar = ({itemList, modeList, label, onClick, width, value}: Props) =>
             onClick={onClick}
             align='left'
             value={value}
+            onChange={onChange}
         />
     </Container>
   )

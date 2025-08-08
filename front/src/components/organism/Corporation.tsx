@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
 import { List } from 'components/molecules';
 import { useNavigate } from 'react-router-dom';
+import { mypageData } from 'types/mypage.types';
 
 interface Props {
   readonly headerList: Array<{label: string, width: string}>;
@@ -11,8 +12,9 @@ interface Props {
   readonly onClick?: (value: React.ReactNode) => void;
   readonly btnOnClick?: () => void;
   readonly typeList: string[];
-  readonly dataList: string[][];
-  readonly logoList: string[];
+  // readonly dataList: string[][];
+  // readonly logoList: string[];
+  readonly fullData: mypageData;
 }
 
 const Container = styled.div`
@@ -47,13 +49,13 @@ const ListBox = styled.div`
   overflow: hidden;
 `;
 
-const Corporation = ({headerList, widthList, notiLabel, onClick, btnOnClick, typeList, logoList, dataList}: Props) => {
+const Corporation = ({headerList, widthList, notiLabel, onClick, btnOnClick, typeList, fullData}: Props) => {
   const navigate = useNavigate();
 
   return (
     <Container>
       <ListCountBox>
-        <ListCount thickness={true}>{dataList.length}</ListCount>
+        <ListCount thickness={true}>{fullData.corpData.length}</ListCount>
         <ListCount thickness={false}>개의 관심기업이 있습니다.</ListCount>
       </ListCountBox>
       <ListBox>
@@ -66,9 +68,9 @@ const Corporation = ({headerList, widthList, notiLabel, onClick, btnOnClick, typ
           btnOnClick={() => btnOnClick}
           nullBtnOnClick={() => navigate('/')}
           typeList={typeList}
-          dataList={dataList}
-          logoList={logoList}
-          corpCodeList={[]}
+          dataList={fullData.corpData}
+          logoList={fullData.logo}
+          corpCodeList={fullData.corpCode}
         />
       </ListBox>
     </Container>

@@ -19,7 +19,7 @@ const Container = styled.div`
     // 스타일
     background-color: white;
     border-radius: 5px;
-    border: 1px solid ${({theme}) => theme.colors.natural[15]};
+    border: 1px solid ${({theme}) => theme.colors.natural[20]};
 
     cursor: pointer;
 

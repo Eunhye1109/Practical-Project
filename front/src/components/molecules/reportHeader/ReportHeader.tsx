@@ -2,14 +2,18 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { IconTextButton } from 'components/atoms';
 import { typoStyle } from 'styles/typoStyle';
-import { Bookmark, Docs, Share } from 'assets/icons';
+import { Bookmark, BookmarkStar, Docs, Share } from 'assets/icons';
+import { useTheme } from '@emotion/react';
 
 interface Props {
   readonly imgUrl: string;
   readonly corpName: string;
   readonly corpCategory: string;
   readonly corpKeyword: string[];
-  readonly onClick?: () => void;
+  readonly shareOnClick?: () => void;
+  readonly saveOnClick?: () => void;
+  readonly reportOnClick?: () => void;
+  readonly onOff: boolean;
 }
 
 const Container = styled.div`
@@ -58,7 +62,8 @@ const ButtonTextBox = styled.div`
   gap: 20px;
 `;
 
-const ReportHeader = ({imgUrl, corpName, corpCategory, corpKeyword, onClick}: Props) => {
+const ReportHeader = ({imgUrl, corpName, corpCategory, corpKeyword, shareOnClick, saveOnClick, reportOnClick, onOff}: Props) => {
+  const theme = useTheme();
   return (
     <Container>
         <Logo src={imgUrl} alt={corpName} />
@@ -66,9 +71,9 @@ const ReportHeader = ({imgUrl, corpName, corpCategory, corpKeyword, onClick}: Pr
           <ButtonTextBox>
             <Text textStyle={true}>{corpName}</Text>
             <ButtonBox>
-              <IconTextButton onClick={onClick} label={'관심기업저장'} icon={<Bookmark />} />
-              <IconTextButton onClick={onClick} label={'기업공유'} icon={<Share />} />
-              <IconTextButton onClick={onClick} label={'기업리포트생성'} icon={<Docs />} />
+              <IconTextButton onClick={saveOnClick} label={'관심기업저장'} icon={onOff ? <BookmarkStar color={theme.colors.primary[100]} /> : <Bookmark />} />
+              <IconTextButton onClick={shareOnClick} label={'기업공유'} icon={<Share />} />
+              <IconTextButton onClick={reportOnClick} label={'기업리포트생성'} icon={<Docs />} />
             </ButtonBox>
           </ButtonTextBox>
           <Text textStyle={false}>{corpCategory} | {corpKeyword[0]}, {corpKeyword[1]}, {corpKeyword[2]}</Text>

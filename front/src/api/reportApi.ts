@@ -1,5 +1,6 @@
 import axios from "axios";
-import { ReportFullData } from "types/search.types";
+import { mypageData } from "types/mypage.types";
+import { ReportFullData } from "types/report.types";
 
 // 백엔드 주소
 const BASE_URL = 'http://localhost:8087/api/';
@@ -9,3 +10,4 @@ export const reportOutput = async (corpCode: string, userPurpose: string): Promi
     const res = await axios.get<ReportFullData>(`${BASE_URL}v1/search/${corpCode}`);
     return res.data;
 }
+

@@ -6,6 +6,8 @@ import { ReportInfoBox, ReportNewsBox, ReportSumaryBox } from 'components/molecu
 import { useLogin } from 'contexts/LoginContext';
 import { typoStyle } from 'styles/typoStyle';
 import StableTypeGraph from 'components/organism/StableTypeGraph';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { deleteCorp, saveCorp } from 'api/mypageApi';
 // import RegularTypeGraph from 'components/organism/RegularTypeGraph';
 // import AttackTypeGraph from 'components/organism/AttackTypeGraph';
 // import AdminTypeGraph from 'components/organism/AdminTypeGraph';
@@ -78,12 +80,79 @@ const BodyText = styled.p`
 `;
 
 const Report = () => {
+  // 데이터 받아오기
+  const location = useLocation();
+  const navigate = useNavigate();
+  const reportData = location.state?.reportData;
+  const corpCode = location.state?.corpCode;
   const {user} = useLogin();
+  // 관심기업 추가되어있는지 안되어있는지
+  const [onOff, setOnOff] = useState(false);
+
+  // 관심기업저장 버튼 클릭
+  // TODO: 이미 추가 되었나 안되었나 확인하는 로직 추가 필요 -> 백엔드 완성 후 구현
+  const handleSaveClick = async () => {
+    if(user?.userId === null || user?.userId === undefined) {
+      alert('로그인이 필요한 서비스입니다.');
+      navigate('/login');
+    } else {
+      if(onOff) {
+        setOnOff(false);
+        try {
+          const res = deleteCorp(user.userId, reportData.header.corpName);
+          alert('관심기업이 삭제되었습니다.');
+        } catch (e) {
+          alert('삭제 실패~~~');
+        }
+      } else {
+          if(window.confirm("메모를 추가하시겠습니까?")) {
+            const memo = prompt('메모를 입력해주세요.');
+            try {
+              const res = await saveCorp(user.userId, corpCode, memo ?? '');
+              console.log(res);
+            } catch (e) {
+              alert('개가티 실패~~');
+            }
+          } else {
+            try {
+              const res = await saveCorp(user.userId, corpCode, '');
+              console.log(res);
+            } catch (e) {
+              alert('개가티 실패~~');
+            }
+          }
+        }
+      }
+  }
+
+  // 기업공유 버튼 클릭
+  const handleShareClick = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert('주소가 복사되었습니다!');
+    } catch (e) {
+      alert('실패');
+    }
+  }
+
+  // 리포트생성 버튼 클릭
+  const handleReportClick = () => {
+
+  }
   
   return (
     <Container>
       <HeaderContent>
-        <ReportHeader imgUrl={reportFullDummyData.header.imgUrl} corpName={reportFullDummyData.header.corpName} corpCategory={reportFullDummyData.header.major} corpKeyword={reportFullDummyData.header.keyword} />
+        <ReportHeader
+          imgUrl={reportFullDummyData.header.imgUrl}
+          corpName={reportFullDummyData.header.corpName}
+          corpCategory={reportFullDummyData.header.major}
+          corpKeyword={reportFullDummyData.header.keyword}
+          saveOnClick={handleSaveClick}
+          shareOnClick={handleShareClick}
+          reportOnClick={handleReportClick}
+          onOff={onOff}
+        />
       </HeaderContent>
 
       <Content>

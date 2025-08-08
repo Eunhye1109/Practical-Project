@@ -6,10 +6,10 @@ import { useTheme } from '@emotion/react';
 import { Tooltip } from 'react-tooltip';
 import { Help } from 'assets/icons';
 import BarGraph from 'components/atoms/barGraph/BarGraph';
-import { GraphData } from 'types/search.types';
+import { GraphData } from 'types/report.types';
 
 interface Props {
-    readonly type: string; // 'composite' | 'group' | 'line' | 'stack' | 'pie';
+    readonly type: string; // 'composite' | 'group' | 'line' | 'stack';
     readonly titleLable: string;
     readonly textType: number;
     readonly size: string;
