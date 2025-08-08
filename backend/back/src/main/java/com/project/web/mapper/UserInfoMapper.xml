@@ -10,6 +10,12 @@
         WHERE USER_ID = #{userId}
         AND USER_PW = #{userPw}
     </delete>
+    
+    <select id="getUserInfo" parameterType="String" resultType="com.project.web.vo.UserVO">
+    	SELECT *
+    	FROM T_USER
+    	WHERE USER_ID = #{userId}
+    </select>
 
 
 </mapper>

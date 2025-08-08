@@ -44,7 +44,7 @@ def build_news_summary_prompt(news_items: list, sentiments: list) -> str:
 # ✅ GPT 요약
 def gpt_summary(profile: dict, user_purpose: str ="안정형"):
     categories = "패션, 물류, 핀테크, 유통, 콘텐츠, 플랫폼, 커머스, IT, 미디어, 제조, 기타"
-    keywords = "예시: #2030 #남성패션 #MZ, 주요 사업 아이템이나 고객에 대한 정보 제공"
+    keywords = "예시: ["#2030", "#남성패션", "#MZ,"]" 주요 사업 아이템이나 고객에 대한 정보 제공"
     investor_types = "#공격형, #안정형, #혼합형"
 
     prompt = f"""당사는 다음과 같은 기업입니다:
@@ -73,7 +73,7 @@ def gpt_summary(profile: dict, user_purpose: str ="안정형"):
 
 {{
   "주요 분야": "패션",
-  "키워드": [(예:"#2030 #남성패션 #MZ"와 같이 그 기업의 핵심 사업 아이템이나 상황을 잘 드러내는 키워드)],
+  "키워드": ["#2030", "#남성패션", "#MZ" 와 같이 그 기업의 핵심 사업 아이템이나 상황을 잘 드러내는 키워드)],
   "한 문장 요약": "이 기업은 ..."
 }}"""
     try:
