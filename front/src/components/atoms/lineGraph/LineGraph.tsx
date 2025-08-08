@@ -2,26 +2,10 @@ import React from 'react'
 import { Line, LineChart, XAxis, YAxis, Legend, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { CustomLegend, dataFormat } from '../graphCustom/GraphCustom';
 import { useTheme } from '@emotion/react';
+import { GraphData } from 'types/search.types';
 
 interface Props {
-    readonly data: Array<{
-        '연도': string; // 연도
-        '순이익': number, // 순이익
-        '영업이익': number, // 영업이익
-        '매출액': number, // 매출액
-        '부채총계': number, // 부채총계
-        '자본총계': number, // 자본총계
-        '유동자산': number, // 유동자산
-        '유동부채': number, // 유동부채
-        'ROE': number,
-        'ROA': number,
-        '영업이익률': number, // 영업이익률
-        '매출액순이익률': number, // 매출액순이익률
-        '부채비율': number, // 부채비율
-        '유동비율': number, // 유동비율
-        '자기자본비율': number, // 자기자본비율
-        '레버리지비율': number // 레버리지비율
-    }>;
+    readonly data: GraphData[];
     readonly graphList: string[];
     readonly unit?: string;
     readonly height?: number;

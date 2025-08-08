@@ -6,30 +6,14 @@ import { useTheme } from '@emotion/react';
 import { Tooltip } from 'react-tooltip';
 import { Help } from 'assets/icons';
 import BarGraph from 'components/atoms/barGraph/BarGraph';
+import { GraphData } from 'types/search.types';
 
 interface Props {
     readonly type: string; // 'composite' | 'group' | 'line' | 'stack' | 'pie';
     readonly titleLable: string;
     readonly textType: number;
     readonly size: string;
-    readonly data: Array<{
-        '연도': string; // 연도
-        '순이익': number, // 순이익
-        '영업이익': number, // 영업이익
-        '매출액': number, // 매출액
-        '부채총계': number, // 부채총계
-        '자본총계': number, // 자본총계
-        '유동자산': number, // 유동자산
-        '유동부채': number, // 유동부채
-        'ROE': number,
-        'ROA': number,
-        '영업이익률': number, // 영업이익률
-        '매출액순이익률': number, // 매출액순이익률
-        '부채비율': number, // 부채비율
-        '유동비율': number, // 유동비율
-        '자기자본비율': number, // 자기자본비율
-        '레버리지비율': number // 레버리지비율
-    }>;
+    readonly data: GraphData[];
     readonly graphList: string[];
     readonly unit?: string;
     readonly tooltipId?: string;
@@ -124,6 +108,44 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
     }
 
     const textBox = (size: string) => {
+        const hasAllValues = !data.some((item, index) =>
+            graphList.some((key) => {
+                const value = item[key as keyof typeof item];
+                const isEmpty =
+                value === null ||
+                value === undefined ||
+                value === '' ||
+                (typeof value === 'number' && isNaN(value));
+
+                if (isEmpty) {
+                return true;
+                }
+
+                return false;
+            })
+        );
+
+        if(hasAllValues === false) {
+            return (
+                <Container width='100%'>
+                    <TextBox>
+                        <TitleBox>
+                            <TitleLabel>{titleLable}</TitleLabel>
+                            <Help color={theme.colors.primary[80]} data-tooltip-id={tooltipId} width={20} />
+                            <Tooltip id={tooltipId}>
+                                <TooltipSumary type={true}>Tips.</TooltipSumary>
+                                {bodyText(textType).tips.map((item) => (
+                                    <TooltipSumary type={false}>- {item}</TooltipSumary>
+                                ))}
+                            </Tooltip>
+                        </TitleBox>
+                    </TextBox>
+                    <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
+                    <BodyText>데이터가 없습니다.</BodyText>
+                </Container>   
+            )
+        }
+        
         switch(size) {
             case 'sm':
                 return (

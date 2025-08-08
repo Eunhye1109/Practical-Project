@@ -8,8 +8,8 @@ interface Props {
     readonly headerList: Array<{label: string, width: string}>;
     readonly dataList: string[][];
     readonly widthList: string[];
-    readonly listOnClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
-    readonly btnOnClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+    readonly listOnClick?: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
+    readonly btnOnClick?: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
     readonly nullBtnOnClick?: () => void;
     readonly btnLabel?: string;
     readonly notiLabel?: string;
@@ -46,7 +46,7 @@ const NotiText = styled.p`
 const List = ({headerList, dataList, listOnClick, btnOnClick, nullBtnOnClick, widthList, btnLabel, notiLabel, typeList, logoList, corpCodeList}: Props) => {
     const theme = useTheme();
   return (
-    <Container onClick={() => listOnClick}>
+    <Container>
         <ListHeader headerList={headerList} />
         <Line width='100%' color={theme.colors.natural[20]} />
         {dataList.length === 0 || dataList === null || dataList === undefined ?
@@ -60,6 +60,7 @@ const List = ({headerList, dataList, listOnClick, btnOnClick, nullBtnOnClick, wi
             <ListItem
                 logo={logoList[index]}
                 data={item}
+                listOnClick={(e) => (listOnClick?.(e, corpCodeList[index]))}
                 btnOnClick={typeList[index]  === 'btn' ? () => btnOnClick : undefined}
                 widthList={widthList}
                 typeList={typeList}

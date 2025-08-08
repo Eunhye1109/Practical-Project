@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import ReportHeader from 'components/molecules/reportHeader/ReportHeader';
-import { reportHeaderDummyData, reportInfoDummyData } from 'constants/reportDummyData';
+import { reportFullDummyData } from 'constants/reportDummyData';
 import { ReportInfoBox, ReportNewsBox, ReportSumaryBox } from 'components/molecules';
 import { useLogin } from 'contexts/LoginContext';
 import { typoStyle } from 'styles/typoStyle';
-import { radarGraphDummyData, aiSumaryDummyData, newsDummyData, similarCorpDummyData } from 'constants/reportDummyData';
 import StableTypeGraph from 'components/organism/StableTypeGraph';
 // import RegularTypeGraph from 'components/organism/RegularTypeGraph';
 // import AttackTypeGraph from 'components/organism/AttackTypeGraph';
 // import AdminTypeGraph from 'components/organism/AdminTypeGraph';
-
-interface Props {
-
-}
 
 const Container = styled.div`
   width: 100%;
@@ -88,17 +83,17 @@ const Report = () => {
   return (
     <Container>
       <HeaderContent>
-        <ReportHeader imgUrl={reportHeaderDummyData.imgUrl} corpName={reportHeaderDummyData.corpName} corpCategory={reportHeaderDummyData.corpCategory} corpKeyword={reportHeaderDummyData.corpKeyword} />
+        <ReportHeader imgUrl={reportFullDummyData.header.imgUrl} corpName={reportFullDummyData.header.corpName} corpCategory={reportFullDummyData.header.major} corpKeyword={reportFullDummyData.header.keyword} />
       </HeaderContent>
 
       <Content>
-        <ReportInfoBox titleLabel='기업 소개' corpSumary={reportInfoDummyData.corpSumary} infoData={reportInfoDummyData.infoData} />
+        <ReportInfoBox titleLabel='기업 소개' corpSumary={reportFullDummyData.infoBox.corpSummary} infoData={reportFullDummyData.infoBox.infoData} />
 
-        <ReportSumaryBox data={radarGraphDummyData} cropName={reportHeaderDummyData.corpName} aiSumaryData={aiSumaryDummyData} similarCorpData={similarCorpDummyData} />
+        <ReportSumaryBox data={reportFullDummyData.rader} cropName={reportFullDummyData.header.corpName} aiSumaryData={reportFullDummyData.aiSumary} similarCorpData={reportFullDummyData.similarCorp} />
 
-        {user?.riskType == '안정형' ? <StableTypeGraph /> : (user?.riskType == '공격형' ? <StableTypeGraph /> : user?.riskType == '관리자형' ? <StableTypeGraph /> : <StableTypeGraph />)}
+        {user?.riskType == '안정형' ? <StableTypeGraph data={reportFullDummyData} /> : (user?.riskType == '공격형' ? <StableTypeGraph data={reportFullDummyData} /> : user?.riskType == '관리자형' ? <StableTypeGraph data={reportFullDummyData} /> : <StableTypeGraph data={reportFullDummyData} />)}
 
-        <ReportNewsBox newsData={newsDummyData} />
+        <ReportNewsBox newsData={reportFullDummyData.newsData} />
         
         <NotiBox>
           <BodyText>

@@ -191,7 +191,8 @@ const SearchResult = () => {
                     widthList={widthList}
                     dataList={searchRes}
                     logoList={logoDummyData}
-                    listOnClick={() => {
+                    listOnClick={(e, corpCode) => {
+                        alert(corpCode);
                     }}
                     corpCodeList={codeList}
                 />
