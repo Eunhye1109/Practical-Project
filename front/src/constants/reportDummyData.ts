@@ -129,7 +129,13 @@ export const reportFullDummyData: ReportFullData = {
         '자기자본비율': 72.75,          
         '레버리지비율': 137.47        
     }
-],
+  ],
+  // 그래프 분석
+  aiGraphSummary: [
+    'afsdfasdfadsfasdasd1',
+    'afsdfasdfadsfasdsada2',
+    'afsdfasdfadsfasdasdadsa3'
+  ],
   // 연관기사 -> 총 3개 필요 [{}, {}, {}] 형태
   newsData: [
     {date: '2025.08.14', title: '테스트 뉴스기사 제목입니다1.테스트 뉴스기사 제목입니다1.테스트 뉴스기사 제목입니다1.테스트 뉴스기사 제목입니다1.', body: '테스트 뉴스 기사 본문입니다.', url: 'https://www.naver.com/'},

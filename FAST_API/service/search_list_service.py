@@ -5,7 +5,7 @@ from openai import OpenAI
 from urllib.parse import unquote
 
 from typing import Optional
-from service.corp_code import get_corp_list
+from utils.corp_code import get_corp_list
 from fastapi.responses import JSONResponse
 from prompts.gpt_prompts import build_summary_prompt
 from utils.logo_utils import get_logo_url

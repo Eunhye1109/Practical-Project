@@ -62,6 +62,8 @@ export interface ReportFullData {
   }>,
   // 15개 지표 -> 지금 사용중인 양식 그대로
   graphData: GraphData[],
+  // ai 그래프 분석
+  aiGraphSummary: string[],
   // 연관기사 -> 총 3개 필요 [{}, {}, {}] 형태
   newsData: Array<{
     date: string, // 기사 날짜 -> 2025.00.00 양식

@@ -19,6 +19,7 @@ interface Props {
     readonly tooltipId?: string;
     readonly height?: number;
     readonly bodyText: (type: number) => {description: string, tips: string[]};
+    readonly aiSummary: string;
 }
 
 const Container = styled.div<{width?: string}>`
@@ -87,7 +88,7 @@ const TooltipSumary = styled.p<{type: boolean}>`
     padding-bottom: ${({type}) => type ? '10px' : '5px'};
 `;
 
-const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId, bodyText, size, height}: Props) => {
+const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId, bodyText, size, height, aiSummary}: Props) => {
     const theme = useTheme();
 
     const graph = (type: string) => {
@@ -108,7 +109,7 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
     }
 
     const textBox = (size: string) => {
-        const hasAllValues = !data.some((item, index) =>
+        const hasAllValues = !data.some((item) =>
             graphList.some((key) => {
                 const value = item[key as keyof typeof item];
                 const isEmpty =
@@ -186,9 +187,7 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
                         {graph(type)}
                         <AiSumaryBox>
                             <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
-                            {bodyText(textType).tips.map((item) => (
-                                <AiSumary type={false}>- {item}</AiSumary>
-                            ))}
+                                <AiSumary type={false}>{aiSummary}</AiSumary>
                         </AiSumaryBox>
                     </Container>
                 )
@@ -212,9 +211,7 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
                         {graph(type)}
                         <AiSumaryBox>
                             <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
-                            {bodyText(textType).tips.map((item) => (
-                                <AiSumary type={false}>- {item}</AiSumary>
-                            ))}
+                                <AiSumary type={false}>{aiSummary}</AiSumary>
                         </AiSumaryBox>
                     </Container>
                 )
@@ -238,9 +235,7 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
                         {graph(type)}
                         <AiSumaryBox>
                             <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
-                            {bodyText(textType).tips.map((item) => (
-                                <AiSumary type={false}>- {item}</AiSumary>
-                            ))}
+                                <AiSumary type={false}>{aiSummary}</AiSumary>
                         </AiSumaryBox>
                     </Container>
                 )

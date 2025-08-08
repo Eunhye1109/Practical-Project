@@ -50,7 +50,7 @@ const itemStyle = (item: string) => (props: {theme: Theme}) =>  {
                 // 크기
                 padding: 4px 8px;
                 // 스타일
-                ${props.theme.typo.caption2Light}
+                ${props.theme.typo.caption2Regular}
                 color: white;
                 background-color: ${props.theme.colors.primary[60]};
                 border-radius: 3px;
@@ -66,7 +66,7 @@ const itemStyle = (item: string) => (props: {theme: Theme}) =>  {
                 // 크기
                 padding: 4px 8px;
                 // 스타일
-                ${props.theme.typo.caption2Light}
+                ${props.theme.typo.caption2Regular}
                 color: white;
                 background-color: ${props.theme.colors.natural[80]};
                 border-radius: 3px;
