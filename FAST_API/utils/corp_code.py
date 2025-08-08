@@ -70,3 +70,38 @@ def get_corp_list(keyword: str):
                 })
     print(f"🔍 [get_corp_list] keyword='{keyword}', matched={len(matched)}건",total_count)
     return matched
+
+def get_corp_name(corp_code: str) -> str:
+    """
+    CORPCODE.xml에서 기업이름을 반환합니다.
+    정확히 일치하는 corp_code가 존재하면 corp_name 반환,
+    없으면 404 예외 발생.
+    """
+    logger = logging.getLogger(__name__)
+    logger.info(f"기업명 조회 요청: {corp_code}")
+
+    # 루트 경로 기준 XML 파일 경로
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, ".."))
+    xml_path = os.path.join(PROJECT_ROOT, "CORPCODE.xml")
+
+    if not os.path.exists(xml_path):
+        raise HTTPException(status_code=500, detail="❌ CORPCODE.xml 파일이 존재하지 않습니다.")
+
+    try:
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+    except ET.ParseError as e:
+        raise HTTPException(status_code=500, detail=f"XML 파싱 오류: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"CORPCODE.xml 로딩 실패: {str(e)}")
+
+    for node in root.iter("list"):
+        code_elem = node.find("corp_code")
+        name_elem = node.find("corp_name")
+
+        if code_elem is not None and name_elem is not None:
+            if code_elem.text.strip() == corp_code.strip():
+                return name_elem.text.strip()
+
+    raise HTTPException(status_code=404, detail=f"corp_code '{corp_code}'에 해당하는 기업명을 찾지 못했습니다.")
