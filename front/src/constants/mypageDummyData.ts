@@ -24,7 +24,7 @@ export const favoriteDummyData: mypageData = {
         ['무신사', '무신사소개입니다.1', '이러한 이유로 무신사에 관심을 가지고 있습니다.'], // 순서대로 기업이름, 기업소개, 메모내용, 기업코드
         ['무신사', '무신사소개입니다.2', '이러한 이유로 무신사에 관심을 가지고 있습니다.']
     ],
-    corpCode: ['120914', '120914']
+    corpCode: ['7777777', '8888888']
 }
 
 export const docsHistoryDummyData: mypageData = {
@@ -36,7 +36,7 @@ export const docsHistoryDummyData: mypageData = {
         ['무신사', '무신사소개입니다.1', '2025.08.14'], // 순서대로 기업이름, 기업소개, 메모내용, 기업코드
         ['무신사', '무신사소개입니다.2', '2025.08.14']
     ],
-    corpCode: ['120914', '120914']
+    corpCode: ['777777', '888888']
 }
 
 export const logoDummyData = [

@@ -9,8 +9,6 @@ interface Props {
   readonly headerList: Array<{label: string, width: string}>;
   readonly widthList: string[];
   readonly notiLabel: string;
-  readonly onClick?: (value: React.ReactNode) => void;
-  readonly btnOnClick?: () => void;
   readonly typeList: string[];
   // readonly dataList: string[][];
   // readonly logoList: string[];
@@ -49,8 +47,27 @@ const ListBox = styled.div`
   overflow: hidden;
 `;
 
-const Corporation = ({headerList, widthList, notiLabel, onClick, btnOnClick, typeList, fullData}: Props) => {
+const Corporation = ({headerList, widthList, notiLabel, typeList, fullData}: Props) => {
   const navigate = useNavigate();
+
+  // 빈 함수
+  const noop = (e: React.MouseEvent<HTMLElement>, corpCode: string) => {};
+  // 메모 수정
+  const handleMemoClick = (e: React.MouseEvent<HTMLElement>, corpCode: string) => {
+    alert('메모수정');
+    alert(corpCode);
+  }
+  // 등록 해제
+  const handleDeleteClick = (e: React.MouseEvent<HTMLElement>, corpCode: string) => {
+    alert('등록삭제');
+  }
+  // 리포트 페이지로 이동
+  const handleReportClick = (e: React.MouseEvent<HTMLElement>, corpCode: string) => {
+
+  }
+
+  // 리스트 안의 버튼 함수
+  const btnList: ((e: React.MouseEvent<HTMLElement>, corpCode: string) => void)[] = [noop, noop, handleMemoClick, handleDeleteClick];
 
   return (
     <Container>
@@ -64,8 +81,8 @@ const Corporation = ({headerList, widthList, notiLabel, onClick, btnOnClick, typ
           widthList={widthList}
           btnLabel='기업 검색하러 가기'
           notiLabel={notiLabel}
-          listOnClick={() => onClick}
-          btnOnClick={() => btnOnClick}
+          listOnClick={handleReportClick}
+          btnList={btnList}
           nullBtnOnClick={() => navigate('/')}
           typeList={typeList}
           dataList={fullData.corpData}

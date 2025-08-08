@@ -9,7 +9,7 @@ interface Props {
     readonly dataList: string[][];
     readonly widthList: string[];
     readonly listOnClick?: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
-    readonly btnOnClick?: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
+    readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string) => void>;
     readonly nullBtnOnClick?: () => void;
     readonly btnLabel?: string;
     readonly notiLabel?: string;
@@ -43,7 +43,7 @@ const NotiText = styled.p`
     color: ${({theme}) => theme.colors.natural[70]};
 `;
 
-const List = ({headerList, dataList, listOnClick, btnOnClick, nullBtnOnClick, widthList, btnLabel, notiLabel, typeList, logoList, corpCodeList}: Props) => {
+const List = ({headerList, dataList, listOnClick, btnList, nullBtnOnClick, widthList, btnLabel, notiLabel, typeList, logoList, corpCodeList}: Props) => {
     const theme = useTheme();
   return (
     <Container>
@@ -61,7 +61,7 @@ const List = ({headerList, dataList, listOnClick, btnOnClick, nullBtnOnClick, wi
                 logo={logoList[index]}
                 data={item}
                 listOnClick={(e) => (listOnClick?.(e, corpCodeList[index]))}
-                btnOnClick={typeList[index]  === 'btn' ? () => btnOnClick : undefined}
+                btnList={btnList}
                 widthList={widthList}
                 typeList={typeList}
                 corpCode={corpCodeList[index]}

@@ -111,7 +111,7 @@ const Mypage = () => {
 
     // 관심기업 데이터 가공
     favoriteDummyData.corpData.forEach(item => {
-        item.push('수정', '저장');
+        item.push('수정', '해제');
     })
     docsHistoryDummyData.corpData.forEach(item => {
         item.push('등록', '다운');
@@ -141,7 +141,8 @@ const Mypage = () => {
             {activeTab === 1 && <DocsHistory
                 headerList={docsHeaderList}
                 widthList={docsWidthList}
-                notiLabel='최근 3개월 이내에 조회한 기업이 없습니다.' typeList={docsTypeList}
+                notiLabel='최근 3개월 이내에 조회한 기업이 없습니다.'
+                typeList={docsTypeList}
                 fullData={docsHistoryDummyData}
             />}
             {activeTab === 2 && <UserInfoSetting />}

@@ -4,7 +4,7 @@ import { css, Theme } from '@emotion/react';
 
 interface Props {
     readonly listOnClick?: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
-    readonly btnOnClick?: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
+    readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string) => void>;
     readonly widthList: string[];
     readonly data: string[];
     readonly typeList: string[];
@@ -123,7 +123,7 @@ const Title = styled.p<{thickness: boolean}>`
     overflow: hidden;
 `;
 
-const ListItem = ({listOnClick, btnOnClick, widthList, typeList, data, logo, corpCode}: Props) => {
+const ListItem = ({listOnClick, btnList, widthList, typeList, data, logo, corpCode}: Props) => {
   return (
     <Container key={corpCode} onClick={(e) => listOnClick?.(e, corpCode)}>
         <LogoTitle>
@@ -134,7 +134,10 @@ const ListItem = ({listOnClick, btnOnClick, widthList, typeList, data, logo, cor
         </LogoTitle>
         {widthList.map((item, index) => (
             <ItemContent key={index} width={item}>
-                <Item type={typeList[index]} onClick={typeList[index] === 'btn' && btnOnClick ? () => btnOnClick : undefined}>
+                <Item type={typeList[index]} onClick={(e,) => {
+                    e.stopPropagation();
+                    btnList?.[index]?.(e, corpCode);
+                }}>
                     {(!data[index + 1] || data[index + 1].trim?.() === '') ? '-' : data[index + 1]}
                 </Item>
             </ItemContent>
