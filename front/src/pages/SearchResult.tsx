@@ -134,7 +134,7 @@ const SearchResult = () => {
     // 정렬 버튼 컨트롤
     const [sortBtn, setSortBtn] = useState(['selected', 'default']);
     // 정렬 방식 리스트
-    const sortList = ['정렬1', '정렬2'];
+    //const sortList = ['정렬1', '정렬2'];
     // 타이틀 검색어
     const [searchTitle, setSearchTitle] = useState(searchCorpName);
     // 최근 검색어 저장
@@ -240,11 +240,11 @@ const SearchResult = () => {
         <Content fixed={scrolled}>
             <SearchControllBar>
                 <SearchCount>검색 결과 <SearchCountBold>{searchRes.length}</SearchCountBold> 건</SearchCount>
-                <SortBox>
+                {/* <SortBox>
                     {sortList.map((sort, index) => (
                         <TextButton key={index} label={sort} mode={sortBtn[index]} onClick={() => handleSortClick(index)} />
                     ))}
-                </SortBox>
+                </SortBox> */}
             </SearchControllBar>
             <SearchListBox>
                 <List

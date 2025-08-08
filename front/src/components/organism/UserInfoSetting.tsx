@@ -51,7 +51,7 @@ const DropdownForm = styled.div`
 
 const UserInfoSetting = () => {
   // 테스트용 데이터
-  const drop01 = ['직업3', '목적2', '유형3']
+  const drop01 = ['자영업자', '주식 투자 종목 분석', '안정형']
   // 페이지 이동
   const navigate = useNavigate();
   // 아이디/비번 에러 메시지 활성/비활성

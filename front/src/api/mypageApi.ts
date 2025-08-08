@@ -15,3 +15,7 @@ export const deleteCorp = async (userId: string, corpName: string) => {
     const res = await axios.delete(`${BASE_URL}v1/company/${userId}/${corpName}`);
     return res.data.success;
 }
+
+// 회원정보 조회
+
+// 회원정보 수정

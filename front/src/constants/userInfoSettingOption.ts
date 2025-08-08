@@ -1,11 +1,13 @@
 import React from "react";
 
 // 직업 카테고리
-export const jobList = ['직업1', '직업2', '직업3', '직업4', '직업5'];
+export const jobList = ["대학생", "취업준비생", "회사원 (사무/전문직)", "자영업자", "스타트업 창업자/임직원", "금융업 종사자", "교사/강사", "연구원/교수"]
+;
 export type JobType = (typeof jobList)[number];
 
 // 서비스이용목적 카테고리
-export const purposeList = ['목적1', '목적2', '목적3', '목적4', '목적5'];
+export const purposeList = ["주식 투자 종목 분석", "장기적인 투자 실력 향상", "재무제표/기업분석 공부", "회계/재무 직무 준비", "내 업무 참고용", "내 사업/창업 참고용", "흥미/취미"]
+;
 export type PurposeType = (typeof purposeList)[number];
 
 // 투자유형 카테고리
