@@ -8,16 +8,11 @@ from typing import Optional
 from service.corp_code import get_corp_list
 from fastapi.responses import JSONResponse
 from prompts.gpt_prompts import build_summary_prompt
-from utils.format_date import format_date
 from utils.logo_utils import get_logo_url
 from prompts.gpt_prompts import gpt_summary
 from utils.config import (
     DARTAPI_KEY,
-    OPENAI_MODEL,
-    DEFAULT_TEMPERATURE,
     MAX_COMPANY_COUNT,
-    client,
-    SUMMARY_PROMPT_TEMPLATE
 )
 
 

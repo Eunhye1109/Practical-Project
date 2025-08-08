@@ -1,7 +1,7 @@
 
 # GPT 기반 slug 추론 함수 (프롬프트 외부 정의 사용)
 from prompts.gpt_logo_prompt import build_logo_slug_prompt
-from utils.config import client,LOGO_API_TOKEN,LOGO_CACHE_PATH
+from utils.config import CLIENT,LOGO_API_TOKEN,LOGO_CACHE_PATH
 import os
 import json
 
@@ -21,7 +21,7 @@ def save_logo_cache(cache: dict):
 def guess_english_slug_from_korean(kor_name: str) -> str:
     prompt = build_logo_slug_prompt(kor_name)
     try:
-        response = client.chat.completions.create(
+        response = CLIENT.chat.completions.create(
             model="gpt-4o",
             messages=[{"role": "user", "content": prompt}],
             temperature=0

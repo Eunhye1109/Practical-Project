@@ -1,4 +1,4 @@
-from utils.config import client
+from utils.config import CLIENT
 import json
 
 # ✅ GPT 요약 프롬프트 (기업 개요 기반)
@@ -77,7 +77,7 @@ def gpt_summary(profile: dict, user_purpose: str ="안정형"):
   "한 문장 요약": "이 기업은 ..."
 }}"""
     try:
-        res = client.chat.completions.create(
+        res = CLIENT.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.5

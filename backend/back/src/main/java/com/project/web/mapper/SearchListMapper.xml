@@ -10,11 +10,15 @@
         CORP_NAME,
         STOCK_TYPE,
         KEYWORDS_JSON,
+        MAJOR,
+        CORP_CODE,
         GPT_SUMMARY
     ) VALUES (
         #{corpName, jdbcType=VARCHAR},
         #{stockType, jdbcType=VARCHAR},
         #{keywords, jdbcType=CLOB, typeHandler=com.project.web.handler.JsonTypeHandler},
+        #{major},
+        #{corpCode},
         #{gptSummary, jdbcType=CLOB}
     )
 </insert>
@@ -24,6 +28,8 @@
         CORP_NAME AS corpName,
         STOCK_TYPE AS stockType,
         KEYWORDS_JSON AS keywords,
+        MAJOR AS major,
+        CORP_CODE AS corpCode,
         GPT_SUMMARY AS gptSummary
     FROM SEARCH_LIST_CACHE
     WHERE CORP_NAME LIKE '%' || #{corpName} || '%'
