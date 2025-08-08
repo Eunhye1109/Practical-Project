@@ -1,35 +1,20 @@
 import time
 import json
-import requests
+
 from openai import OpenAI
 from urllib.parse import unquote
 
 from typing import Optional
 from utils.corp_code import get_corp_list
 from fastapi.responses import JSONResponse
-from prompts.gpt_prompts import build_summary_prompt
-from utils.logo_utils import get_logo_url
 from prompts.gpt_prompts import gpt_summary
+from utils.api_util import collect_profile
 from utils.config import (
-    DARTAPI_KEY,
-    MAX_COMPANY_COUNT,
+    MAX_COMPANY_COUNT
 )
 
 
 
-# ✅ 기업 개요 수집
-def collect_profile(corp_code):
-    url = "https://opendart.fss.or.kr/api/company.json"
-    params = {"crtfc_key": DARTAPI_KEY, "corp_code": corp_code}
-    res = requests.get(url, params=params).json()
-    print(f"🧾 DART 응답: {res}")
-    if res.get("status") != "000":
-        print(f"⚠️ 기업 개요 수집 실패: {corp_code}")
-        return {}
-    return {
-        "회사명": res.get("corp_name"),
-        "상장여부": "상장" if res.get("stock_code") else "비상장",
-    }
 
 
 # ✅ 전체 요약 수행 함수

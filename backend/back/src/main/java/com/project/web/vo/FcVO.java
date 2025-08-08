@@ -12,5 +12,6 @@ public class FcVO {
 	    private String corpName;
 	    private LocalDateTime createdAt;
 	    private String u_comment;
+	    private String corpCode;
 	   
 }

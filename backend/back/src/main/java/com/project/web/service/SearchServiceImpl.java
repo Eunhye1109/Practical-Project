@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.project.web.dto.MatchResultDTO;
+import com.project.web.dto.RadarDTO;
 import com.project.web.dto.ResponseDTO;
 import com.project.web.dto.SearchResultDTO;
 import com.project.web.mapper.SearchHisMapper;
 import com.project.web.mapper.TargetColMapper;
 import com.project.web.utils.ConvertToFlatYearlyListUtil;
+import com.project.web.utils.RadarScoreCalculator;
 import com.project.web.vo.ColumnMatchVO;
 import com.project.web.vo.SearchwordVO;
 import com.project.web.vo.TargetColVO;
@@ -130,10 +132,14 @@ public class SearchServiceImpl implements SearchService {
         List<Map<String, Object>> flatColumns = ConvertToFlatYearlyListUtil.convert(columnList, ratios);
         String corpName = (String) allYearData.get("corpName");
         
+        List<RadarDTO> radarList = RadarScoreCalculator.calculateScores(flatColumns);
+
+        
         return SearchResultDTO.builder()
             .corpCode(corpCode)
             .corpName(corpName)
             .columns(flatColumns)
+            .rader(radarList)
             .build();
 
     }
