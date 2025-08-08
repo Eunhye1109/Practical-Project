@@ -15,6 +15,7 @@ public class FcDTO {
     private String userId;
     private String corpName;
     private String u_comment;
+    private String corpCode;
      // ✅ VO와 이름 일치
 
     @Singular("fc")            // ✅ 리스트 빌더 안정성 강화

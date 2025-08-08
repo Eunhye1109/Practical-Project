@@ -16,7 +16,13 @@ import java.util.Map;
 public class SearchResultDTO {
     private String corpName;
     private String corpCode;
+    private HeaderDTO header;
+    private InfoBoxDTO infoBox;
+    private List<RadarDTO> rader;
+    private List<AiSummaryDTO> aiSumary;
+    private List<SimilarCorpDTO> similarCorp;
     private List<Map<String, Object>> columns;
+    private List<NewsDataDTO> newsData;
     private String message;
 
 }

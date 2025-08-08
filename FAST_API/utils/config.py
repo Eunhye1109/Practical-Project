@@ -3,6 +3,7 @@
 from dotenv import load_dotenv
 from openai import OpenAI
 from prompts.prompt_loader import load_prompt
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import os
 
 load_dotenv(dotenv_path="Keys.env")
@@ -12,9 +13,13 @@ DARTAPI_KEY = os.getenv("DARTAPI_KEY")
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-LOGO_CACHE_PATH = os.getenv("summaries/logo_cache.json")
+LOGO_CACHE_PATH = os.getenv("LOGO_CACHE_PATHn")
 
-LOGO_API_TOKEN = os.getenv("pk_bVmwf0tgQT2enb3JOCA5Ig")
+LOGO_API_TOKEN = os.getenv("LOGO_API_TOKEN")
+
+NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID")
+
+NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET")
 
 
 # 프롬프트 관련
@@ -39,3 +44,6 @@ DEFAULT_TEMPERATURE = 0.5
 
 
 
+# ✅ FinBERT 로드
+tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
+model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")

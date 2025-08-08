@@ -1,27 +1,27 @@
 from utils.config import CLIENT
 import json
 
-# ✅ GPT 요약 프롬프트 (기업 개요 기반)
-def build_summary_prompt(profile: dict, investor_type: str) -> str:
-    guide = {
-        "안정형": "장기적 재무 안정성과 배당 관점에서 분석해주세요.",
-        "공격형": "단기 고수익 또는 고성장 관점에서 분석해주세요.",
-        "융합형": "수익성과 안정성 사이 균형에 대해 분석해주세요."
-    }
+# # ✅ GPT 요약 프롬프트 (기업 개요 기반)
+# def build_summary_prompt(profile: dict, investor_type: str) -> str:
+#     guide = {
+#         "안정형": "장기적 재무 안정성과 배당 관점에서 분석해주세요.",
+#         "공격형": "단기 고수익 또는 고성장 관점에서 분석해주세요.",
+#         "융합형": "수익성과 안정성 사이 균형에 대해 분석해주세요."
+#     }
 
-    prompt = f"""
-다음은 한 기업의 개요입니다.
-'{investor_type}' 투자자에게 적합한 전략을 
-한줄 제시하세요.
+#     prompt = f"""
+# 다음은 한 기업의 개요입니다.
+# '{investor_type}' 투자자에게 적합한 전략을 
+# 한줄 제시하세요.
 
-[기업 개요]
-- 회사명: {profile.get("회사명")}
-- 상장여부: {profile.get("상장여부")}
+# [기업 개요]
+# - 회사명: {profile.get("회사명")}
+# - 상장여부: {profile.get("상장여부")}
 
-[투자자 유형: {investor_type}]
-{guide[investor_type]}
-"""
-    return prompt
+# [투자자 유형: {investor_type}]
+# {guide[investor_type]}
+# """
+#     return prompt
 
 # ✅ GPT 뉴스 요약 프롬프트
 def build_news_summary_prompt(news_items: list, sentiments: list) -> str:
