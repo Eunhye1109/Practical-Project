@@ -6,6 +6,8 @@ import { List, SearchBar } from 'components/molecules';
 import { dropdownOption, modeOption, headerList, typeList, widthList } from '../constants/searchResultOption';
 import TextButton from 'components/atoms/textButton/TextButton';
 import { logoDummyData } from 'constants/mypageDummyData';
+import { reportOutput } from 'api/reportApi';
+import { useLogin } from 'contexts/LoginContext';
 
 const Container = styled.div`
     // 크기
@@ -123,6 +125,7 @@ const SearchResult = () => {
     const navigate = useNavigate();
     const searchRes = location.state?.res;
     const codeList = location.state?.code;
+    const {user} = useLogin();
 
     // 스크롤 이벤트 관리
     const [scrolled, setScrolled] = useState(false);
@@ -159,6 +162,18 @@ const SearchResult = () => {
         // TODO: 정렬에 맞게 다시 리스트 로딩
     }, [sortBtn]);
 
+    // 기업 선택 -> 리포트 화면 이동
+    const handleReportClick = async (corpCode: string) => {
+        try {
+            const reportData = await reportOutput(corpCode, user?.riskType ?? '비회원');
+            console.log(reportData);
+            console.log(user?.riskType ?? '비회원');
+            alert('일단 클릭은 됨~~');
+        } catch (e) {
+            alert('실패~~')
+        }
+    }
+
   return (
     <Container>
         <TopPanner fixed={scrolled}>
@@ -172,7 +187,7 @@ const SearchResult = () => {
                 itemList={dropdownOption}
                 modeList={modeOption}
                 label='기업명을 입력해주세요.'
-                width='80%'
+                width='85%'
             />
         </SearchBarBox>
         <Content fixed={scrolled}>
@@ -191,8 +206,7 @@ const SearchResult = () => {
                     widthList={widthList}
                     dataList={searchRes}
                     logoList={logoDummyData}
-                    listOnClick={(e, corpCode) => {
-                        alert(corpCode);
+                    listOnClick={(e, corpCode) => {handleReportClick(corpCode)
                     }}
                     corpCodeList={codeList}
                 />

@@ -52,7 +52,7 @@ const itemStyle = (item: string) => (props: {theme: Theme}) =>  {
                 // 스타일
                 ${props.theme.typo.caption2Light}
                 color: white;
-                background-color: ${props.theme.colors.primary[40]};
+                background-color: ${props.theme.colors.primary[60]};
                 border-radius: 3px;
                 // 텍스트 관리
                 display: -webkit-box;
@@ -68,7 +68,7 @@ const itemStyle = (item: string) => (props: {theme: Theme}) =>  {
                 // 스타일
                 ${props.theme.typo.caption2Light}
                 color: white;
-                background-color: ${props.theme.colors.natural[100]};
+                background-color: ${props.theme.colors.natural[80]};
                 border-radius: 3px;
                 z-index: 1000;
                 cursor: pointer;

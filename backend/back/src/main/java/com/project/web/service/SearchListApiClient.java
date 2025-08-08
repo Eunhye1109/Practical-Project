@@ -18,18 +18,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SearchListApiClient {
 
-    private final RestTemplate restTemplate;
+	private final RestTemplate restTemplate;
 
-    public List<SearchListDTO> fetchCompanySummaries(String corpName) {
-        String url = "http://localhost:8000/api/search/list?keyword=" + UriUtils.encode(corpName, StandardCharsets.UTF_8);
+	public List<SearchListDTO> fetchCompanySummaries(String corpName, String userPurpose) {
+		String url = "http://localhost:8000/api/search/list?keyword="
+				+ UriUtils.encode(corpName, StandardCharsets.UTF_8);
+		if (userPurpose != null && !userPurpose.isBlank()) {
+			url += "&user_purpose=" + UriUtils.encode(userPurpose, StandardCharsets.UTF_8);
+		}
+		ResponseEntity<List<SearchListDTO>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<SearchListDTO>>() {
+				});
 
-        ResponseEntity<List<SearchListDTO>> response = restTemplate.exchange(
-            url,
-            HttpMethod.GET,
-            null,
-            new ParameterizedTypeReference<List<SearchListDTO>>() {}
-        );
-
-            return response.getBody();
-    }
+		return response.getBody();
+	}
 }

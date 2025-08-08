@@ -24,8 +24,9 @@ public class SearchListController {
 
 	@Operation(summary = "기업 리스트 출력 API")
 	@PostMapping("/search/list")
-	public ResponseEntity<List<SearchListDTO>> searchList(@RequestParam String corpName){
-		List<SearchListDTO> CompanyList = searchListService.searchList(corpName);
+	public ResponseEntity<List<SearchListDTO>> searchList(@RequestParam String corpName,
+			@RequestParam(required = false) String userPurpose){
+		List<SearchListDTO> CompanyList = searchListService.searchList(corpName, userPurpose);
 		return new ResponseEntity<>(CompanyList,HttpStatus.OK);
 	}
 }

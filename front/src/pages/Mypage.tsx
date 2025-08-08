@@ -69,7 +69,7 @@ const TabItem = styled.div<{selected: boolean}>`
     text-align: center;
     // 스타일
     ${({theme, selected}) => selected ? typoStyle.body.semiBold(theme) : typoStyle.body.regular(theme)}
-    color: ${({theme, selected}) => selected ? theme.colors.primary[40] : theme.colors.natural[40]};
+    color: ${({theme, selected}) => selected ? theme.colors.primary[80] : theme.colors.natural[40]};
     cursor: pointer;
 
     transition: 0.2s ease-in-out;
@@ -117,7 +117,7 @@ const Mypage = () => {
                 {itemList.map((item, index) => (
                     <TabItem selected={activeTab === index ? true : false} onClick={() => handleTabChange(index)}>
                         {item}
-                        <Line opacity={activeTab === index ? '1' : '0'} width='100%' color={theme.colors.primary[40]} thickness='2px' />
+                        <Line opacity={activeTab === index ? '1' : '0'} width='100%' color={theme.colors.primary[80]} thickness='2px' />
                     </TabItem>
                 ))}
             </TabBox>

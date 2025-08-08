@@ -92,9 +92,6 @@ const Home = () => {
       });
       if(searchDataList[0]) {
         navigate('/searchResult', { state: { res: dataList, code: codeList } });
-        console.log(searchDataList);
-        console.log(dataList);
-        console.log(codeList);
       }
     } catch (e) {
       alert('실패~~~');

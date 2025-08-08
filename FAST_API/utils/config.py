@@ -2,7 +2,7 @@
 
 from dotenv import load_dotenv
 from openai import OpenAI
-from utils.prompt_loader import load_prompt
+from prompts.prompt_loader import load_prompt
 import os
 
 load_dotenv(dotenv_path="Keys.env")
@@ -24,12 +24,16 @@ SUMMARY_PROMPT_TEMPLATE = load_prompt("prompts/gpt_summary_prompt.txt")
 # 설정 관련
 SIM_THRESHOLD = 0.8
 YEARS = ["2024", "2023", "2022"]
-REPRT_CODE=11011
 DEFAULT_YEAR = "2023"
 MAX_COMPANY_COUNT = 2 # 응답 제한
 
+# DART
+REPRT_CODE=11011
+FS_DIV_OPTIONS = ["CFS", "OFS", "UFS"]
+
+
 # GPT 모델 관련
-client = OpenAI(api_key=OPENAI_API_KEY)
+CLIENT = OpenAI(api_key=OPENAI_API_KEY)
 OPENAI_MODEL = "gpt-4o"
 DEFAULT_TEMPERATURE = 0.5
 

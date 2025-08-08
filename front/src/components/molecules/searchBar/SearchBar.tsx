@@ -29,8 +29,9 @@ const SearchBar = ({itemList, modeList, label, onClick, width, value}: Props) =>
         {itemList.map((item, index) => (
             <Dropdown
                 itemList={item}
-                width='15%'
+                width='20%'
                 mode={modeList[index]}
+                key={index}
             />
         ))}
         <SearchInput

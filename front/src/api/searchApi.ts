@@ -10,5 +10,3 @@ export const searchCorp = async (corpName: string): Promise<SearchListDTO[]> => 
     return res.data;
 }
 
-// 리포트로 이동
-//export const reportOutput = async (corpName: string, userPurpose: string): Promise

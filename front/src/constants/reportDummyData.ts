@@ -1,7 +1,7 @@
 import React from "react";
-import { reportFullData } from "types/search.types";
+import { ReportFullData } from "types/search.types";
 
-export const reportFullDummyData: reportFullData = {
+export const reportFullDummyData: ReportFullData = {
   // 기업 기본 소개
   header: {
     corpName: '무신사',

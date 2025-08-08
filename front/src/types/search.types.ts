@@ -28,7 +28,7 @@ export interface GraphData {
 }
 
 // 리포트 데이터 양식
-export interface reportFullData {
+export interface ReportFullData {
   // 기업 기본 소개
   header: {
     corpName: string, // 기업명

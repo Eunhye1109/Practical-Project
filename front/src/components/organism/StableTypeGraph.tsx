@@ -2,10 +2,10 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { stableType, stableTypeBodyText, stableTypeTitle } from 'constants/graphOption';
 import { GraphBox } from 'components/molecules';
-import { reportFullData } from 'types/search.types';
+import { ReportFullData } from 'types/search.types';
 
 interface Prop {
-  data: reportFullData;
+  data: ReportFullData;
 }
 
 const Container = styled.div`

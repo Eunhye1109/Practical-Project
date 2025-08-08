@@ -25,7 +25,7 @@ export const corDummyDataList = [
 
 //  더미 데이터
 export const docsWidthList = ['50%', '15%', '5%', '10%']
-export const docsTypeList = ['text', 'text', 'text', 'btn', 'btn']
+export const docsTypeList = ['text', 'text', 'btn', 'btn']
 export const docsHeaderList = [
     {label: '기업명', width: '20%'},
     {label: '기업소개', width: '50%'},
@@ -35,6 +35,6 @@ export const docsHeaderList = [
 ]
 
 export const docsDummyDataList = [
-    ['무신사', '엉어엉리멍ㄴ리;ㅏㄴㅁㅓ리;ㅏ', '2025.08.14', '해제', '출력'],
-    ['무신사', '엉어엉리멍ㄴ리;ㅏㄴㅁㅓ리;ㅏ', '2025.08.14', '해제', '출력'],
+    ['무신사', '엉어엉리멍ㄴ리;ㅏㄴㅁㅓ리;ㅏ', '2025.08.14', '등록', '출력'],
+    ['무신사', '엉어엉리멍ㄴ리;ㅏㄴㅁㅓ리;ㅏ', '2025.08.14', '등록', '출력'],
 ]
