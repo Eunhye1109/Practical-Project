@@ -6,4 +6,6 @@ public interface UserInfoService {
 
 	UserDTO secession(String userId, String userPw);
 
+	UserDTO getUserInfo(String userId);
+
 }

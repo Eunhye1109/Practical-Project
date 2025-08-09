@@ -41,25 +41,8 @@
 # from google.colab import drive
 # drive.mount('/content/drive')
 
-# # ✅ FinBERT 로드
-# tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
-# model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
 
-# # ✅ DART 기업 목록 불러오기
-# def load_corp_list(api_key: str) -> pd.DataFrame:
-#     url = f"https://opendart.fss.or.kr/api/corpCode.xml?crtfc_key={api_key}"
-#     res = requests.get(url)
-#     if res.status_code != 200 or b'PK' not in res.content[:2]:
-#         raise Exception("❌ DART API에서 corpCode.zip을 받지 못했습니다.")
-#     z = zipfile.ZipFile(io.BytesIO(res.content))
-#     xml_content = z.read(z.namelist()[0])
-#     root = ET.fromstring(xml_content)
-#     return pd.DataFrame([{
-#         "corp_code": item.findtext('corp_code'),
-#         "corp_name": item.findtext('corp_name'),
-#         "stock_code": item.findtext('stock_code'),
-#         "modify_date": item.findtext('modify_date')
-#     } for item in root.findall('list')])
+
 
 # # ✅ 기업명 검색
 # def find_corp_by_keyword(df: pd.DataFrame, keyword: str):
@@ -84,22 +67,7 @@
 #         "지주회사": res.get("hm_ownr_corp_nm")
 #     }
 
-# # ✅ 뉴스 기사 수집 (본문 + 링크)
-# def fetch_news_articles(keyword: str, max_count: int = 5):
-#     url = "https://openapi.naver.com/v1/search/news.json"
-#     headers = {
-#         "X-Naver-Client-Id": NAVER_CLIENT_ID,
-#         "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
-#     }
-#     params = {"query": keyword, "display": max_count, "sort": "date"}
-#     res = requests.get(url, headers=headers, params=params)
-#     if res.status_code != 200:
-#         return []
-#     return [{
-#         "title": item["title"],
-#         "description": item["description"],
-#         "link": item["link"]
-#     } for item in res.json().get("items", [])]
+
 
 # # ✅ 감성 분석 (FinBERT)
 # def analyze_sentiment(texts: list) -> list:

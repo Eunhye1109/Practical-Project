@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import com.project.web.dto.AiSummaryDTO;
 import com.project.web.dto.MatchResultDTO;
+import com.project.web.dto.RadarDTO;
 import com.project.web.dto.ResponseDTO;
 import com.project.web.dto.SearchResultDTO;
 import com.project.web.mapper.SearchHisMapper;
 import com.project.web.mapper.TargetColMapper;
 import com.project.web.utils.ConvertToFlatYearlyListUtil;
+import com.project.web.utils.RadarScoreCalculator;
 import com.project.web.vo.ColumnMatchVO;
 import com.project.web.vo.SearchwordVO;
 import com.project.web.vo.TargetColVO;
@@ -26,6 +29,7 @@ public class SearchServiceImpl implements SearchService {
     private final TargetColMapper targetColMapper;
     private final FinancialRatioService financialRatioService;
     private final SearchHisMapper searchHisMapper;
+    private final AiSummaryService aiSummaryService;
 
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
@@ -130,10 +134,16 @@ public class SearchServiceImpl implements SearchService {
         List<Map<String, Object>> flatColumns = ConvertToFlatYearlyListUtil.convert(columnList, ratios);
         String corpName = (String) allYearData.get("corpName");
         
+        List<RadarDTO> radarList = RadarScoreCalculator.calculateScores(flatColumns);
+        List<AiSummaryDTO> aiSummaryList = aiSummaryService.getAiSummaryFromFastAPI(corpName, userPurpose);
+        System.out.println("🤖 [AI] 긍부정 분석 결과 수 = " + aiSummaryList.size());
+        
         return SearchResultDTO.builder()
             .corpCode(corpCode)
             .corpName(corpName)
             .columns(flatColumns)
+            .rader(radarList)
+            .aiSumary(aiSummaryList)
             .build();
 
     }

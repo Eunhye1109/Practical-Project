@@ -35,4 +35,10 @@ public class UserInfoServiceImpl implements UserInfoService{
 				.build();
 	}
 
+	@Override
+	public UserDTO getUserInfo(String userId) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getUserInfo'");
+	}
+
 }
