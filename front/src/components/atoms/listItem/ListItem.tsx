@@ -6,7 +6,7 @@ interface Props {
     readonly listOnClick?: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
     readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string) => void>;
     readonly widthList: string[];
-    readonly data: string[];
+    readonly data: string | string[];
     readonly typeList: string[];
     readonly logo: string;
     readonly corpCode: string;
@@ -132,16 +132,43 @@ const ListItem = ({listOnClick, btnList, widthList, typeList, data, logo, corpCo
                 <Title thickness={true}>{data[0]}</Title>
             </div>
         </LogoTitle>
-        {widthList.map((item, index) => (
-            <ItemContent key={index} width={item}>
-                <Item type={typeList[index]} onClick={(e,) => {
-                    e.stopPropagation();
-                    btnList?.[index]?.(e, corpCode);
-                }}>
-                    {(!data[index + 1] || data[index + 1].trim?.() === '') ? '-' : data[index + 1]}
-                </Item>
-            </ItemContent>
-        ))}
+        {widthList.map((item, index) => {
+            const currentData = data[index + 1];
+            // 배열일 때
+            if (Array.isArray(currentData)) {
+                return (
+                <ItemContent key={index} width={item}>
+                    {currentData.map((tag, tagIndex) => (
+                        <Item
+                            key={tagIndex}
+                            type={typeList[index]}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                btnList?.[index]?.(e, corpCode);
+                            }}
+                        >
+                            {tag}
+                        </Item>
+                    ))}
+                </ItemContent>
+                );
+            // 배열 아닐때
+            } else {
+                return (
+                <ItemContent key={index} width={item}>
+                    <Item
+                    type={typeList[index]}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        btnList?.[index]?.(e, corpCode);
+                    }}
+                    >
+                    {(!currentData || currentData === '') ? '-' : currentData}
+                    </Item>
+                </ItemContent>
+                );
+            }
+        })}
     </Container>
   )
 }

@@ -7,6 +7,7 @@ import bg from '../assets/images/bg/background06.png';
 import { useNavigate } from 'react-router-dom';
 import { hisKeyword, saveKeyword, searchCorp } from 'api/searchApi';
 import { useLogin } from 'contexts/LoginContext';
+import { dataFormat } from 'components/atoms/graphCustom/GraphCustom';
 
 interface Props {
   readonly bgImg: string;
@@ -139,6 +140,15 @@ const Home = () => {
       if(searchDataList[0]) {
         navigate('/searchResult', { state: { res: dataList, code: codeList, corpName: corpName } });
       }
+
+      // 데이터 타입 확인
+      dataList.map(item => (
+        item.map(smitem => (
+          console.log('type', typeof smitem)
+        ))
+      ))
+      console.log('데이터: ', dataList);
+      
     } catch (e) {
       alert('검색어 저장하기 실패~~~');
     }

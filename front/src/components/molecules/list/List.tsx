@@ -6,7 +6,7 @@ import { typoStyle } from 'styles/typoStyle';
 
 interface Props {
     readonly headerList: Array<{label: string, width: string}>;
-    readonly dataList: string[][];
+    readonly dataList: (string | string[])[];
     readonly widthList: string[];
     readonly listOnClick?: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
     readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string) => void>;

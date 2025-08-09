@@ -160,7 +160,7 @@ const Report = () => {
 
         <ReportSumaryBox data={reportFullDummyData.rader} cropName={reportFullDummyData.header.corpName} aiSumaryData={reportFullDummyData.aiSumary} similarCorpData={reportFullDummyData.similarCorp} />
 
-        {user?.riskType == '안정형' ? <StableTypeGraph data={reportData} /> : (user?.riskType == '공격형' ? <StableTypeGraph data={reportFullDummyData} /> : user?.riskType == '관리자형' ? <StableTypeGraph data={reportFullDummyData} /> : <StableTypeGraph data={reportFullDummyData} />)}
+        {user?.riskType == '안정형' ? <StableTypeGraph data={reportFullDummyData} /> : (user?.riskType == '공격형' ? <StableTypeGraph data={reportFullDummyData} /> : user?.riskType == '관리자형' ? <StableTypeGraph data={reportFullDummyData} /> : <StableTypeGraph data={reportFullDummyData} />)}
 
         <ReportNewsBox newsData={reportFullDummyData.newsData} />
         
