@@ -171,7 +171,9 @@ const SearchResult = () => {
         try {
             const reportData = await reportOutput(corpCode, user?.riskType ?? '비회원');
             console.log(user?.riskType ?? '비회원');
-            navigate('/report', {state: {reportData: reportData}});
+            console.log(reportData);
+            
+            navigate('/report', {state: {reportData: reportData, corpCode}});
         } catch (e) {
             alert('실패~~')
         }

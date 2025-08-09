@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { useState } from 'react';
 import { DropdownItem } from 'components/atoms'
@@ -51,6 +51,17 @@ const DropdownList = ({itemList, mode, onChange, open, selfSelected}: Props) => 
     if (mode === 'radio') return [itemList[0]];
     return itemList;
   });
+
+  // selfSelected 바뀌면 업데이트
+  useEffect(() => {
+    if (selfSelected !== undefined && itemList.includes(selfSelected)) {
+      setSelectedList([selfSelected]);
+    } else if (mode === 'radio') {
+      setSelectedList([itemList[0]]);
+    } else {
+      setSelectedList(itemList);
+    }
+  }, [selfSelected, mode, itemList]);
 
   const handleSelect = (label: string) => {
     setSelectedList((prev) => {

@@ -27,19 +27,19 @@ export interface JoinInputOption {
 
 export const joinInputOptions: JoinInputOption[] = [
   {
-    name: "userId",
+    name: "newUserId",
     inputTitleLabel: "아이디",
     inputLabel: "아이디를 입력해주세요.",
     textLabel: "중복된 아이디가 존재합니다.",
-    visible: false,
-    blur: false,
+    visible: true,
+    blur: true,
   },
   {
     name: "prevPw",
     inputTitleLabel: " 현재 비밀번호",
     inputLabel: "현재 비밀번호를 입력해주세요.",
     textLabel: "비밀번호가 틀렸습니다.",
-    visible: false,
+    visible: true,
     blur: true,
     type: "password",
   },
@@ -90,7 +90,7 @@ export const joinDropdownOption: JoinDropdownOption[] = [
         label: '서비스 사용 목적',
     },
     {   
-        name: 'termsType',
+        name: 'riskType',
         categoryList: investmentTypeList,
         label: '투자 유형',
     }

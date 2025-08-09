@@ -52,6 +52,7 @@
 <update id="updateUser" parameterType="com.project.web.vo.UpdateUserVO">
     UPDATE T_USER
     SET
+        USER_ID = #{newUserId},
         USER_PW = #{userPw},
         USER_PHONE = #{userPhone},
         USER_JOB = #{userJob},

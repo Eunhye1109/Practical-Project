@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
 import { Button } from 'components/atoms';
-import { UserDTO } from 'types/user.types';
+import { UpdateUserVO, UserDTO } from 'types/user.types';
 import { useNavigate } from 'react-router-dom';
 import { joinDropdownOption, joinInputOptions } from 'constants/userInfoSettingOption';
 import { DropdownBox, InputBox } from 'components/molecules';
+import { userDataInquiry, userDataUpdate } from 'api/mypageApi';
+import { useLogin } from 'contexts/LoginContext';
+import { idCheckUser } from 'api/userApi';
 
 const Container = styled.div`
   // 크기
@@ -50,8 +53,7 @@ const DropdownForm = styled.div`
 `;
 
 const UserInfoSetting = () => {
-  // 테스트용 데이터
-  const drop01 = ['자영업자', '주식 투자 종목 분석', '안정형']
+  const {user, login} = useLogin();
   // 페이지 이동
   const navigate = useNavigate();
   // 아이디/비번 에러 메시지 활성/비활성
@@ -63,20 +65,41 @@ const UserInfoSetting = () => {
   const [prevPwOverlap, setPrevPwOverlap] = useState('');
   // 제출 버튼 활성/비활성
   const [btnActive, setBtnActive] = useState('deactive');
-
   // 사용자 데이터(데이터 받아와서 넣기)
-  const [formData, setFormData] = useState<UserDTO>({
-    userId: '',
-    userPw: '',
-    userPhone: '',
-    userJob: '',
-    userPurpose: '',
-    riskType: '',
-  });
+  const [formData, setFormData] = useState<UpdateUserVO>();
+  // 사용자 기존 비밀번호
+  const [currentPw, setCurrentPw] = useState();
+
+  // 사용자 데이터 받아오기
+  useEffect(() => {
+    const currentUserData = async () => {
+      try {
+        const res = await userDataInquiry(user?.userId ?? '');
+        const resRe: UpdateUserVO = {
+          userId: res.userInfo.userId,
+          newUserId: res.userInfo.userId,
+          userPw: res.userInfo.userPw,
+          userPhone: res.userInfo.userPhone,
+          userJob: res.userInfo.userJob,
+          userPurpose: res.userInfo.userPurpose,
+          riskType: res.userInfo.riskType
+        } 
+        setFormData(resRe);
+        console.log('유저정보: ', res.userInfo);
+        setCurrentPw(res.userInfo.userPw);
+      } catch (e) {
+      }
+    } 
+    currentUserData();
+  }, [user])
+
 
   // input 데이터 저장 메소드
   const handleInputChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData(prev => ({...prev, [name]: e.target.value}));
+    setFormData( prev => {
+      if (!prev) return prev;
+      return {...prev, [name]: e.target.value}
+    });
   }
   const handlePwOverlapChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setPwOverlap(e.target.value);
@@ -86,28 +109,49 @@ const UserInfoSetting = () => {
   }
   // dropdown 데이터 저장 메소드
   const handleDropdownChange = (name: string) => (selected: string[]) => {
-    setFormData(prev => ({ ...prev, [name]: selected[0] }));
+    setFormData(prev => {
+      if (!prev) return prev;
+      return { ...prev, [name]: selected[0]}
+    });
   };
 
   // 아이디 중복 확인 메소드
-  const handleIdCheckBlur = () => {
-    // TODO: 로직 작성
+  const handleIdCheckBlur = async () => {
+    try {
+      const res = await idCheckUser(formData?.newUserId ?? '');
+      console.log('아이디 중복 검사', res);
+      
+      if(res.success) {
+        setIdVisible(true);
+        console.log('중복 미존재: ', res.success);
+        
+      } else {
+        setIdVisible(false);
+        console.log('중복 존재: ', res.success);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  // 현재 비밀번호 일치 확인 메소드
+  // 현재 비밀번호 일치 확인 메소드 & 버튼 활성화
   const handlePrevPwCheckBlur = () => {
-    // TODO: 불러온 데이터와 입력된 데이터 대조
+    if(currentPw !== prevPwOverlap) {
+      setPrevPwVisible(false);
+    } else {
+      setPrevPwVisible(true);
+    }
   }
 
   // 비밀번호 중복 확인 메소드
   const handlePwCheckBlur = () => {
     // 둘 중 하나라도 빈칸이면 true
-    if(formData.userPw === '' || pwOverlap === '') {
+    if(formData?.userPw === '' || pwOverlap === '') {
       setPwVisible(true);
-      return;
+      return ;
     }
     // 두 값이 일치하면 true
-    if(formData.userPw === pwOverlap) {
+    if(formData?.userPw === pwOverlap) {
       setPwVisible(true);
     } else {
       setPwVisible(false);
@@ -117,15 +161,27 @@ const UserInfoSetting = () => {
   // 데이터 수정 확인
   useEffect(() => {
     console.log('[DEBUG] formData changed:', formData);
-  }, [formData, idVisible, pwVisible]);
+    if(idVisible && prevPwVisible && pwVisible && prevPwVisible && prevPwOverlap !== null && prevPwOverlap !== '') {
+      console.log(idVisible, prevPwVisible, pwVisible, prevPwVisible);
+      setBtnActive('default');
+    } else {
+      console.log(idVisible, prevPwVisible, pwVisible, prevPwVisible);
+      setBtnActive('deactive');
+    }
+  }, [formData, pwOverlap, prevPwOverlap]);
 
-  // TODO: 데이터 제출 로직(정보 수정 완료)
-  const handleJoinClick = () => {
+  // 데이터 제출 로직(정보 수정 완료)
+  const handleJoinClick = async () => {
     if(btnActive === 'deactive'){
       alert('현재 비밀번호를 확인해주세요.');
-    } else {
-      alert('회원정보가 수정되었습니다.');
-      navigate('/');
+    } else if (formData) {
+      try {
+        const res = await userDataUpdate(formData);
+        login({userId: formData.newUserId, userPw: formData.userPw, riskType: formData.riskType});
+        alert('회원정보가 수정되었습니다.');
+      } catch (e) {
+        alert('실패');
+      }
     }
   }
 
@@ -139,11 +195,13 @@ const UserInfoSetting = () => {
               inputLabel={opt.inputLabel}
               inputTitleLabel={opt.inputTitleLabel}
               textLabel={opt.textLabel}
-              visible={opt.visible ? (opt.name === 'id' ? idVisible : (opt.name === 'pw' ? pwVisible : prevPwVisible)) : true}
+              visible={opt.visible ? (opt.name === 'newUserId' ? idVisible : (opt.name === 'userPw' ? pwVisible : prevPwVisible)) : true}
               type={opt.type ?? 'text'}
               onChange={opt.name == 'pwCheck' ? handlePwOverlapChange : (opt.name === 'prevPw' ? handlePrevPwOverlapChange : handleInputChange(opt.name))}
-              onBlur={opt.blur ? (opt.name === 'id' ? handleIdCheckBlur : (opt.name === 'pw' ? handlePwCheckBlur : handlePrevPwCheckBlur)) : undefined}
-              // TODO: value값 받아온 데이터로 넣기
+              onBlur={opt.blur ? (opt.name === 'newUserId' ? handleIdCheckBlur : (opt.name === 'userPw' ? handlePwCheckBlur : handlePrevPwCheckBlur)) : undefined}
+              value={
+                opt.name === 'newUserId' ? formData?.newUserId : (opt.name === 'userPhone' ? formData?.userPhone : undefined)
+              }
             />
           ))}
         </InputForm>
@@ -155,9 +213,8 @@ const UserInfoSetting = () => {
               label={opt.label}
               mode={'radio'}
               onChange={handleDropdownChange(opt.name)}
-              // TODO: 나중에 받아온 데이터로 바꾸기
-              btnLabel={drop01[index]}
-              selfSelected={drop01[index]}
+              btnLabel={opt.name === 'userJob' ? formData?.userJob : (opt.name === 'userPurpose' ? formData?.userPurpose : formData?.riskType)}
+              selfSelected={opt.name === 'userJob' ? formData?.userJob : (opt.name === 'userPurpose' ? formData?.userPurpose : formData?.riskType)}
             />
           ))}
         </DropdownForm>

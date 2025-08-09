@@ -39,7 +39,7 @@ const variantStyle = (variant: string) => (props: {theme: Theme}) => {
             `;
         case 'deactive':
             return css`
-                background-color: ${props.theme.colors.natural[5]};
+                background-color: ${props.theme.colors.natural[10]};
                 color: ${props.theme.colors.natural[30]};
                 `;
         default:

@@ -60,5 +60,6 @@ export interface ReportFullData {
     title: string, //기사제목
     body: string, // 기사 본문
     url: string // 기사 링크
-  }>
+  }>,
+  message?: string
 }

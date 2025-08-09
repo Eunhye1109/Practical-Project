@@ -20,11 +20,9 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     
     corp_name = get_corp_name(corp_code)
     result = {}
-    success = False
 
     # ✅ [1] 재무정보 수집
     for year in YEARS:
-        year_success = False
         for fs_div in FS_DIV_OPTIONS:
             url = (
                 f"https://opendart.fss.or.kr/api/fnlttSinglAcnt.json?"
@@ -40,29 +38,21 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
                         for item in res["list"]
                     }
                     result[str(year)]["fs_div_used"] = fs_div
-                    year_success = True
                     break
                 else:
                     print(f"⚠️ DART 응답 없음: year={year}, fs_div={fs_div}")
             except Exception as e:
-                raise HTTPException(status_code=500, detail=f"{year}년도 {fs_div} 조회 실패: {str(e)}")
-
-        if not year_success:
-            print(f"❌ {year}년도 재무정보 수집 실패")
-        else:
-            success = True
-
-    if not success:
-        raise HTTPException(status_code=404, detail="DART에 등록된 재무정보가 없습니다.")
+                print(f"❌ {year}년도 {fs_div} 조회 실패: {str(e)}")
 
     # ✅ [2] 인사정보 수집 시도
     try:
         emp_data = fetch_corp_emp_data(corp_code)
         for year in YEARS:
-            if year in emp_data and year in result:
-                # ✅ 동일 연도에 병합 (ex: 평균인건비, 직원수)
+            if year in emp_data:
+                if year not in result:
+                    result[year] = {}
                 for k, v in emp_data[year].items():
-                    if k != "fs_div_used":  # 중복 방지
+                    if k != "fs_div_used":
                         result[year][k] = v
         print("✅ 인사정보 병합 완료")
     except Exception as e:
@@ -72,6 +62,8 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     result["corpName"] = corp_name
     result["corpCode"] = corp_code
 
+    # ✅ [4] 아무것도 없으면 soft return
+    if not any(k in result for k in YEARS):
+        result["warning"] = "수집된 재무 또는 인사정보가 없습니다."
+
     return result
-
-
