@@ -38,6 +38,21 @@
     WHERE CORP_NAME LIKE '%' || #{corpName} || '%'
 </select>
 
+<select id="selectHeaderByCorpCode"
+        parameterType="string"
+        resultType="com.project.web.vo.SearchListCacheVO">
+   SELECT corpName, logoUrl, major, keywordsJson
+FROM (
+    SELECT
+        CORP_NAME   AS corpName,
+        LOGO_URL    AS logoUrl,
+        MAJOR       AS major,
+        KEYWORDS_JSON AS keywordsJson
+    FROM SEARCH_LIST_CACHE
+    WHERE CORP_CODE = #{corpCode}
+) 
+WHERE ROWNUM = 1
+</select>
 
 
 </mapper>
