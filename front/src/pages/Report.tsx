@@ -9,9 +9,8 @@ import StableTypeGraph from 'components/organism/StableTypeGraph';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { deleteCorp, saveCorp } from 'api/mypageApi';
 import RegularTypeGraph from 'components/organism/RegularTypeGraph';
-// import RegularTypeGraph from 'components/organism/RegularTypeGraph';
-// import AttackTypeGraph from 'components/organism/AttackTypeGraph';
-// import AdminTypeGraph from 'components/organism/AdminTypeGraph';
+import AttackTypeGraph from 'components/organism/AttackTypeGraph';
+import AdminTypeGraph from 'components/organism/AdminTypeGraph';
 
 const Container = styled.div`
   width: 100%;
@@ -138,7 +137,7 @@ const Report = () => {
 
   // 리포트생성 버튼 클릭
   const handleReportClick = () => {
-    console.log(reportData.graphData);
+    console.log('레이더: ', reportData);
   }
   
   return (
@@ -164,9 +163,9 @@ const Report = () => {
         {user?.riskType == '안정형' ?
         <StableTypeGraph data={reportData} /> :
         (user?.riskType == '공격형' ?
-        <StableTypeGraph data={reportFullDummyData} /> :
+        <AttackTypeGraph data={reportData} /> :
         user?.riskType == '혼합형' ?
-        <StableTypeGraph data={reportFullDummyData} /> :
+        <AdminTypeGraph data={reportData} /> :
         // 비회원
         <RegularTypeGraph data={reportData} />)}
         

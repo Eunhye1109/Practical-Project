@@ -12,7 +12,7 @@ DARTAPI_KEY = os.getenv("DARTAPI_KEY")
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-LOGO_CACHE_PATH = os.getenv("LOGO_CACHE_PATHn")
+LOGO_CACHE_PATH = os.getenv("LOGO_CACHE_PATH")
 
 LOGO_API_TOKEN = os.getenv("LOGO_API_TOKEN")
 

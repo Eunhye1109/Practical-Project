@@ -32,16 +32,9 @@ const SmContent = styled.div`
   flex-wrap: wrap;
 `;
 
-const MdContent = styled.div`
-  width: calc(50% - 10px);
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-`;
-
 const StableTypeGraph = ({data}: Prop) => {
-  const typeList = ['composite', 'bar', 'line', 'group', 'bar', 'bar', 'line', 'bar', 'group']
-  const unitList = ['%', '원', '원', '%', '원', '원', '원', '%', '%']
+  const typeList = ['group', 'bar', 'bar', 'group', 'group', 'group']
+  const unitList = ['%', '%', '%', '%', '원', '%']
 
   return (
     <Container>
@@ -57,18 +50,11 @@ const StableTypeGraph = ({data}: Prop) => {
       {/* 조합2 */}
       <LineContent>
         <GraphBox type={typeList[3]} titleLable={stableTypeTitle[3]} textType={3} data={data.graphData} graphList={stableType[3]} tooltipId={'tip03'} bodyText={stableTypeBodyText} unit={unitList[3]} size={'md'} height={200} aiSummary={'data.aiGraphSummary[1] ?? '} />
-        <SmContent>
-          <GraphBox type={typeList[4]} titleLable={stableTypeTitle[4]} textType={4} data={data.graphData} graphList={stableType[4]} tooltipId={'tip04'} bodyText={stableTypeBodyText} unit={unitList[4]} size={'sm'} aiSummary={''} />
-          <GraphBox type={typeList[5]} titleLable={stableTypeTitle[5]} textType={5} data={data.graphData} graphList={stableType[5]} tooltipId={'tip05'} bodyText={stableTypeBodyText} unit={unitList[5]} size={'sm'} aiSummary={''} />
-        </SmContent>
-        <SmContent>
-          <GraphBox type={typeList[6]} titleLable={stableTypeTitle[6]} textType={6} data={data.graphData} graphList={stableType[6]} tooltipId={'tip06'} bodyText={stableTypeBodyText} unit={unitList[6]} size={'sm'} aiSummary={''} />
-          <GraphBox type={typeList[7]} titleLable={stableTypeTitle[7]} textType={7} data={data.graphData} graphList={stableType[7]} tooltipId={'tip07'} bodyText={stableTypeBodyText} unit={unitList[7]} size={'sm'} aiSummary={''} />
-        </SmContent>
+        <GraphBox type={typeList[4]} titleLable={stableTypeTitle[4]} textType={4} data={data.graphData} graphList={stableType[4]} tooltipId={'tip03'} bodyText={stableTypeBodyText} unit={unitList[4]} size={'md'} height={200} aiSummary={'data.aiGraphSummary[1] ?? '} />
       </LineContent>
 
       {/* 조합3 */}
-      <GraphBox type={typeList[8]} titleLable={stableTypeTitle[8]} textType={8} data={data.graphData} graphList={stableType[8]} tooltipId={'tip08'} bodyText={stableTypeBodyText} unit={unitList[8]} size={'xl'} height={300} aiSummary={'data.aiGraphSummary[2] ?? '} />
+      <GraphBox type={typeList[5]} titleLable={stableTypeTitle[5]} textType={5} data={data.graphData} graphList={stableType[5]} tooltipId={'tip08'} bodyText={stableTypeBodyText} unit={unitList[5]} size={'xl'} height={300} aiSummary={'data.aiGraphSummary[2] ?? '} />
     </Container>
   )
 }
