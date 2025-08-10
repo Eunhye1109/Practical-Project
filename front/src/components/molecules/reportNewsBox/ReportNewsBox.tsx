@@ -6,9 +6,11 @@ import { theme } from 'styles/theme';
 import { Tooltip } from 'react-tooltip';
 import { Line } from 'components/atoms';
 import { useTheme } from '@emotion/react';
+import bg from 'assets/images/bg/background11.png';
 
 interface Props {
-    newsData: Array<{date: string, title: string, body: string, url: string}>
+    newsData: Array<{date: string, title: string, body: string, url: string}>;
+    corpName: string;
 }
 
 const Container = styled.div`
@@ -37,14 +39,21 @@ const NewContent = styled.div`
     width: calc(50% - 10px);
     // 디스플레이
     display: flex;
-    justify-content: start;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
     padding: 30px;
     box-sizing: border-box;
+    gap: 5px;
     // 스타일
     border-radius: 10px;
     border: 1px solid ${({theme}) => theme.colors.primaryBlue[40]};
-    background-image: ${({theme}) => theme.colors.gradient.greenCross};
+    background-image:
+        ${({theme}) => theme.colors.gradient.crossOpacity},
+        url(${bg}),
+        ${({theme}) => theme.colors.gradient.greenCross};
+    background-size: cover;
+    background-position: center;
 `;
 
 const NewsContent = styled.div`
@@ -117,7 +126,21 @@ const NewsTitle = styled.a<{width: string}>`
     }
 `;
 
-const ReportNewsBox = ({newsData}: Props) => {
+const RiskSubTitle = styled.span<{thick: boolean}>`
+    font-size: 20px;
+    font-weight: ${({thick}) => thick ? 300 : 200};
+    font-family: 'SB어그로';
+    color: white;
+`;
+
+const RiskRank = styled.span`
+    font-size: 100px;
+    font-weight: 300;
+    font-family: 'SB어그로';
+    color: white;
+`;
+
+const ReportNewsBox = ({newsData, corpName}: Props) => {
     const theme = useTheme();
   return (
     <Container>
@@ -144,7 +167,11 @@ const ReportNewsBox = ({newsData}: Props) => {
         </Content>
 
         <NewContent>
-            
+            <div>
+                <RiskSubTitle thick={true}>{corpName}</RiskSubTitle>
+                <RiskSubTitle thick={false}>의 리스크 점수는</RiskSubTitle>
+            </div>
+            <RiskRank>A랭크</RiskRank>
         </NewContent>
     </Container>
   )

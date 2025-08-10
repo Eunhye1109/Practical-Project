@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class HeaderDTO {
     private String corpName;
-    private String imgUrl;
+    private String logoUrl;
     private String major;
     private List<String> keyword;
 }

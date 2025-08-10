@@ -8,6 +8,7 @@ from fastapi import HTTPException
 from utils.config import DARTAPI_KEY, YEARS, REPRT_CODE, FS_DIV_OPTIONS
 from utils.corp_code import get_corp_name
 from utils.api_util import fetch_corp_emp_data
+from utils.logo_utils import get_logo_url
 import logging
 
 
@@ -61,6 +62,7 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     # ✅ [3] 최종 기본 정보 추가
     result["corpName"] = corp_name
     result["corpCode"] = corp_code
+    result["logoUrl"] = get_logo_url(corp_name)
 
     # ✅ [4] 아무것도 없으면 soft return
     if not any(k in result for k in YEARS):

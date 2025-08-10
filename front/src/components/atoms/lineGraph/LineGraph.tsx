@@ -19,7 +19,7 @@ const LineGraph = ({data, graphList, unit, height, size}: Props) => {
         <LineChart data={data} style={{overflow: 'visible'}} margin={{top: 10, left: 0, bottom: 0, right: 10}}>
             <CartesianGrid stroke={theme.colors.primary[100]} strokeDasharray={'1 3'} />
             <XAxis
-                dataKey='연도'
+                dataKey='year'
                 tickFormatter={(value) => value + '년'}
                 tickMargin={5}
                 tick={{

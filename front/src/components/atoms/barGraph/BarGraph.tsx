@@ -26,7 +26,7 @@ const BarGraph = ({data, graphList, unit, height, size}: Props) => {
                 activeBar={{fill: theme.colors.primaryGreen[60]}}
             />
             <XAxis
-                dataKey='연도'
+                dataKey='year'
                 tickFormatter={(value) => value + '년'}
                 tickMargin={5}
                 tick={{

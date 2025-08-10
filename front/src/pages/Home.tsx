@@ -133,17 +133,24 @@ const Home = () => {
       }
       const dataList: any[][] = [];
       const codeList: any[] = [];
+      const logoList: any[] = [];
 
       searchDataList.forEach(item => {
         const values = Object.values(item);
-        const lastValue = values[values.length - 1];
+        const firstValue = values[0];
+        const lastValue = values[values.length - 2];
+        console.log(values);
+        
 
-        dataList.push(values.slice(0, values.length - 1));
+        dataList.push(values.slice(1, values.length - 1));
         codeList.push(lastValue);
+        logoList.push(firstValue);
       });
       if(searchDataList[0]) {
-        navigate('/searchResult', { state: { res: dataList, code: codeList, corpName: corpName } });
+        navigate('/searchResult', { state: { res: dataList, code: codeList, corpName: corpName, logo: logoList } });
       }
+      
+      console.log('전체 데이터: ', dataList);
 
       // 데이터 타입 확인
       dataList.map(item => (

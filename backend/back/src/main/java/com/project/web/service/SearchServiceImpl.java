@@ -54,7 +54,7 @@ public class SearchServiceImpl implements SearchService {
             return SearchResultDTO.builder()
                     .corpCode(corpCode)
                     .corpName((String) allYearData.get("corpName"))
-                    .columns(Collections.emptyList())
+                    .graphData(Collections.emptyList())
                     .message("최근 3개년 재무데이터가 존재하지 않습니다.")
                     .build();
         }
@@ -141,7 +141,7 @@ public class SearchServiceImpl implements SearchService {
         return SearchResultDTO.builder()
             .corpCode(corpCode)
             .corpName(corpName)
-            .columns(flatColumns)
+            .graphData(flatColumns)
             .rader(radarList)
             .aiSumary(aiSummaryList)
             .build();

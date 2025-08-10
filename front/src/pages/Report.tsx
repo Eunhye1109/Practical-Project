@@ -8,6 +8,7 @@ import { typoStyle } from 'styles/typoStyle';
 import StableTypeGraph from 'components/organism/StableTypeGraph';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { deleteCorp, saveCorp } from 'api/mypageApi';
+import RegularTypeGraph from 'components/organism/RegularTypeGraph';
 // import RegularTypeGraph from 'components/organism/RegularTypeGraph';
 // import AttackTypeGraph from 'components/organism/AttackTypeGraph';
 // import AdminTypeGraph from 'components/organism/AdminTypeGraph';
@@ -84,7 +85,7 @@ const Report = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const reportData = location.state?.reportData;
-  const corpCode = location.state?.corpCode;
+  const corpCode = reportData.corpCode;
   const {user} = useLogin();
   // 관심기업 추가되어있는지 안되어있는지
   const [onOff, setOnOff] = useState(false);
@@ -137,7 +138,7 @@ const Report = () => {
 
   // 리포트생성 버튼 클릭
   const handleReportClick = () => {
-
+    console.log(reportData.graphData);
   }
   
   return (
@@ -145,7 +146,7 @@ const Report = () => {
       <HeaderContent>
         <ReportHeader
           imgUrl={reportFullDummyData.header.imgUrl}
-          corpName={reportFullDummyData.header.corpName}
+          corpName={reportData.corpName}
           corpCategory={reportFullDummyData.header.major}
           corpKeyword={reportFullDummyData.header.keyword}
           saveOnClick={handleSaveClick}
@@ -158,11 +159,18 @@ const Report = () => {
       <Content>
         <ReportInfoBox titleLabel='기업 소개' corpSumary={reportFullDummyData.infoBox.corpSummary} infoData={reportFullDummyData.infoBox.infoData} />
 
-        <ReportSumaryBox data={reportFullDummyData.rader} cropName={reportFullDummyData.header.corpName} aiSumaryData={reportFullDummyData.aiSumary} similarCorpData={reportFullDummyData.similarCorp} />
+        <ReportSumaryBox data={reportFullDummyData.rader} cropName={reportData.corpName} aiSumaryData={reportFullDummyData.aiSumary} similarCorpData={reportFullDummyData.similarCorp} />
 
-        {user?.riskType == '안정형' ? <StableTypeGraph data={reportFullDummyData} /> : (user?.riskType == '공격형' ? <StableTypeGraph data={reportFullDummyData} /> : user?.riskType == '관리자형' ? <StableTypeGraph data={reportFullDummyData} /> : <StableTypeGraph data={reportFullDummyData} />)}
-
-        <ReportNewsBox newsData={reportFullDummyData.newsData} />
+        {user?.riskType == '안정형' ?
+        <StableTypeGraph data={reportData} /> :
+        (user?.riskType == '공격형' ?
+        <StableTypeGraph data={reportFullDummyData} /> :
+        user?.riskType == '혼합형' ?
+        <StableTypeGraph data={reportFullDummyData} /> :
+        // 비회원
+        <RegularTypeGraph data={reportData} />)}
+        
+        <ReportNewsBox newsData={reportFullDummyData.newsData} corpName={reportData.corpName} />
         
         <NotiBox>
           <BodyText>

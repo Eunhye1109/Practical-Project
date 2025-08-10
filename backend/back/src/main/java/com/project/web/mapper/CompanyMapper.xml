@@ -7,8 +7,8 @@
 
     <!-- 관심 기업 등록 -->
 	<insert id="insertCompany">
-	    INSERT INTO FAVORITE_COMPANY (USER_ID, CORP_NAME, U_COMMENT)
-	    VALUES (#{userId}, #{corpName}, #{u_comment})
+	    INSERT INTO FAVORITE_COMPANY (USER_ID, CORP_NAME, LOGO_URL, U_COMMENT)
+	    VALUES (#{userId}, #{corpName}, #{logoUrl, jdbcType=VARCHAR}, #{u_comment})
 	</insert>
 	
 	<select id="selectCompany" resultType="com.project.web.vo.FcVO">
@@ -17,6 +17,7 @@
         USER_ID AS userId,
         CORP_NAME AS corpName,
         CREATED_AT AS createdAt,
+        LOGO_URL AS logoUrl,
         U_COMMENT AS u_comment
     FROM FAVORITE_COMPANY
     WHERE USER_ID = #{userId}

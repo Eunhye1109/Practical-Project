@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { CompositeGraph, StackedGraph, LineGraph, GroupBarGraph, Line } from 'components/atoms';
 import { typoStyle } from 'styles/typoStyle';
@@ -20,6 +20,7 @@ interface Props {
     readonly height?: number;
     readonly bodyText: (type: number) => {description: string, tips: string[]};
     readonly aiSummary: string;
+    readonly boxBlur?: boolean;
 }
 
 const Container = styled.div<{width?: string}>`
@@ -35,6 +36,15 @@ const Container = styled.div<{width?: string}>`
     border-radius: 10px;
     border: 1px solid ${({theme}) => theme.colors.primary[40]};
     background-color: white;
+`;
+
+const BlurBox = styled.div<{blur?: boolean}>`
+    width: 100%;
+    height: 100%;
+    // 블러
+    filter: ${({blur}) => blur ? 'blur(3px)' : undefined};
+    opacity: ${({blur}) => blur ? '0.5' : undefined};
+    pointer-events: ${({blur}) => blur ? 'none' : undefined};
 `;
 
 const TextBox = styled.div`
@@ -88,8 +98,12 @@ const TooltipSumary = styled.p<{type: boolean}>`
     padding-bottom: ${({type}) => type ? '10px' : '5px'};
 `;
 
-const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId, bodyText, size, height, aiSummary}: Props) => {
+const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId, bodyText, size, height, aiSummary, boxBlur}: Props) => {
     const theme = useTheme();
+
+    useEffect(() => {
+        graph(type)
+    }, [data])
 
     const graph = (type: string) => {
         switch(type) {
@@ -135,8 +149,8 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
                             <Help color={theme.colors.primary[80]} data-tooltip-id={tooltipId} width={20} />
                             <Tooltip id={tooltipId}>
                                 <TooltipSumary type={true}>Tips.</TooltipSumary>
-                                {bodyText(textType).tips.map((item) => (
-                                    <TooltipSumary type={false}>- {item}</TooltipSumary>
+                                {bodyText(textType).tips.map((item, index) => (
+                                    <TooltipSumary key={index} type={false}>- {item}</TooltipSumary>
                                 ))}
                             </Tooltip>
                         </TitleBox>
@@ -151,92 +165,100 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
             case 'sm':
                 return (
                     <Container width='100%'>
-                        <TextBox>
-                            <TitleBox>
-                                <TitleLabel>{titleLable}</TitleLabel>
-                                <Help color={theme.colors.primary[80]} data-tooltip-id={tooltipId} width={20} />
-                                <Tooltip id={tooltipId}>
-                                    <TooltipSumary type={true}>Tips.</TooltipSumary>
-                                    {bodyText(textType).tips.map((item) => (
-                                        <TooltipSumary type={false}>- {item}</TooltipSumary>
-                                    ))}
-                                </Tooltip>
-                            </TitleBox>
-                        </TextBox>
-                        <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
-                        {graph(type)}
+                        <BlurBox blur={boxBlur ?? false}>
+                            <TextBox>
+                                <TitleBox>
+                                    <TitleLabel>{titleLable}</TitleLabel>
+                                    <Help color={theme.colors.primary[80]} data-tooltip-id={tooltipId} width={20} />
+                                    <Tooltip id={tooltipId}>
+                                        <TooltipSumary type={true}>Tips.</TooltipSumary>
+                                        {bodyText(textType).tips.map((item, index) => (
+                                            <TooltipSumary key={index} type={false}>- {item}</TooltipSumary>
+                                        ))}
+                                    </Tooltip>
+                                </TitleBox>
+                            </TextBox>
+                            <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
+                            {graph(type)}
+                        </BlurBox>
                     </Container>
                 )
             case 'md':
                 return (
                     <Container width='calc(50% - 10px)'>
-                        <TextBox>
-                            <TitleBox>
-                                <TitleLabel>{titleLable}</TitleLabel>
-                                <Help color={theme.colors.primary[80]} data-tooltip-id={tooltipId} width={20} />
-                                <Tooltip id={tooltipId}>
-                                    <TooltipSumary type={true}>Tips.</TooltipSumary>
-                                    {bodyText(textType).tips.map((item) => (
-                                        <TooltipSumary type={false}>- {item}</TooltipSumary>
-                                    ))}
-                                </Tooltip>
-                            </TitleBox>
-                            <BodyText>{bodyText(textType).description}</BodyText>
-                        </TextBox>
-                        <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
-                        {graph(type)}
-                        <AiSumaryBox>
-                            <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
-                                <AiSumary type={false}>{aiSummary}</AiSumary>
-                        </AiSumaryBox>
+                        <BlurBox blur={boxBlur ?? false}>
+                            <TextBox>
+                                <TitleBox>
+                                    <TitleLabel>{titleLable}</TitleLabel>
+                                    <Help color={theme.colors.primary[80]} data-tooltip-id={tooltipId} width={20} />
+                                    <Tooltip id={tooltipId}>
+                                        <TooltipSumary type={true}>Tips.</TooltipSumary>
+                                        {bodyText(textType).tips.map((item, index) => (
+                                            <TooltipSumary key={index} type={false}>- {item}</TooltipSumary>
+                                        ))}
+                                    </Tooltip>
+                                </TitleBox>
+                                <BodyText>{bodyText(textType).description}</BodyText>
+                            </TextBox>
+                            <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
+                            {graph(type)}
+                            <AiSumaryBox>
+                                <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
+                                    <AiSumary type={false}>{aiSummary}</AiSumary>
+                            </AiSumaryBox>
+                        </BlurBox>
                     </Container>
                 )
             case 'lg':
                 return (
                     <Container width='calc(75% - 10px)'>
-                        <TextBox>
-                            <TitleBox>
-                                <TitleLabel>{titleLable}</TitleLabel>
-                                <Help color={theme.colors.primary[80]} data-tooltip-id={tooltipId} width={20} />
-                                <Tooltip id={tooltipId}>
-                                    <TooltipSumary type={true}>Tips.</TooltipSumary>
-                                    {bodyText(textType).tips.map((item) => (
-                                        <TooltipSumary type={false}>- {item}</TooltipSumary>
-                                    ))}
-                                </Tooltip>
-                            </TitleBox>
-                            <BodyText>{bodyText(textType).description}</BodyText>
-                        </TextBox>
-                        <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
-                        {graph(type)}
-                        <AiSumaryBox>
-                            <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
-                                <AiSumary type={false}>{aiSummary}</AiSumary>
-                        </AiSumaryBox>
+                        <BlurBox blur={boxBlur ?? false}>
+                            <TextBox>
+                                <TitleBox>
+                                    <TitleLabel>{titleLable}</TitleLabel>
+                                    <Help color={theme.colors.primary[80]} data-tooltip-id={tooltipId} width={20} />
+                                    <Tooltip id={tooltipId}>
+                                        <TooltipSumary type={true}>Tips.</TooltipSumary>
+                                        {bodyText(textType).tips.map((item, index) => (
+                                            <TooltipSumary key={index} type={false}>- {item}</TooltipSumary>
+                                        ))}
+                                    </Tooltip>
+                                </TitleBox>
+                                <BodyText>{bodyText(textType).description}</BodyText>
+                            </TextBox>
+                            <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
+                            {graph(type)}
+                            <AiSumaryBox>
+                                <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
+                                    <AiSumary type={false}>{aiSummary}</AiSumary>
+                            </AiSumaryBox>
+                        </BlurBox>
                     </Container>
                 )
             case 'xl':
                 return (
                     <Container width='100%'>
-                        <TextBox>
-                            <TitleBox>
-                                <TitleLabel>{titleLable}</TitleLabel>
-                                <Help color={theme.colors.primary[80]} data-tooltip-id={tooltipId} width={20} />
-                                <Tooltip id={tooltipId}>
-                                    <TooltipSumary type={true}>Tips.</TooltipSumary>
-                                    {bodyText(textType).tips.map((item) => (
-                                        <TooltipSumary type={false}>- {item}</TooltipSumary>
-                                    ))}
-                                </Tooltip>
-                            </TitleBox>
-                            <BodyText>{bodyText(textType).description}</BodyText>
-                        </TextBox>
-                        <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
-                        {graph(type)}
-                        <AiSumaryBox>
-                            <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
-                                <AiSumary type={false}>{aiSummary}</AiSumary>
-                        </AiSumaryBox>
+                        <BlurBox blur={boxBlur ?? false}>
+                            <TextBox>
+                                <TitleBox>
+                                    <TitleLabel>{titleLable}</TitleLabel>
+                                    <Help color={theme.colors.primary[80]} data-tooltip-id={tooltipId} width={20} />
+                                    <Tooltip id={tooltipId}>
+                                        <TooltipSumary type={true}>Tips.</TooltipSumary>
+                                        {bodyText(textType).tips.map((item, index) => (
+                                            <TooltipSumary key={index} type={false}>- {item}</TooltipSumary>
+                                        ))}
+                                    </Tooltip>
+                                </TitleBox>
+                                <BodyText>{bodyText(textType).description}</BodyText>
+                            </TextBox>
+                            <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
+                            {graph(type)}
+                            <AiSumaryBox>
+                                <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
+                                    <AiSumary type={false}>{aiSummary}</AiSumary>
+                            </AiSumaryBox>
+                        </BlurBox>
                     </Container>
                 )
             default:

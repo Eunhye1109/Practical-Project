@@ -61,7 +61,7 @@ public class SearchCacheServiceImpl implements SearchCacheService {
         return SearchResultDTO.builder()
         		.corpCode(corpCode)
             .corpName(corpName)
-            .columns(flatList)
+            .graphData(flatList)
             .build();
     }
 
@@ -70,7 +70,7 @@ public class SearchCacheServiceImpl implements SearchCacheService {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
         String corpName = result.getCorpName();
         
-        for (Map<String, Object> row : result.getColumns()) {
+        for (Map<String, Object> row : result.getGraphData()) {
             String year = String.valueOf(row.get("year"));
             for (Map.Entry<String, Object> entry : row.entrySet()) {
                 String colName = entry.getKey();

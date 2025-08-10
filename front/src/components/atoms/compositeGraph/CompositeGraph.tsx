@@ -15,6 +15,7 @@ interface Props {
 
 const CompositeGraph = ({data, graphList, unit, height, size}: Props) => {
     const theme = useTheme();
+    
   return (
     <ResponsiveContainer width='100%' height={height ?? 100}>
         <ComposedChart data={data} margin={{top: 0, left: 0, bottom: 0, right: 0}}>
@@ -42,6 +43,7 @@ const CompositeGraph = ({data, graphList, unit, height, size}: Props) => {
                         radius={[5, 5, 0 , 0]}
                         fill={theme.colors.primaryGreen[40]}
                         activeBar={{fill: theme.colors.primaryGreen[60]}}
+                        key={index}
                     />
                 ) : (
                     <Line
@@ -50,11 +52,12 @@ const CompositeGraph = ({data, graphList, unit, height, size}: Props) => {
                         stroke={index === 1 ? theme.colors.primaryBlue[100] : (index === 2 ? theme.colors.primary[100] : theme.colors.natural[80])}
                         strokeWidth={2}
                         dot={{r: 4}}
+                        key={index}
                     />
                 )
             ))}
             <XAxis
-                dataKey='연도'
+                dataKey='year'
                 tickFormatter={(value) => value + '년'}
                 tickMargin={5}
                 tick={{

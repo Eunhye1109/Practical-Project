@@ -46,7 +46,7 @@ const StackedGraph = ({data, graphList, unit, height, size}: Props) => {
             ))}
             {size !== 'sm' && <Legend content={<CustomLegend />} verticalAlign="top" />}
             <XAxis
-                dataKey='연도'
+                dataKey='year'
                 tickFormatter={(value) => value + '년'}
                 tickMargin={5}
                 tick={{

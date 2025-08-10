@@ -19,7 +19,7 @@ const GroupBarGraph = ({data, graphList, unit, height, size}: Props) => {
         <BarChart data={data} barCategoryGap={20} margin={{top: 0, left: 0, bottom: 0, right: 0}}>
             <CartesianGrid stroke={theme.colors.primary[100]} strokeDasharray={'1 3'} vertical={false} />
             <XAxis
-                dataKey='연도'
+                dataKey='year'
                 tickFormatter={(value) => value + '년'}
                 tickMargin={5}
                 tick={{

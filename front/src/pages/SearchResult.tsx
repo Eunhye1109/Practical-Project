@@ -127,6 +127,7 @@ const SearchResult = () => {
     const navigate = useNavigate();
     const [searchRes, setSearchRes] = useState(location.state?.res);
     const [codeList, setCodeList] = useState(location.state?.code);
+    const [logoList, setLogoList] = useState(location.state?.logo);
     const [searchCorpName, setSearchCorpName] = useState(location.state?.corpName);
     const {user} = useLogin();
     // 로딩창
@@ -164,11 +165,6 @@ const SearchResult = () => {
         }
     }, []);
 
-    // 정렬 변경 반영
-    useEffect(() => {
-        // TODO: 정렬에 맞게 다시 리스트 로딩
-    }, [sortBtn]);
-
     // 기업 선택 -> 리포트 화면 이동
     const handleReportClick = async (corpCode: string) => {
         setLoading(true);
@@ -176,10 +172,8 @@ const SearchResult = () => {
             const reportData = await reportOutput(corpCode, user?.riskType ?? '비회원');
             console.log(user?.riskType ?? '비회원');
             console.log(reportData);
-            
-            navigate('/report', {state: {reportData: reportData, corpCode}});
+            navigate('/report', {state: {reportData: reportData, userType: user?.riskType ?? '비회원'}});
         } catch (e) {
-            alert('실패~~')
         } finally {
             setLoading(false);
         }
@@ -210,16 +204,20 @@ const SearchResult = () => {
             }
             const dataList: any[][] = [];
             const codeList: any[] = [];
+            const logoList: any[] = [];
 
             searchDataList.forEach(item => {
                 const values = Object.values(item);
+                const firstValue = values[0];
                 const lastValue = values[values.length - 1];
 
-                dataList.push(values.slice(0, values.length - 1));
+                dataList.push(values.slice(1, values.length - 1));
                 codeList.push(lastValue);
+                logoList.push(firstValue);
             });
             setSearchRes(dataList);
             setCodeList(codeList);
+            setLogoList(logoList);
             setSearchTitle(searchCorpName);
         } catch (e) {
             alert('실패~~~');
@@ -260,12 +258,9 @@ const SearchResult = () => {
                     headerList={headerList}
                     widthList={widthList}
                     dataList={searchRes}
-                    logoList={logoDummyData}
-                    listOnClick={(e, corpCode) => {
-                        handleReportClick(corpCode);
-                        navigate('/report', {state: {corpCode: corpCode}});
-                    }}
+                    logoList={logoList}
                     corpCodeList={codeList}
+                    listOnClick={(e, corpCode) => {handleReportClick(corpCode);}}
                 />
             </SearchListBox>
         </Content>

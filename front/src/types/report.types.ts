@@ -7,6 +7,8 @@ export interface GraphData {
     '자본총계': number | null | undefined,
     '유동자산': number | null | undefined,
     '유동부채': number | null | undefined,
+    'jan_salary_am': number | null | undefined, // 1인 평균 급여
+    'sm': number | null | undefined, // 직원 수
     'ROE': number | null | undefined,                   
     'ROA': number | null | undefined,                   
     '영업이익률': number | null | undefined,      
@@ -19,6 +21,8 @@ export interface GraphData {
 
 // 리포트 데이터 양식
 export interface ReportFullData {
+  corpCode: string,
+  corpName: string,
   // 기업 기본 소개
   header: {
     corpName: string, // 기업명

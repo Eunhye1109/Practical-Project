@@ -8,7 +8,7 @@ interface Props {
     readonly headerList: Array<{label: string, width: string}>;
     readonly dataList: (string | string[])[];
     readonly widthList: string[];
-    readonly listOnClick?: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
+    readonly listOnClick: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
     readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string) => void>;
     readonly nullBtnOnClick?: () => void;
     readonly btnLabel?: string;
@@ -60,7 +60,10 @@ const List = ({headerList, dataList, listOnClick, btnList, nullBtnOnClick, width
             <ListItem
                 logo={logoList[index]}
                 data={item}
-                listOnClick={(e) => (listOnClick?.(e, corpCodeList[index]))}
+                listOnClick={(e) => {
+                    const code = corpCodeList[index];
+                    listOnClick?.(e, code);
+                }}
                 btnList={btnList}
                 widthList={widthList}
                 typeList={typeList}

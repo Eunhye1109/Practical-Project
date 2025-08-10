@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { css, Theme } from '@emotion/react';
 
 interface Props {
-    readonly listOnClick?: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
+    readonly listOnClick: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
     readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string) => void>;
     readonly widthList: string[];
     readonly data: string | string[];
@@ -70,7 +70,6 @@ const itemStyle = (item: string) => (props: {theme: Theme}) =>  {
                 color: white;
                 background-color: ${props.theme.colors.natural[80]};
                 border-radius: 3px;
-                z-index: 1000;
                 cursor: pointer;
 
                 &:hover {
@@ -106,12 +105,14 @@ const LogoTitle = styled.div`
 
 const Logo = styled.img<{src: string}>`
     // 크기
-    width: 40px;
-    height: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
     // 스타일
     border-radius: 50%;
     border: 1px solid ${({theme}) => theme.colors.natural[20]};
-    background-color: white;
+    background-color: ${({src, theme}) => src === null && src === undefined ? theme.colors.primary[30] : theme.colors.natural[0]};
 `;
 
 const Title = styled.p<{thickness: boolean}>`
@@ -125,7 +126,7 @@ const Title = styled.p<{thickness: boolean}>`
 
 const ListItem = ({listOnClick, btnList, widthList, typeList, data, logo, corpCode}: Props) => {
   return (
-    <Container key={corpCode} onClick={(e) => listOnClick?.(e, corpCode)}>
+    <Container key={corpCode} onClick={(e) => listOnClick(e, corpCode)}>
         <LogoTitle>
             <Logo src={logo} />
             <div>

@@ -2,6 +2,8 @@ import React from "react";
 import { ReportFullData } from "types/report.types";
 
 export const reportFullDummyData: ReportFullData = {
+  corpCode: 'asdadsa',
+  corpName: '무신사',
   // 기업 기본 소개
   header: {
     corpName: '무신사',
@@ -84,6 +86,8 @@ export const reportFullDummyData: ReportFullData = {
         '자본총계': 209416191000000,     // 자본총계
         '유동자산': 59062658000000,    // 유동자산
         '유동부채': 46086047000000, // 유동부채
+        'jan_salary_am': 46173000,
+        'sm': 141,
         'ROE': 12.14,                   // 자기자본이익률 (Return on Equity)
         'ROA': 9.77,                    // 총자산이익률 (Return on Assets)
         '영업이익률': 11.95,       // 영업이익률
@@ -102,6 +106,8 @@ export const reportFullDummyData: ReportFullData = {
         '자본총계': 224787774000000,
         '유동자산': 68548442000000,
         '유동부채': 41775101000000,
+        'jan_salary_am': 46173000,
+        'sm': 141,
         'ROE': 11.3,                   
         'ROA': 8.56,                   
         '영업이익률': -6.77,      
@@ -120,6 +126,8 @@ export const reportFullDummyData: ReportFullData = {
         '자본총계': 236396657000000,
         '유동자산': 82320322000000,
         '유동부채': 80157976000000,
+        'jan_salary_am': 46173000,
+        'sm': 141,
         'ROE': 9.98,                   
         'ROA': 7.26,                   
         '영업이익률': 5.91,       
