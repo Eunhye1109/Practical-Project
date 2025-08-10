@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 // Style import
 import { ThemeProvider } from '@emotion/react';
 import { theme } from 'styles/theme';
+import { LoadingProvider } from 'contexts/LodingContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,9 +16,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <LoadingProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </LoadingProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

@@ -3,6 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import { LoginProvider } from 'contexts/LoginContext';
+import { LoadingProvider, useLoading } from 'contexts/LodingContext';
+import Loading from 'components/atoms/loading/Loading';
 
 // Layouts import
 import MainLayout from 'layouts/MainLayout';
@@ -27,21 +29,23 @@ const Content = styled.main`
 `;
 
 function App() {
+  const {isLoading} = useLoading();
   return (
     <Wrapper>
       <LoginProvider>
-        <MainLayout>
-          <Content>
-            <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/join' element={<Join />} />
-              <Route path='/searchResult' element={<SearchResult />} />
-              <Route path='/mypage' element={<Mypage />} />
-              <Route path='/report' element={<Report />} />
-            </Routes>
-          </Content>
-        </MainLayout>
+          <MainLayout>
+            <Content>
+              <Loading isLoading={isLoading} />
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/join' element={<Join />} />
+                <Route path='/searchResult' element={<SearchResult />} />
+                <Route path='/mypage' element={<Mypage />} />
+                <Route path='/report' element={<Report />} />
+              </Routes>
+            </Content>
+          </MainLayout>
       </LoginProvider>
     </Wrapper>
   );

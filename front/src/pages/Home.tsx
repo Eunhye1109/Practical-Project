@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { hisKeyword, saveKeyword, searchCorp } from 'api/searchApi';
 import { useLogin } from 'contexts/LoginContext';
 import { dataFormat } from 'components/atoms/graphCustom/GraphCustom';
+import { useLoading } from 'contexts/LodingContext';
 
 interface Props {
   readonly bgImg: string;
@@ -100,6 +101,8 @@ const Home = () => {
   const {user} = useLogin();
   // 최근 검색어 저장
   const [recentKeywords, setRecentKeywords] = useState<string[]>([]);
+  // 로딩창
+  const {setLoading} = useLoading();
 
   // 최근 검색어 불러오기
   useEffect(() => {
@@ -122,6 +125,7 @@ const Home = () => {
 
   // 검색 실행
   const handleSearchClick = async () => {
+    setLoading(true);
     try {
       const searchDataList = await searchCorp(corpName);
       if(user?.userId && recentKeywords.every(item => item !== corpName)) {
@@ -151,6 +155,8 @@ const Home = () => {
       
     } catch (e) {
       alert('검색어 저장하기 실패~~~');
+    } finally {
+      setLoading(false);
     }
   }
   return (

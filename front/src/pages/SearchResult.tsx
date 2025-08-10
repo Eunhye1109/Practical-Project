@@ -9,6 +9,7 @@ import { logoDummyData } from 'constants/mypageDummyData';
 import { reportOutput } from 'api/reportApi';
 import { useLogin } from 'contexts/LoginContext';
 import { hisKeyword, saveKeyword, searchCorp } from 'api/searchApi';
+import { useLoading } from 'contexts/LodingContext';
 
 const Container = styled.div`
     // 크기
@@ -128,6 +129,8 @@ const SearchResult = () => {
     const [codeList, setCodeList] = useState(location.state?.code);
     const [searchCorpName, setSearchCorpName] = useState(location.state?.corpName);
     const {user} = useLogin();
+    // 로딩창
+    const {setLoading} = useLoading();
 
     // 스크롤 이벤트 관리
     const [scrolled, setScrolled] = useState(false);
@@ -168,6 +171,7 @@ const SearchResult = () => {
 
     // 기업 선택 -> 리포트 화면 이동
     const handleReportClick = async (corpCode: string) => {
+        setLoading(true);
         try {
             const reportData = await reportOutput(corpCode, user?.riskType ?? '비회원');
             console.log(user?.riskType ?? '비회원');
@@ -176,6 +180,8 @@ const SearchResult = () => {
             navigate('/report', {state: {reportData: reportData, corpCode}});
         } catch (e) {
             alert('실패~~')
+        } finally {
+            setLoading(false);
         }
     }
 
