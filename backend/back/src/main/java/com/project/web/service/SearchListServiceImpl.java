@@ -38,6 +38,8 @@ public class SearchListServiceImpl implements SearchListService{
 	        if (dto.getLogoUrl() == null) dto.setLogoUrl("");
 	        if (dto.getMajor() == null) dto.setMajor("");
 	        if (dto.getCorpCode() == null) dto.setCorpCode("");
+	        if (dto.getCeoName() == null) dto.setCeoName("");   // ← 추가
+	        if (dto.getEstablishDate()   == null) dto.setEstablishDate("");     // ← 추가
 
 	        try {
 				dto.setKeywordsJson(dto.getKeywords() != null

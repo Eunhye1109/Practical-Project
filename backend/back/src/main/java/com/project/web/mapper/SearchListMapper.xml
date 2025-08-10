@@ -6,53 +6,65 @@
 <mapper namespace="com.project.web.mapper.SearchListMapper">
 
 <insert id="insertSearchResult" parameterType="com.project.web.dto.SearchListDTO">
-	INSERT INTO SEARCH_LIST_CACHE (
-        CORP_NAME,
-        STOCK_TYPE,
-        KEYWORDS_JSON,
-        MAJOR,
-        CORP_CODE,
-        GPT_SUMMARY,
-        LOGO_URL
-    ) VALUES (
-        #{corpName,    jdbcType=VARCHAR},
-	    #{stockType,   jdbcType=VARCHAR},
-	    #{keywordsJson,jdbcType=CLOB},      <!-- 서비스에서 JSON 문자열로 세팅 -->
-	    #{major,       jdbcType=VARCHAR},   <!-- ★ null일 때 꼭 필요 -->
-	    #{corpCode,    jdbcType=VARCHAR},
-	    #{gptSummary,  jdbcType=CLOB},
-	    #{logoUrl,     jdbcType=VARCHAR}
-    )
+  INSERT INTO SEARCH_LIST_CACHE (
+    CORP_NAME, STOCK_TYPE, KEYWORDS_JSON, MAJOR, CORP_CODE,
+    GPT_SUMMARY, LOGO_URL, CEO_NAME, ESTABLISH_DATE, CREATED_AT
+  ) VALUES (
+    #{corpName}, #{stockType}, #{keywordsJson}, #{major}, #{corpCode},
+    #{gptSummary}, #{logoUrl}, #{ceoName}, #{establishDate}, SYSDATE
+  )
 </insert>
 
+
 <select id="selectByCorpName" parameterType="String" resultType="com.project.web.dto.SearchListDTO">
-    SELECT
-        CORP_NAME AS corpName,
-        STOCK_TYPE AS stockType,
-        KEYWORDS_JSON AS keywords,
-        MAJOR AS major,
-        CORP_CODE AS corpCode,
-        GPT_SUMMARY AS gptSummary,
-        LOGO_URL AS logoUrl
-    FROM SEARCH_LIST_CACHE
-    WHERE CORP_NAME LIKE '%' || #{corpName} || '%'
+     SELECT
+    CORP_NAME       AS corpName,
+    STOCK_TYPE      AS stockType,
+    KEYWORDS_JSON   AS keywords,
+    MAJOR           AS major,
+    CORP_CODE       AS corpCode,
+    GPT_SUMMARY     AS gptSummary,
+    LOGO_URL        AS logoUrl,
+    CEO_NAME        AS ceoName,
+    ESTABLISH_DATE  AS establishDate
+  FROM SEARCH_LIST_CACHE
+  WHERE CORP_NAME LIKE '%' || #{corpName} || '%'
 </select>
 
 <select id="selectHeaderByCorpCode"
         parameterType="string"
         resultType="com.project.web.vo.SearchListCacheVO">
-   SELECT corpName, logoUrl, major, keywordsJson
-FROM (
+  SELECT corpName, logoUrl, major, keywordsJson
+  FROM (
     SELECT
-        CORP_NAME   AS corpName,
-        LOGO_URL    AS logoUrl,
-        MAJOR       AS major,
-        KEYWORDS_JSON AS keywordsJson
+      CORP_NAME     AS corpName,
+      LOGO_URL      AS logoUrl,
+      MAJOR         AS major,
+      KEYWORDS_JSON AS keywordsJson
     FROM SEARCH_LIST_CACHE
     WHERE CORP_CODE = #{corpCode}
-) 
-WHERE ROWNUM = 1
+    -- 최신 것 우선이면 정렬 컬럼에 맞게 바꿔줘 (예: CREATED_AT DESC)
+  )
+  WHERE ROWNUM = 1
 </select>
+
+<select id="selectInfoBaseByCorpCode"
+        parameterType="string"
+        resultType="com.project.web.vo.InfoBaseVO">
+  SELECT
+    CORP_NAME        AS corpName,
+    STOCK_TYPE       AS stockType,
+    CEO_NAME         AS ceoName,
+    ESTABLISH_DATE   AS establishDate,
+    GPT_SUMMARY      AS gptSummary,
+    LOGO_URL         AS logoUrl
+  FROM SEARCH_LIST_CACHE
+  WHERE CORP_CODE = #{corpCode}
+    AND ROWNUM = 1
+</select>
+
+
+
 
 
 </mapper>

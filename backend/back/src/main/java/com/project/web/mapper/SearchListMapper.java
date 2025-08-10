@@ -13,4 +13,6 @@ public interface SearchListMapper {
 	void insertSearchResult(SearchListDTO dto);
 	List<SearchListDTO> selectByCorpName(String corpName);
 	SearchListCacheVO selectHeaderByCorpCode(@Param("corpCode") String corpCode);
+	SearchListCacheVO selectInfoBaseByCorpCode(@Param("corpCode") String corpCode); // ← 추가
+
 }

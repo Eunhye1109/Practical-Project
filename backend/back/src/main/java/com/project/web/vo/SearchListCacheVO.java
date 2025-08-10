@@ -7,5 +7,11 @@ public class SearchListCacheVO {
     private String corpName;
     private String logoUrl;
     private String major;
-    private String keywordsJson; // JSON 문자열 (예: ["#반도체","#모바일"])
+    private String keywordsJson;
+
+    private String ceoName;
+    private String stockType;
+    private String establishDate;
+    private String gptSummary;
 }
+
