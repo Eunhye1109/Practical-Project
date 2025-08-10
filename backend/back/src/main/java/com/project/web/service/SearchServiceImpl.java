@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.project.web.dto.AiSummaryDTO;
+import com.project.web.dto.HeaderDTO;
 import com.project.web.dto.MatchResultDTO;
 import com.project.web.dto.RadarDTO;
 import com.project.web.dto.ResponseDTO;
@@ -12,6 +13,7 @@ import com.project.web.dto.SearchResultDTO;
 import com.project.web.mapper.SearchHisMapper;
 import com.project.web.mapper.TargetColMapper;
 import com.project.web.utils.ConvertToFlatYearlyListUtil;
+import com.project.web.utils.HeaderAssembler;
 import com.project.web.utils.RadarScoreCalculator;
 import com.project.web.vo.ColumnMatchVO;
 import com.project.web.vo.SearchwordVO;
@@ -30,14 +32,14 @@ public class SearchServiceImpl implements SearchService {
     private final FinancialRatioService financialRatioService;
     private final SearchHisMapper searchHisMapper;
     private final AiSummaryService aiSummaryService;
-
+    private final HeaderAssembler headerAssembler;
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
     @Override
     public SearchResultDTO search(String corpCode, String userPurpose) {
 
     	// 1. FastAPI에서 기업 컬럼 수집
-        System.out.println("📦 [1] FastAPI fetch 시작 → corpName = " + corpCode);
+        System.out.println("📦 [1] FastAPI fetch 시작 → corpCode = " + corpCode);
         Map<String, Object> allYearData = fetchService.fetchColumns(corpCode, userPurpose);
         System.out.println("📦 [1] allYearData.keys = " + allYearData.keySet());
 
@@ -138,9 +140,12 @@ public class SearchServiceImpl implements SearchService {
         List<AiSummaryDTO> aiSummaryList = aiSummaryService.getAiSummaryFromFastAPI(corpName, userPurpose);
         System.out.println("🤖 [AI] 긍부정 분석 결과 수 = " + aiSummaryList.size());
         
+        HeaderDTO header = headerAssembler.buildFromCache(corpCode);
+        
         return SearchResultDTO.builder()
             .corpCode(corpCode)
             .corpName(corpName)
+            .header(header)
             .graphData(flatColumns)
             .rader(radarList)
             .aiSumary(aiSummaryList)
