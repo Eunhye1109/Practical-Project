@@ -12,14 +12,16 @@
         KEYWORDS_JSON,
         MAJOR,
         CORP_CODE,
-        GPT_SUMMARY
+        GPT_SUMMARY,
+        LOGO_URL
     ) VALUES (
-        #{corpName, jdbcType=VARCHAR},
-        #{stockType, jdbcType=VARCHAR},
-        #{keywords, jdbcType=CLOB, typeHandler=com.project.web.handler.JsonTypeHandler},
-        #{major},
-        #{corpCode},
-        #{gptSummary, jdbcType=CLOB}
+        #{corpName,    jdbcType=VARCHAR},
+	    #{stockType,   jdbcType=VARCHAR},
+	    #{keywordsJson,jdbcType=CLOB},      <!-- 서비스에서 JSON 문자열로 세팅 -->
+	    #{major,       jdbcType=VARCHAR},   <!-- ★ null일 때 꼭 필요 -->
+	    #{corpCode,    jdbcType=VARCHAR},
+	    #{gptSummary,  jdbcType=CLOB},
+	    #{logoUrl,     jdbcType=VARCHAR}
     )
 </insert>
 
@@ -30,7 +32,8 @@
         KEYWORDS_JSON AS keywords,
         MAJOR AS major,
         CORP_CODE AS corpCode,
-        GPT_SUMMARY AS gptSummary
+        GPT_SUMMARY AS gptSummary,
+        LOGO_URL AS logoUrl
     FROM SEARCH_LIST_CACHE
     WHERE CORP_NAME LIKE '%' || #{corpName} || '%'
 </select>

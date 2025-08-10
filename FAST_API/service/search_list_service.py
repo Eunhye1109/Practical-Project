@@ -9,6 +9,7 @@ from utils.corp_code import get_corp_list
 from fastapi.responses import JSONResponse
 from prompts.gpt_prompts import gpt_summary
 from utils.api_util import collect_profile
+from utils.logo_utils import get_logo_url
 from utils.config import (
     MAX_COMPANY_COUNT
 )
@@ -70,7 +71,8 @@ def search_list_summary(keyword: str, user_purpose: Optional[str] = None):
                 "stockType": profile.get("상장여부"),
                 "major":summary.get("주요 분야"),
                 "keywords": summary.get("키워드"),
-                "gptSummary": summary.get("한 문장 요약")
+                "gptSummary": summary.get("한 문장 요약"),
+                "logoUrl": get_logo_url(profile.get("회사명"))
                 
             })
         

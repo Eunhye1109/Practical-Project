@@ -2,7 +2,6 @@
 
 from dotenv import load_dotenv
 from openai import OpenAI
-from prompts.prompt_loader import load_prompt
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import os
 
@@ -22,15 +21,12 @@ NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID")
 NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET")
 
 
-# 프롬프트 관련
-SUMMARY_PROMPT_TEMPLATE = load_prompt("prompts/gpt_summary_prompt.txt")
-
 
 # 설정 관련
 SIM_THRESHOLD = 0.8
 YEARS = ["2024", "2023", "2022"]
 DEFAULT_YEAR = "2023"
-MAX_COMPANY_COUNT = 3 # 응답 제한
+MAX_COMPANY_COUNT = 2 # 응답 제한
 
 # DART
 REPRT_CODE=11011

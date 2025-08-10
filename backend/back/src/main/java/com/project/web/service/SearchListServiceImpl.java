@@ -3,6 +3,9 @@ package com.project.web.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.web.dto.SearchListDTO;
 import com.project.web.mapper.SearchListMapper;
 
@@ -30,10 +33,22 @@ public class SearchListServiceImpl implements SearchListService{
 		System.out.println("❌ 캐시 결과 없음 → FastAPI 호출");
 	    List<SearchListDTO> fromFastApi = searchListApiClient.fetchCompanySummaries(corpName, userPurpose);
 
+	    ObjectMapper om = new ObjectMapper();
 	    for (SearchListDTO dto : fromFastApi) {
-	        // ✅ 저장
-	    	System.out.println("📥 DB 저장: " + dto.getCorpName());
+	        if (dto.getLogoUrl() == null) dto.setLogoUrl("");
+	        if (dto.getMajor() == null) dto.setMajor("");
+	        if (dto.getCorpCode() == null) dto.setCorpCode("");
+
+	        try {
+				dto.setKeywordsJson(dto.getKeywords() != null
+				    ? om.writeValueAsString(dto.getKeywords())
+				    : "[]");
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+
 	        searchListMapper.insertSearchResult(dto);
+	        System.out.println("📥 DB 저장: " + dto.getCorpName());
 	    }
 
 	    return fromFastApi;

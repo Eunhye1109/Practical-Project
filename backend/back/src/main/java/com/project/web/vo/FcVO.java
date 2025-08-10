@@ -13,5 +13,6 @@ public class FcVO {
 	    private LocalDateTime createdAt;
 	    private String u_comment;
 	    private String corpCode;
+	    private String logoUrl;
 	   
 }

@@ -12,6 +12,7 @@ import lombok.Singular;
 @Builder
 public class FcDTO {
 
+	private List<>
     private String userId;
     private String corpName;
     private String u_comment;
