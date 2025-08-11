@@ -3,8 +3,8 @@ import styled from '@emotion/styled'
 import { css, Theme } from '@emotion/react';
 
 interface Props {
-    readonly listOnClick: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
-    readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string) => void>;
+    readonly listOnClick: (e: React.MouseEvent<HTMLDivElement>, corpCode: string, corpName?: string) => void;
+    readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string, corpName?: string) => void>;
     readonly widthList: string[];
     readonly data: string | string[];
     readonly typeList: string[];
@@ -126,7 +126,7 @@ const Title = styled.p<{thickness: boolean}>`
 
 const ListItem = ({listOnClick, btnList, widthList, typeList, data, logo, corpCode}: Props) => {
   return (
-    <Container key={corpCode} onClick={(e) => listOnClick(e, corpCode)}>
+    <Container key={corpCode} onClick={(e) => listOnClick(e, corpCode, data[0])}>
         <LogoTitle>
             <Logo src={logo} />
             <div>
@@ -145,7 +145,7 @@ const ListItem = ({listOnClick, btnList, widthList, typeList, data, logo, corpCo
                             type={typeList[index]}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                btnList?.[index]?.(e, corpCode);
+                                btnList?.[index]?.(e, corpCode, data[0]);
                             }}
                         >
                             {tag}

@@ -7,5 +7,3 @@ export interface SearchListDTO {
     keywords: string[]; // 키워드
     corpCode: string; // 기업코드
 }
-
-

@@ -6,7 +6,7 @@ import { ReportInfoBox, ReportNewsBox, ReportSumaryBox } from 'components/molecu
 import { useLogin } from 'contexts/LoginContext';
 import { typoStyle } from 'styles/typoStyle';
 import StableTypeGraph from 'components/organism/StableTypeGraph';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { data, useLocation, useNavigate } from 'react-router-dom';
 import { deleteCorp, saveCorp } from 'api/mypageApi';
 import RegularTypeGraph from 'components/organism/RegularTypeGraph';
 import AttackTypeGraph from 'components/organism/AttackTypeGraph';
@@ -111,7 +111,7 @@ const Report = () => {
             try {
               const res = await saveCorp(user.userId, corpName, memo ?? '');
               console.log(res);
-              alert('메모 포함 저장: 성공');
+              alert(corpName + '이 관심기업에 추가되었습니다.');
             } catch (e) {
               alert('메모 포함 저장: 실패');
             }
@@ -119,7 +119,7 @@ const Report = () => {
             try {
               const res = await saveCorp(user.userId, corpName, '');
               console.log(res);
-              alert('메모 없이 저장: 성공');
+              alert(corpName + '이 관심기업에 추가되었습니다.');
             } catch (e) {
               alert('메모 없이 저장: 실패');
             }
@@ -142,7 +142,7 @@ const Report = () => {
   const handleReportClick = () => {
     console.log('레이더: ', reportData);
   }
-  
+
   return (
     <Container>
       <HeaderContent>

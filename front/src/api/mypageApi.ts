@@ -1,4 +1,5 @@
 import axios from "axios";
+import { addZAxis } from "recharts/types/state/cartesianAxisSlice";
 import { mypageData } from "types/mypage.types";
 import { UpdateUserVO, UserDTO } from "types/user.types";
 
@@ -8,6 +9,18 @@ const BASE_URL = 'http://localhost:8087/api/';
 // 관심기업 저장
 export const saveCorp = async (userId: string, corpName: string, uComment: string) => {
     const res = await axios.post(`${BASE_URL}v1/company?userId=${userId}&corpName=${corpName}&u_comment=${uComment}`);
+    return res.data;
+}
+
+// 관심기업 조회
+export const selectCorp = async (userId: string) => {
+    const res = await axios.get(`${BASE_URL}v1/company/${userId}`);
+    return res.data;
+}
+
+// 관심기업 수정
+export const updateCorpe = async (userId: string, corpName: string, u_comment: string) => {
+    const res = await axios.patch(`${BASE_URL}v1/company/comment?userId=${userId}&corpName=${corpName}&u_comment=${u_comment}`)
     return res.data;
 }
 

@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
 import { List } from 'components/molecules';
 import { useNavigate } from 'react-router-dom';
 import { mypageData } from 'types/mypage.types';
+import { useLogin } from 'contexts/LoginContext';
+import { deleteCorp, updateCorpe } from 'api/mypageApi';
 
 interface Props {
   readonly headerList: Array<{label: string, width: string}>;
@@ -13,6 +15,7 @@ interface Props {
   // readonly dataList: string[][];
   // readonly logoList: string[];
   readonly fullData: mypageData;
+  readonly reData: () => void;
 }
 
 const Container = styled.div`
@@ -47,22 +50,46 @@ const ListBox = styled.div`
   overflow: hidden;
 `;
 
-const Corporation = ({headerList, widthList, notiLabel, typeList, fullData}: Props) => {
+const Corporation = ({headerList, widthList, notiLabel, typeList, fullData, reData}: Props) => {
   const navigate = useNavigate();
+  const {user} = useLogin();
 
   // 빈 함수
   const noop = (e: React.MouseEvent<HTMLElement>, corpCode: string) => {};
   // 메모 수정
-  const handleMemoClick = (e: React.MouseEvent<HTMLElement>, corpCode: string) => {
-    alert('메모수정');
-    alert(corpCode);
+  const handleMemoClick = (e: React.MouseEvent<HTMLElement>, corpCode: string, corpName?: string) => {
+    const memo = prompt('메모를 입력해주세요.');
+    const updateFavoriteCorp = async () => {
+      if(user?.userId) {
+        try {
+          const res = await updateCorpe(user.userId, corpName ?? '', memo ?? '');
+          reData();
+          alert('관심기업이 수정되었습니다.');
+        } catch (e) {
+          alert('수정 실패');
+        }
+      }
+    }
+    updateFavoriteCorp();
   }
   // 등록 해제
-  const handleDeleteClick = (e: React.MouseEvent<HTMLElement>, corpCode: string) => {
-    alert('등록삭제');
+  const handleDeleteClick = (e: React.MouseEvent<HTMLElement>, corpCode: string, corpName?: string) => {
+    const deleteFavoriteCorp = async () => {
+      if(user?.userId) {
+        try {
+          const res = await deleteCorp(user.userId, corpName ?? '');
+          reData();
+          alert('관심기업이 삭제되었습니다.');
+          
+        } catch (e) {
+          alert('삭제 실패');
+        }
+      }
+    }
+    deleteFavoriteCorp();
   }
   // 리포트 페이지로 이동
-  const handleReportClick = (e: React.MouseEvent<HTMLElement>, corpCode: string) => {
+  const handleReportClick = async (e: React.MouseEvent<HTMLElement>, corpCode: string) => {
 
   }
 

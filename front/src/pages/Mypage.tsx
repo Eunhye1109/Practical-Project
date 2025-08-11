@@ -9,6 +9,9 @@ import { typoStyle } from 'styles/typoStyle';
 import { Line } from 'components/atoms';
 import { useTheme } from '@emotion/react';
 import { nullList, corWidthList, corHeaderList, docsHistoryDummyData, docsWidthList, docsHeaderList, corTypeList, docsTypeList, docsDummyDataList, favoriteDummyData } from '../constants/mypageDummyData';
+import { useLogin } from 'contexts/LoginContext';
+import { mypageData } from 'types/mypage.types';
+import { selectCorp } from 'api/mypageApi';
 
 const Container = styled.div`
     // 크기
@@ -95,6 +98,13 @@ const Mypage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const itemList = ['관심기업', '최근조회보고서', '내정보수정', '회원탈퇴'];
     const defaultTab = parseInt(searchParams.get('tab') ?? '0'); // 기본값은 0번 탭
+    const {user} = useLogin();
+    // 관심기업 리스트
+    const [data, setData] = useState<mypageData>({
+        logo: [],
+        corpData: [],
+        corpCode: []
+    });
 
     const [activeTab, setActiveTab] = useState(defaultTab);
 
@@ -109,14 +119,43 @@ const Mypage = () => {
         setActiveTab(tabParam);
     }, [searchParams]);
 
-    // 관심기업 데이터 가공
-    favoriteDummyData.corpData.forEach(item => {
-        item.push('수정', '해제');
-    })
+    // 관심 기업 조회 함수
+    const selectFavoriteCorp = async () => {
+        if(user?.userId) {
+            try {
+            const res = await selectCorp(user.userId);
+            const fullData = res.fcVOList;
+            const newData: mypageData = {
+                logo: fullData.map((item: { logoUrl: string }) => item.logoUrl),
+                corpData: fullData.map((item: { corpName: string; corpSummary: string; u_comment: string }) => [
+                    item.corpName,
+                    item.corpSummary,
+                    item.u_comment
+                ]),
+                corpCode: fullData.map((item: { corpCode: string }) => item.corpCode)
+            };
+            // 관심기업 데이터 가공
+            newData.corpData.forEach(item => {
+                item.push('수정', '해제');
+            })
+            setData(newData);
+            console.log('전체 데이터: ', res);
+            console.log('배열에 있는 데이터: ', fullData);
+            console.log('최종 데이터: ', data);
+            } catch (e) {
+            console.log('실패');
+            }
+        }
+    }
+    // 관심기업 조회
+    useEffect(() => {
+        selectFavoriteCorp();
+    }, [user?.userId])
+
     docsHistoryDummyData.corpData.forEach(item => {
         item.push('등록', '다운');
     })
-
+    
   return (
     <Container>
         <TopPanner>
@@ -136,7 +175,8 @@ const Mypage = () => {
                 widthList={corWidthList}
                 notiLabel='아직 등록된 관심기업이 없습니다.'
                 typeList={corTypeList}
-                fullData={favoriteDummyData}
+                fullData={data}
+                reData={selectFavoriteCorp}
             />}
             {activeTab === 1 && <DocsHistory
                 headerList={docsHeaderList}

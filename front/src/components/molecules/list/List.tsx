@@ -8,8 +8,8 @@ interface Props {
     readonly headerList: Array<{label: string, width: string}>;
     readonly dataList: (string | string[])[];
     readonly widthList: string[];
-    readonly listOnClick: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
-    readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string) => void>;
+    readonly listOnClick: (e: React.MouseEvent<HTMLDivElement>, corpCode: string, corpName?: string) => void;
+    readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string, corpName?: string) => void>;
     readonly nullBtnOnClick?: () => void;
     readonly btnLabel?: string;
     readonly notiLabel?: string;
@@ -49,10 +49,11 @@ const List = ({headerList, dataList, listOnClick, btnList, nullBtnOnClick, width
     <Container>
         <ListHeader headerList={headerList} />
         <Line width='100%' color={theme.colors.natural[20]} />
-        {dataList.length === 0 || dataList === null || dataList === undefined ?
+        {dataList.length === 0 ?
         <NullContent>
             <NotiText>{notiLabel}</NotiText>
-            <Button label={btnLabel ?? ''} variant='default' size='sm' onClick={nullBtnOnClick} />
+            <Button label={btnLabel ?? ''} variant='default' size='sm' onClick={
+                nullBtnOnClick} />
         </NullContent>
         :
         dataList.map((item, index) => (
@@ -64,7 +65,7 @@ const List = ({headerList, dataList, listOnClick, btnList, nullBtnOnClick, width
                     const code = corpCodeList[index];
                     listOnClick?.(e, code);
                 }}
-                btnList={btnList}
+                btnList={btnList?.map(fn => (e: React.MouseEvent<HTMLElement>) => fn(e, corpCodeList[index], item[index]))}
                 widthList={widthList}
                 typeList={typeList}
                 corpCode={corpCodeList[index]}
