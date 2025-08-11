@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.web.mapper.CompanyMapper">
+
+    <!-- 관심 기업 등록 -->
+	<!-- FC.GPT_SUMMARY이 VARCHAR2(4000)인 경우 -->
+<insert id="insertCompany" parameterType="com.project.web.vo.FcVO">
+  INSERT INTO FAVORITE_COMPANY (
+    USER_ID, CORP_NAME, CORP_CODE, U_COMMENT, CREATED_AT
+  )
+  SELECT
+    #{userId},
+    c.CORP_NAME,          
+    #{corpCode},
+    #{uComment},
+    SYSTIMESTAMP
+  FROM SEARCH_LIST_CACHE c
+  WHERE c.CORP_CODE = #{corpCode}
+</insert>
+
+
+
+
+	
+	<!-- CompanyMapper.xml -->
+<select id="selectCompany" resultType="com.project.web.vo.FcVO">
+  SELECT
+    f.USER_ID     AS userId,
+    f.CORP_CODE   AS corpCode,
+    COALESCE(f.CORP_NAME, s.CORP_NAME) AS corpName, 
+    COALESCE(f.LOGO_URL,  s.LOGO_URL)  AS logoUrl,   
+    NVL(f.GPT_SUMMARY, s.GPT_SUMMARY)  AS gptSummary,
+    f.U_COMMENT   AS uComment
+  FROM FAVORITE_COMPANY f
+  LEFT JOIN SEARCH_LIST_CACHE s
+    ON s.CORP_CODE = f.CORP_CODE
+  WHERE f.USER_ID = #{userId}
+  ORDER BY f.CREATED_AT DESC
+</select>
+
+	
+	 <!-- 메모 수정 -->
+	<update id="updateComment">
+  UPDATE FAVORITE_COMPANY
+  SET U_COMMENT = #{uComment}
+  WHERE USER_ID = #{userId} AND CORP_CODE = #{corpCode}
+</update>
+	
+	
+	<!-- 관심 기업 삭제 -->
+	<delete id="deleteCompany">
+	    DELETE FROM FAVORITE_COMPANY
+	    WHERE USER_ID = #{userId} AND CORP_Code = #{corpCode}
+	</delete>
+
+
+</mapper>

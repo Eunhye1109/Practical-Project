@@ -5,6 +5,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+<<<<<<< HEAD
 
 # Windows
 Thumbs.db
@@ -69,3 +70,222 @@ Desktop.ini
 #################################
 # 프로젝트 스택과 무관한 항목은 필요할 때만 추가하세요.
 # 예) Unity, .csproj, .sln 등
+=======
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+#################################
+# 2. 에디터/IDE 설정 파일
+#################################
+# VSCode
+.vscode/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse(STS) 워크스페이스
+.metadata/
+
+#################################
+# 3. 로그 및 환경설정 파일
+#################################
+*.log
+.env
+.env.*
+
+#################################
+# 4. 백엔드 (Spring Boot / Maven or Gradle)
+#################################
+# 빌드 결과물
+**/target/
+**/build/
+
+# Maven wrapper 제외 (필요 시)
+!**/mvnw
+!**/mvnw.cmd
+!**/.mvn/wrapper/maven-wrapper.jar
+
+#################################
+# 5. 프론트엔드 (React / Node.js)
+#################################
+# 종속성
+**/node_modules/
+
+# 빌드 산출물
+**/dist/
+**/build/
+**/.cache/
+
+#################################
+# 6. 민감정보 및 인증서
+#################################
+*.keystore
+*.jks
+*.pem
+*.p12
+*.crt
+*.key
+
+#################################
+# 7. 기타 (필요 시 추가)
+#################################
+# 프로젝트 스택과 무관한 항목은 필요할 때만 추가하세요.
+# 예) Unity, .csproj, .sln 등
+
+# 암호화 jar 파일
+jasypt-cli.jar
+
+# IDE
+.idea/
+*.iml
+
+# 빌드 결과물
+/target/
+*.log
+
+# 환경 변수 / 보안 설정
+application-dev.properties
+application-prod.properties
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+<<<<<<< HEAD
+>>>>>>> ab53b6c96bfcf98cd7912f6992808652582206d4
+=======
+
+#################################
+# 🔥 FastAPI 파이썬 캐시 파일
+#################################
+*.pyc
+__pycache__/
+**/__pycache__/
+FAST_API/**/__pycache__/
+venv/
+backend/back/bin/
+=======
+*.iml
+
+# 빌드 결과물
+/target/
+*.log
+
+# 환경 변수 / 보안 설정
+application-dev.properties
+application-prod.properties
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+#################################
+# 8. Python / FastAPI 관련
+#################################
+
+# Python 바이트코드 캐시
+__pycache__/
+*.py[cod]
+
+# FastAPI에서 생성된 pyc 캐시도 포함됨
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# PyCharm 설정 (이미 IDEA 항목에 일부 있음)
+*.idea/
+*.idea_modules/
+
+# virtualenv
+venv/
+.venv/
+
+# mypy, pytest, coverage
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter notebook
+.ipynb_checkpoints/
+backend/back/bin/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+#################################
+# 2. 에디터/IDE 설정 파일
+#################################
+# VSCode
+.vscode/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse(STS) 워크스페이스
+.metadata/
+
+#################################
+# 3. 로그 및 환경설정 파일
+#################################
+*.log
+.env
+.env.*
+
+#################################
+# 4. 백엔드 (Spring Boot / Maven or Gradle)
+#################################
+# 빌드 결과물
+**/target/
+**/build/
+
+# Maven wrapper 제외 (필요 시)
+!**/mvnw
+!**/mvnw.cmd
+!**/.mvn/wrapper/maven-wrapper.jar
+
+#################################
+# 5. 프론트엔드 (React / Node.js)
+#################################
+# 종속성
+**/node_modules/
+
+# 빌드 산출물
+**/dist/
+**/build/
+**/.cache/
+
+#################################
+# 6. 민감정보 및 인증서
+#################################
+*.keystore
+*.jks
+*.pem
+*.p12
+*.crt
+*.key
+
+#################################
+# 7. 기타 (필요 시 추가)
+#################################
+# 프로젝트 스택과 무관한 항목은 필요할 때만 추가하세요.
+# 예) Unity, .csproj, .sln 등
+.history/
+Set-Content -Path .gitignore -Value @"
+Key.env
+FAST_API/.history/
+FAST_API/utils/__pycache__/
+*.pyc
+"@
+.env
+FAST_API/keys.env
+>>>>>>> 81fbe33b24f22d314028fe5b7db68b1c3b5618ea

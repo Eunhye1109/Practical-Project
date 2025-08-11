@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.web.mapper.SearchHisMapper">
+
+	<insert id="insertHis" parameterType="com.project.web.vo.SearchwordVO">
+	INSERT INTO T_SEARCH_WORD (
+      USER_ID,
+      SEARCH_WORD,
+      CREATED_AT
+	  )
+	  VALUES (
+	      #{userId},
+	      #{searchWord},
+	      SYSDATE
+	  )
+	</insert>
+	
+	<select id="getHis" parameterType="string" resultType="com.project.web.vo.SearchwordVO">
+	   SELECT USER_ID AS userId,
+         SEARCH_WORD AS searchWord
+	  FROM (
+	    SELECT *
+	    FROM T_SEARCH_WORD
+	    WHERE USER_ID = #{userId}
+	    ORDER BY CREATED_AT DESC
+	  )
+	  WHERE ROWNUM &lt;= 3
+	</select>
+
+</mapper>

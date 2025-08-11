@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.web.mapper.SearchCacheMapper">
+
+
+  <select id="existsValidCache" resultType="boolean" parameterType="string">
+  SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+  FROM search_cache
+  WHERE corp_code = #{corpCode}
+    AND cached_at >= ADD_MONTHS(SYSDATE, -3)
+  </select>
+
+
+  <select id="getCachedResult" resultType="com.project.web.vo.SearchCacheVO">
+   SELECT
+    search_cache_idx AS searchCacheIdx,
+    corp_code		  AS corpCode,
+    corp_name         AS corpName,
+    col_name          AS colName,
+    col_value         AS colValue,
+    cached_at         AS cachedAt,
+    years             AS years
+  FROM search_cache
+  WHERE corp_code = #{corpCode}
+  </select>
+
+  <insert id="save" parameterType="com.project.web.vo.SearchCacheVO">
+  INSERT INTO search_cache (
+    search_cache_idx,  <!-- auto increment라면 생략 가능 --> 
+    corp_code,
+    corp_name,
+    col_name,
+    col_value,
+    years,
+    cached_at
+  )
+  VALUES (
+    SEARCH_CACHE_SEQ.NEXTVAL,  <!-- Oracle일 경우 시퀀스 사용 --> 
+    #{corpCode, jdbcType=VARCHAR},
+    #{corpName, jdbcType=VARCHAR},
+    #{colName, jdbcType=VARCHAR},
+    #{colValue, jdbcType=VARCHAR},
+    #{years, jdbcType=VARCHAR},
+    SYSTIMESTAMP  <!-- 또는 #{cachedAt, jdbcType=TIMESTAMP} 사용 가능 --> 
+  )
+</insert>
+
+</mapper>

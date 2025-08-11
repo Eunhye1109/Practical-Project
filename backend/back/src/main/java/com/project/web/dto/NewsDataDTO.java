@@ -1,0 +1,14 @@
+package com.project.web.dto;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class NewsDataDTO {
+
+    private String date;  // "2025.08.08" 형식
+    private String title;
+    private String body;
+    private String link;
+}
