@@ -154,10 +154,8 @@ public class SearchServiceImpl implements SearchService {
 	     // ✅ 인포박스 조립
 	     infoBoxAssembler.build(corpCode, flatColumns);
 	     
-	     List<String> candidateNames = listedCorpRepository.findCandidateNamesForSimilarity(); 
 
-	     List<SimilarCorpDTO> similarCorp =
-	         similarCorpService.fetchTop3(corpName, candidateNames);
+	     List<SimilarCorpDTO> similarCorp = similarCorpService.fetchTop3(corpName);
 	     
 	     List<NewsDataDTO> newsList = fetchService.fetchNewsData(corpName);
 

@@ -8,7 +8,7 @@ from fastapi import HTTPException
 from utils.config import DARTAPI_KEY, YEARS, REPRT_CODE, FS_DIV_OPTIONS
 from utils.corp_code import get_corp_name
 from utils.api_util import fetch_corp_emp_data, fetch_news_articles, fetch_corp_dividend_data
-from utils.logo_utils import get_logo_url
+from utils.canon_util import _build_dividend_canon
 from prompts.gpt_prompts import build_news_summary_prompt
 import logging
 
@@ -22,6 +22,8 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     
     corp_name = get_corp_name(corp_code)
     result = {}
+    result["corpName"] = corp_name
+    result["corpCode"] = corp_code
 
     # ✅ [1] 재무정보 수집
     for year in YEARS:
@@ -60,30 +62,43 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     except Exception as e:
         print(f"⚠️ 인사정보 수집 실패: {e}")
 
-        # ✅ [배당(alot)] 수집/병합
+    # [배당(alot)] 수집/병합
     try:
         alot_data = fetch_corp_dividend_data(corp_code)
 
-        # 🔎 수집된 연도 목록/키 확인
-        print(f"[alot years] {list(alot_data.keys())}")
+        # 1) alot 원본을 result[연도]에 먼저 병합
+        
         for y in YEARS:
             ystr = str(y)
-            keys = sorted(list((alot_data.get(ystr) or {}).keys()))
-            print(f"[alot keys {ystr}] {keys[:50]}")
+            ymap = (alot_data or {}).get(ystr)
+            if ymap:
+                result.setdefault(ystr, {}).update(ymap)
 
-        # 병합
-        for year in YEARS:
-            ystr = str(year)
-            if ystr in alot_data:
-                result.setdefault(ystr, {}).update(alot_data[ystr])
-
-        # 🔎 병합 후 최종 결과에서 배당 관련 키만 확인
+        DEFAULT_DIVIDEND = {
+        "주당 현금배당금(원)": 0,
+        "현금배당수익률(%)": 0.0,
+        "주식배당수익률(%)": 0.0,
+        "(연결)현금배당성향(%)": 0.0,
+        }
+        # 2) 병합 직후 캐논키 생성
         for y in YEARS:
             ystr = str(y)
             if ystr in result:
-                merged_keys = sorted([k for k in result[ystr].keys()
-                                    if ("배당" in k) or ("수익률" in k) or ("성향" in k)])
-                print(f"[merged keys {ystr}] {merged_keys}")
+                canon = _build_dividend_canon(result[ystr])  # ← 이제 원본 키가 존재!
+                result[ystr].update(canon)
+
+                # (선택) 퍼지매칭 원천 차단: 원본 suffix 키 제거
+                for k in list(result[ystr].keys()):
+                    if "|보통주" in k or "|우선주" in k:
+                        del result[ystr][k]
+
+        # 디버그
+        for y in YEARS:
+            ystr = str(y)
+            if ystr in result:
+                keys = sorted([k for k in result[ystr].keys()
+                            if ("배당" in k or "수익률" in k or "성향" in k)])
+                print(f"[final dividend keys {ystr}] {keys}")
 
         print("✅ 배당(alot) 병합 완료")
     except Exception as e:
