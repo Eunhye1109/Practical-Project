@@ -7,7 +7,7 @@ from typing import Optional
 from fastapi import HTTPException
 from utils.config import DARTAPI_KEY, YEARS, REPRT_CODE, FS_DIV_OPTIONS
 from utils.corp_code import get_corp_name
-from utils.api_util import fetch_corp_emp_data, fetch_news_articles
+from utils.api_util import fetch_corp_emp_data, fetch_news_articles, fetch_corp_dividend_data
 from utils.logo_utils import get_logo_url
 from prompts.gpt_prompts import build_news_summary_prompt
 import logging
@@ -60,15 +60,35 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     except Exception as e:
         print(f"⚠️ 인사정보 수집 실패: {e}")
 
-    # ✅ [3] 최종 기본 정보 추가
-    result["corpName"] = corp_name
-    result["corpCode"] = corp_code
-    result["logoUrl"] = get_logo_url(corp_name)
+        # ✅ [배당(alot)] 수집/병합
+    try:
+        alot_data = fetch_corp_dividend_data(corp_code)
 
-    # ✅ [4] 아무것도 없으면 soft return
-    if not any(k in result for k in YEARS):
-        result["warning"] = "수집된 재무 또는 인사정보가 없습니다."
-        
+        # 🔎 수집된 연도 목록/키 확인
+        print(f"[alot years] {list(alot_data.keys())}")
+        for y in YEARS:
+            ystr = str(y)
+            keys = sorted(list((alot_data.get(ystr) or {}).keys()))
+            print(f"[alot keys {ystr}] {keys[:50]}")
+
+        # 병합
+        for year in YEARS:
+            ystr = str(year)
+            if ystr in alot_data:
+                result.setdefault(ystr, {}).update(alot_data[ystr])
+
+        # 🔎 병합 후 최종 결과에서 배당 관련 키만 확인
+        for y in YEARS:
+            ystr = str(y)
+            if ystr in result:
+                merged_keys = sorted([k for k in result[ystr].keys()
+                                    if ("배당" in k) or ("수익률" in k) or ("성향" in k)])
+                print(f"[merged keys {ystr}] {merged_keys}")
+
+        print("✅ 배당(alot) 병합 완료")
+    except Exception as e:
+        print(f"⚠️ 배당(alot) 수집 실패: {e}")
+
     # 뉴스 정보
     try:
         news_data = fetch_news_articles(corp_name)[:3]  # 최대 3개
