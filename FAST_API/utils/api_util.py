@@ -9,20 +9,39 @@ from fastapi import HTTPException
 def collect_profile(corp_code):
     url = "https://opendart.fss.or.kr/api/company.json"
     params = {"crtfc_key": DARTAPI_KEY, "corp_code": corp_code}
-    res = requests.get(url, params=params).json()
-    print(f"🧾 DART 응답: {res}")
-    if res.get("status") != "000":
-        print(f"⚠️ 기업 개요 수집 실패: {corp_code}")
-        return {}
+    try:
+        res = requests.get(url, params=params, timeout=8)  # ← 타임아웃 추가
+        res.raise_for_status()
+        data = res.json()
+    except requests.Timeout:
+        print("⏱️ DART company.json timeout")
+        data = {}
+    except Exception as e:
+        print(f"❌ DART company.json error: {e}")
+        data = {}
+
+    if not data or data.get("status") != "000":
+        print(f"⚠️ 기업 개요 수집 실패: {corp_code}, resp={data}")
+        # 최소 필드만 구성해서 내려주기 (요약은 돌아가게)
+        return {
+            "회사명": None,
+            "상장여부": None,
+            "업종": None,
+            "사업개요": None,
+            "설립일": None,
+            "본사위치": None,
+            "대표자명": None,
+        }
+
     return {
-    "회사명": res.get("corp_name"),
-    "상장여부": "상장" if res.get("stock_code") else "비상장",
-    "업종": res.get("industry"),
-    "사업개요": res.get("business"),
-    "설립일": res.get("est_dt"),
-    "본사위치": res.get("adres"),
-    "대표자명": res.get("ceo_nm"),  # ← 추가
-}
+        "회사명": data.get("corp_name"),
+        "상장여부": "상장" if data.get("stock_code") else "비상장",
+        "업종": data.get("industry"),
+        "사업개요": data.get("business"),
+        "설립일": data.get("est_dt"),
+        "본사위치": data.get("adres"),
+        "대표자명": data.get("ceo_nm"),
+    }
 
 
 
