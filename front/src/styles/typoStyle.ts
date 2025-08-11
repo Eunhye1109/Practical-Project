@@ -9,9 +9,9 @@ export const typoStyle = {
             font-family: ${theme.typo.title1Bold.fontFamily};
         `,
         regular: (theme: AppTheme) => css`
-            font-size: ${theme.typo.title1Bold.fontSize};
-            font-weight: ${theme.typo.title1Bold.fontWeight};
-            font-family: ${theme.typo.title1Bold.fontFamily};
+            font-size: ${theme.typo.title1Regular.fontSize};
+            font-weight: ${theme.typo.title1Regular.fontWeight};
+            font-family: ${theme.typo.title1Regular.fontFamily};
         `
     },
     subTitle: {

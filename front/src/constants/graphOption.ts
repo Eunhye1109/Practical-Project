@@ -1,13 +1,13 @@
 import React from "react";
 
 // 안정형 그래프제목 리스트
-export const stableTypeTitle = ['자본, 부채 구조', '부채비율 3년 평균', '유동비율 3년 평균', '유동 비율 & 레버리지', '유동성 상태', '리스크 신호등']
+export const stableTypeTitle = ['자본, 부채 구조', '부채비율 3년 평균', '유동비율 3년 평균', '유동 비율 & 레버리지', '유동성 상태', '재무 건전성']
 
 // 공격형 그래프제목 리스트
-export const attackTypeTitle = ['매출과 영업이익 추이', '매출 성장률', '순이익 성장률', '수익성 비교', '순이익 추이', '리스크 신호등']
+export const attackTypeTitle = ['매출과 영업이익 추이', '매출 성장률', '순이익 성장률', '수익성 비교', '순이익 추이', '재무 건전성']
 
 // 혼합형 그래프제목 리스트
-export const adminTypeTitle = ['균형 비율', '수익성, 효율', '매출, 영업이익 추이', '리스크 신호등']
+export const adminTypeTitle = ['균형 비율', '수익성, 효율', '매출, 영업이익 추이', '재무 건전성']
 
 // 안정형 그래프리스트
 export const stableType = {

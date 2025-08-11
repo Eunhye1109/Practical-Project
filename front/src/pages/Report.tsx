@@ -11,6 +11,8 @@ import { deleteCorp, saveCorp } from 'api/mypageApi';
 import RegularTypeGraph from 'components/organism/RegularTypeGraph';
 import AttackTypeGraph from 'components/organism/AttackTypeGraph';
 import AdminTypeGraph from 'components/organism/AdminTypeGraph';
+import { useLoading } from 'contexts/LodingContext';
+import PdfReport from 'components/organism/PdfReport';
 
 const Container = styled.div`
   width: 100%;
@@ -89,6 +91,11 @@ const Report = () => {
   const {user} = useLogin();
   // 관심기업 추가되어있는지 안되어있는지
   const [onOff, setOnOff] = useState(false);
+  // 로딩
+  const {setLabel, setLoading} = useLoading();
+  // pdf 만들기
+  const [pdfData, setPdfData] = useState(null);
+  const [showPdf, setShowPdf] = useState(false);
 
   // 관심기업저장 버튼 클릭
   // TODO: 이미 추가 되었나 안되었나 확인하는 로직 추가 필요 -> 백엔드 완성 후 구현
@@ -139,12 +146,30 @@ const Report = () => {
   }
 
   // 리포트생성 버튼 클릭
-  const handleReportClick = () => {
-    console.log('레이더: ', reportData);
+  const handleReportClick = async () => {
+    setLabel('리포트 출력을 준비하는 중입니다...');
+    setLoading(true);
+    try {
+      if (!reportData) {
+      alert('보고서 데이터를 불러오세요.');
+      return;
+    }
+      setPdfData(reportData);
+      setShowPdf(true);
+    } catch (error) {
+      alert('리포트 생성에 실패했습니다. 다시 시도해주세요.');
+    } 
+    
   }
 
+  // PDF 생성 완료 후 호출
+  const handlePdfComplete = () => {
+    setLoading(false);
+    setShowPdf(false); // PDF 컴포넌트 숨기기
+  };
+
   return (
-    <Container>
+    <Container id='pdf'>
       <HeaderContent>
         <ReportHeader
           logoUrl={reportData?.header?.logoUrl ?? ''}
@@ -182,6 +207,8 @@ const Report = () => {
           </BodyText>
         </NotiBox>
       </Content>
+
+      {showPdf && <PdfReport data={reportData} onComplete={handlePdfComplete} />}
     </Container>
   )
 }

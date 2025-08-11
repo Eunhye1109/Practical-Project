@@ -1,9 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
-import { Help } from 'assets/icons';
-import { theme } from 'styles/theme';
-import { Tooltip } from 'react-tooltip';
 import { Line } from 'components/atoms';
 import { useTheme } from '@emotion/react';
 import bg from 'assets/images/bg/background11.png';
