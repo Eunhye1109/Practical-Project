@@ -140,10 +140,10 @@ public class SearchServiceImpl implements SearchService {
         List<Map<String, Object>> flatColumns = ConvertToFlatYearlyListUtil.convert(columnList, ratios);
         String corpName = (String) allYearData.get("corpName");
         
+        
+        
         List<RadarDTO> radarList = RadarScoreCalculator.calculateScores(flatColumns);
         String safePurpose = (userPurpose == null || userPurpose.isBlank()) ? "안정형" : userPurpose;
-        List<AiSummaryDTO> aiSummaryList = aiSummaryService.getAiSummaryFromFastAPI(corpCode, safePurpose);
-        System.out.println("🤖 [AI] 긍부정 분석 결과 수 = " + aiSummaryList.size());
         
         HeaderDTO header = headerAssembler.buildFromCache(corpCode);
 
@@ -154,6 +154,9 @@ public class SearchServiceImpl implements SearchService {
 	     
 	     List<NewsDataDTO> newsList = fetchService.fetchNewsData(corpName);
 
+	     List<AiSummaryDTO> aiSummaryList = aiSummaryService.getAiSummaryFromFastAPI(corpCode, safePurpose, flatColumns, newsList);
+	     System.out.println("🤖 [AI] 긍부정 분석 결과 수 = " + aiSummaryList.size());
+	     
 	     // ❌ 삭제: result.setInfoBox(infoBox);  // 이런 변수 없음. 지워주세요.
 	
 	     // 최종 리턴
