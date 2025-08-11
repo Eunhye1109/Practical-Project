@@ -61,7 +61,7 @@ const TabBox = styled.div`
 
 const TabItem = styled.div<{selected: boolean}>`
     // 크기
-    width: 25%;
+    width: 33.33%;
     // 디스플레이
     display: flex;
     justify-content: start;
@@ -79,6 +79,7 @@ const TabItem = styled.div<{selected: boolean}>`
 
     &:hover {
         opacity: 0.8;
+        color: ${({theme}) => theme.colors.primary[80]};
     }
 `;
 
@@ -96,7 +97,7 @@ const Content = styled.div<{width: string}>`
 const Mypage = () => {
     const theme = useTheme();
     const [searchParams, setSearchParams] = useSearchParams();
-    const itemList = ['관심기업', '최근조회보고서', '내정보수정', '회원탈퇴'];
+    const itemList = ['관심기업', '내정보수정', '회원탈퇴'];
     const defaultTab = parseInt(searchParams.get('tab') ?? '0'); // 기본값은 0번 탭
     const {user} = useLogin();
     // 관심기업 리스트
@@ -178,15 +179,15 @@ const Mypage = () => {
                 fullData={data}
                 reData={selectFavoriteCorp}
             />}
-            {activeTab === 1 && <DocsHistory
+            {/* {activeTab === 1 && <DocsHistory
                 headerList={docsHeaderList}
                 widthList={docsWidthList}
                 notiLabel='최근 3개월 이내에 조회한 기업이 없습니다.'
                 typeList={docsTypeList}
                 fullData={docsHistoryDummyData}
-            />}
-            {activeTab === 2 && <UserInfoSetting />}
-            {activeTab === 3 && <Withdrawal />}
+            />} */}
+            {activeTab === 1 && <UserInfoSetting />}
+            {activeTab === 2 && <Withdrawal />}
         </Content>
     </Container>
   )

@@ -49,10 +49,6 @@ const Navigation = () => {
     const change = !hidePath.includes(location.pathname);
 
     const [nav, setNav] = useState([
-        {label: '관심기업', to: '/mypage?tab=0', icon: <Bookmark />},
-        {label: '최근조회보고서', to: '/mypage?tab=1', icon: <History />},
-        {label: '마이페이지', to: '/mypage?tab=2', icon: <Person />},
-        {label: '로그아웃', to: '/', icon: <Logout />},
         {label: '로그인', to: '/login', icon: <Login />},
         {label: '회원가입', to: '/join', icon: <Join />}
     ]);
@@ -61,8 +57,7 @@ const Navigation = () => {
         if(user !== null) {
             setNav([
                 {label: '관심기업', to: '/mypage?tab=0', icon: <Bookmark />},
-                {label: '최근조회보고서', to: '/mypage?tab=1', icon: <History />},
-                {label: '마이페이지', to: '/mypage?tab=2', icon: <Person />},
+                {label: '마이페이지', to: '/mypage?tab=1', icon: <Person />},
                 {label: '로그아웃', to: '/', icon: <Logout />}
             ])
         } else {
