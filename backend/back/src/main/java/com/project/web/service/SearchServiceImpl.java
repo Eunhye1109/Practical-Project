@@ -141,7 +141,8 @@ public class SearchServiceImpl implements SearchService {
         String corpName = (String) allYearData.get("corpName");
         
         List<RadarDTO> radarList = RadarScoreCalculator.calculateScores(flatColumns);
-        List<AiSummaryDTO> aiSummaryList = aiSummaryService.getAiSummaryFromFastAPI(corpName, userPurpose);
+        String safePurpose = (userPurpose == null || userPurpose.isBlank()) ? "안정형" : userPurpose;
+        List<AiSummaryDTO> aiSummaryList = aiSummaryService.getAiSummaryFromFastAPI(corpCode, safePurpose);
         System.out.println("🤖 [AI] 긍부정 분석 결과 수 = " + aiSummaryList.size());
         
         HeaderDTO header = headerAssembler.buildFromCache(corpCode);
