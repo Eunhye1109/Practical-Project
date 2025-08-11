@@ -68,6 +68,8 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     # ✅ [4] 아무것도 없으면 soft return
     if not any(k in result for k in YEARS):
         result["warning"] = "수집된 재무 또는 인사정보가 없습니다."
+        
+    # 뉴스 정보
     try:
         news_data = fetch_news_articles(corp_name)[:3]  # 최대 3개
         result["newsData"] = news_data
