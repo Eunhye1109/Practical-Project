@@ -1,11 +1,15 @@
 package com.project.web.service;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.project.web.dto.NewsDataDTO;
+
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -25,4 +29,13 @@ public class FetchServiceImpl implements FetchService{
         }
         throw new RuntimeException("FastAPI fetch 호출 실패");
     }
+    
+    public List<NewsDataDTO> fetchNewsData(String corpName) {
+        String url = "http://localhost:8000/news?keyword=" + corpName;
+        ResponseEntity<List<NewsDataDTO>> response =
+            restTemplate.exchange(url, HttpMethod.GET, null,
+                new ParameterizedTypeReference<>() {});
+        return response.getBody();
+    }
+
 }
