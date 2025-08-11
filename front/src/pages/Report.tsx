@@ -85,6 +85,7 @@ const Report = () => {
   const navigate = useNavigate();
   const reportData = location.state?.reportData;
   const corpCode = reportData.corpCode;
+  const corpName = reportData.corpName;
   const {user} = useLogin();
   // 관심기업 추가되어있는지 안되어있는지
   const [onOff, setOnOff] = useState(false);
@@ -108,17 +109,19 @@ const Report = () => {
           if(window.confirm("메모를 추가하시겠습니까?")) {
             const memo = prompt('메모를 입력해주세요.');
             try {
-              const res = await saveCorp(user.userId, corpCode, memo ?? '');
+              const res = await saveCorp(user.userId, corpName, memo ?? '');
               console.log(res);
+              alert('메모 포함 저장: 성공');
             } catch (e) {
-              alert('개가티 실패~~');
+              alert('메모 포함 저장: 실패');
             }
           } else {
             try {
-              const res = await saveCorp(user.userId, corpCode, '');
+              const res = await saveCorp(user.userId, corpName, '');
               console.log(res);
+              alert('메모 없이 저장: 성공');
             } catch (e) {
-              alert('개가티 실패~~');
+              alert('메모 없이 저장: 실패');
             }
           }
         }
@@ -144,7 +147,7 @@ const Report = () => {
     <Container>
       <HeaderContent>
         <ReportHeader
-          imgUrl={reportFullDummyData.header.imgUrl}
+          logoUrl={reportFullDummyData.header.logoUrl}
           corpName={reportData.corpName}
           corpCategory={reportFullDummyData.header.major}
           corpKeyword={reportFullDummyData.header.keyword}

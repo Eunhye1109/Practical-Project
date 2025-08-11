@@ -6,7 +6,7 @@ import { Bookmark, BookmarkStar, Docs, Share } from 'assets/icons';
 import { useTheme } from '@emotion/react';
 
 interface Props {
-  readonly imgUrl: string;
+  readonly logoUrl: string;
   readonly corpName: string;
   readonly corpCategory: string;
   readonly corpKeyword: string[];
@@ -62,11 +62,11 @@ const ButtonTextBox = styled.div`
   gap: 20px;
 `;
 
-const ReportHeader = ({imgUrl, corpName, corpCategory, corpKeyword, shareOnClick, saveOnClick, reportOnClick, onOff}: Props) => {
+const ReportHeader = ({logoUrl, corpName, corpCategory, corpKeyword, shareOnClick, saveOnClick, reportOnClick, onOff}: Props) => {
   const theme = useTheme();
   return (
     <Container>
-        <Logo src={imgUrl} alt={corpName} />
+        <Logo src={logoUrl} alt={corpName} />
         <TextBox>
           <ButtonTextBox>
             <Text textStyle={true}>{corpName}</Text>

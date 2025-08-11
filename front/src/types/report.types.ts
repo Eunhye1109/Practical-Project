@@ -26,7 +26,7 @@ export interface ReportFullData {
   // 기업 기본 소개
   header: {
     corpName: string, // 기업명
-    imgUrl: string, // 로고 url
+    logoUrl: string, // 로고 url
     major: string, // 분야
     keyword: string[]
   },

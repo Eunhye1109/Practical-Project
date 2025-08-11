@@ -6,8 +6,8 @@ import { UpdateUserVO, UserDTO } from "types/user.types";
 const BASE_URL = 'http://localhost:8087/api/';
 
 // 관심기업 저장
-export const saveCorp = async (userId: string, corpCode: string, uComment: string): Promise<mypageData> => {
-    const res = await axios.post<mypageData>(`${BASE_URL}v1/company?userId=${userId}&corpCode=${corpCode}&u_comment=${uComment}`);
+export const saveCorp = async (userId: string, corpName: string, uComment: string) => {
+    const res = await axios.post(`${BASE_URL}v1/company?userId=${userId}&corpName=${corpName}&u_comment=${uComment}`);
     return res.data;
 }
 

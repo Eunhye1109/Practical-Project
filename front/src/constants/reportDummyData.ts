@@ -7,7 +7,7 @@ export const reportFullDummyData: ReportFullData = {
   // 기업 기본 소개
   header: {
     corpName: '무신사',
-    imgUrl: 'https://res.cloudinary.com/zuzu-homepage/image/upload/f_auto,q_auto/v1739446680/p4rn9qxymke0lda94pzk.jpg',
+    logoUrl: 'https://res.cloudinary.com/zuzu-homepage/image/upload/f_auto,q_auto/v1739446680/p4rn9qxymke0lda94pzk.jpg',
     major: '패션',
     keyword: ['키워드1', '키워드2', '키워드3']
   },
