@@ -147,10 +147,10 @@ const Report = () => {
     <Container>
       <HeaderContent>
         <ReportHeader
-          logoUrl={reportFullDummyData.header.logoUrl}
+          logoUrl={reportData.header.logoUrl}
           corpName={reportData.corpName}
-          corpCategory={reportFullDummyData.header.major}
-          corpKeyword={reportFullDummyData.header.keyword}
+          corpCategory={reportData.header.major}
+          corpKeyword={reportData.header.keyword}
           saveOnClick={handleSaveClick}
           shareOnClick={handleShareClick}
           reportOnClick={handleReportClick}
@@ -161,7 +161,7 @@ const Report = () => {
       <Content>
         <ReportInfoBox titleLabel='기업 소개' corpSumary={reportFullDummyData.infoBox.corpSummary} infoData={reportFullDummyData.infoBox.infoData} />
 
-        <ReportSumaryBox data={reportFullDummyData.rader} cropName={reportData.corpName} aiSumaryData={reportFullDummyData.aiSumary} similarCorpData={reportFullDummyData.similarCorp} />
+        <ReportSumaryBox data={reportData.rader} cropName={reportData.corpName} aiSumaryData={reportFullDummyData.aiSumary} similarCorpData={reportFullDummyData.similarCorp} />
 
         {user?.riskType == '안정형' ?
         <StableTypeGraph data={reportData} /> :

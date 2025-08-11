@@ -144,11 +144,6 @@ const SearchResult = () => {
     // 최근 검색어 저장
     const [recentKeywords, setRecentKeywords] = useState<string[]>([]);
 
-    // 정렬 변경 함수
-    const handleSortClick = (clickIndex: number) => {
-        setSortBtn(prev => prev.map((_, index) => index === clickIndex ? 'selected' : 'default'))
-    }
-
     // SearchBar 위치 조정
     useEffect(() => {
         const handleSearchBar = () => {

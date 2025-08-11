@@ -33,6 +33,7 @@ const Logo = styled.img`
   height: 70px;
   // 스타일
   border-radius: 50%;
+  border: 1px solid ${({theme}) => theme.colors.primary[40]};
 `;
 
 const TextBox = styled.div`
