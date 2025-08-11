@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
-import { List, SearchBar } from 'components/molecules';
+import { List, SearchBar, SearchInput } from 'components/molecules';
 import { dropdownOption, modeOption, headerList, typeList, widthList } from '../constants/searchResultOption';
 import TextButton from 'components/atoms/textButton/TextButton';
 import { logoDummyData } from 'constants/mypageDummyData';
@@ -10,6 +10,7 @@ import { reportOutput } from 'api/reportApi';
 import { useLogin } from 'contexts/LoginContext';
 import { hisKeyword, saveKeyword, searchCorp } from 'api/searchApi';
 import { useLoading } from 'contexts/LodingContext';
+import { Search } from 'assets/icons';
 
 const Container = styled.div`
     // 크기
@@ -62,9 +63,11 @@ const SearchBarBox = styled.div<{fixed: boolean}>`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 10px;
     z-index: ${({fixed}) => fixed ? 1000 : 0};
     // 위치
-    margin-top: ${({fixed}) => fixed ? '60px' : '100px'};
+    margin-top: ${({fixed}) => fixed ? '60px' : '110px'};
     position: ${({fixed}) => fixed ? 'fixed' : undefined};
     // 스타일
     background-color: ${({fixed}) => fixed ? 'white' : undefined};
@@ -121,6 +124,25 @@ const SearchListBox = styled.div`
     border: 1px solid ${({theme}) => theme.colors.natural[20]};
 `;
 
+const ReSearchKeywordBox = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const ReSearchKeyword = styled.span<{thick: boolean}>`
+  ${({theme, thick}) => thick ? typoStyle.subBody.semiBold(theme) : typoStyle.subBody.regular(theme)};
+  cursor: ${({thick}) => thick ? 'default' : 'pointer'};
+  color: ${({theme}) => theme.colors.primary[110]};
+
+  :hover {
+    text-decoration: ${({thick}) => thick ? 'none' : 'underline'};
+  }
+`;
+const ReSearchKeywordContent = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
 const SearchResult = () => {
     // 검색 결과 관련
     const location = useLocation();
@@ -159,6 +181,25 @@ const SearchResult = () => {
             window.removeEventListener('scroll', handleSearchBar)
         }
     }, []);
+
+    // 최근 검색어 불러오기
+    useEffect(() => {
+        const fetchKeyword = async () => {
+            if(user?.userId) {
+                try {
+                    const res = await hisKeyword(user.userId);
+                    const list: string[] = [];
+                    {res.map((item) => (
+                    list.push(item.searchWord)
+                    ))}
+                    setRecentKeywords(list);
+                } catch (e) {
+                    alert('불러오기 실패')
+                }
+            }
+        }
+        fetchKeyword();
+    }, [user]);
 
     // 기업 선택 -> 리포트 화면 이동
     const handleReportClick = async (corpCode: string) => {
@@ -239,15 +280,26 @@ const SearchResult = () => {
             </PannerTitleBox>
         </TopPanner>
         <SearchBarBox fixed={scrolled}>
-            <SearchBar
-                itemList={dropdownOption}
-                modeList={modeOption}
+            <SearchInput
+                width='50%'
                 label='기업명을 입력해주세요.'
-                width='85%'
-                value={searchCorpName}
-                onChange={(e) =>setSearchCorpName(e.target.value)}
+                icon={<Search width='100%' height='100%' />}
                 onClick={handleSearchClick}
+                onChange={(e) => {setSearchCorpName(e.target.value)}}
+                value={searchCorpName}
+                align='left'
             />
+            {user ?
+            <ReSearchKeywordBox>
+                <ReSearchKeyword thick={true}>최근 검색어 | </ReSearchKeyword>
+                <ReSearchKeywordContent>
+                {recentKeywords.map((item) => (
+                    <ReSearchKeyword thick={false} onClick={() => setSearchCorpName(item)}>{item}</ReSearchKeyword>
+                ))}
+                </ReSearchKeywordContent>
+            </ReSearchKeywordBox> :
+            undefined
+            }
         </SearchBarBox>
         <Content fixed={scrolled}>
             <SearchControllBar>
