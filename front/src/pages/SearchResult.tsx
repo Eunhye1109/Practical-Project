@@ -167,8 +167,14 @@ const SearchResult = () => {
             const reportData = await reportOutput(corpCode, user?.riskType ?? '비회원');
             console.log(user?.riskType ?? '비회원');
             console.log('리포트 전체 데이터: ', reportData);
-            navigate('/report', {state: {reportData: reportData, userType: user?.riskType ?? '비회원'}});
+            if(reportData.header === null || reportData.infoBox === null) {
+                alert('최근 3개년 데이터가 없어 리포트를 제공할 수 없습니다.');
+            } else {
+                navigate('/report', {state: {reportData: reportData, userType: user?.riskType ?? '비회원'}});
+            }
         } catch (e) {
+            alert('최근 3개년 데이터가 없어 리포트를 제공할 수 없습니다.');
+            console.log(codeList);
         } finally {
             setLoading(false);
         }
@@ -209,6 +215,11 @@ const SearchResult = () => {
                 dataList.push(values.slice(1, values.length - 1));
                 codeList.push(lastValue);
                 logoList.push(firstValue);
+                console.log('밸류: ', values);
+                console.log('데이터: ', dataList);
+                console.log('코드: ', codeList);
+                console.log('로고: ', logoList);
+                
             });
             setSearchRes(dataList);
             setCodeList(codeList);

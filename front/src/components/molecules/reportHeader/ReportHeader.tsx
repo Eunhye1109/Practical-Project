@@ -67,7 +67,7 @@ const ReportHeader = ({logoUrl, corpName, corpCategory, corpKeyword, shareOnClic
   const theme = useTheme();
   return (
     <Container>
-        <Logo src={logoUrl} alt={corpName} />
+        <Logo src={logoUrl === null ? '' : logoUrl} alt={corpName} />
         <TextBox>
           <ButtonTextBox>
             <Text textStyle={true}>{corpName}</Text>

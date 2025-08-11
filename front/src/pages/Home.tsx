@@ -7,7 +7,6 @@ import bg from '../assets/images/bg/background06.png';
 import { useNavigate } from 'react-router-dom';
 import { hisKeyword, saveKeyword, searchCorp } from 'api/searchApi';
 import { useLogin } from 'contexts/LoginContext';
-import { dataFormat } from 'components/atoms/graphCustom/GraphCustom';
 import { useLoading } from 'contexts/LodingContext';
 
 interface Props {
@@ -138,13 +137,16 @@ const Home = () => {
       searchDataList.forEach(item => {
         const values = Object.values(item);
         const firstValue = values[0];
-        const lastValue = values[values.length - 2];
-        console.log(values);
+        const lastValue = values[values.length - 1];
         
 
         dataList.push(values.slice(1, values.length - 1));
         codeList.push(lastValue);
         logoList.push(firstValue);
+        console.log('밸류: ', values);
+        console.log('데이터: ', dataList);
+        console.log('코드: ', codeList);
+        console.log('로고: ', logoList);
       });
       if(searchDataList[0]) {
         navigate('/searchResult', { state: { res: dataList, code: codeList, corpName: corpName, logo: logoList } });

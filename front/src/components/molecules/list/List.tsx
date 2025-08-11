@@ -8,7 +8,7 @@ interface Props {
     readonly headerList: Array<{label: string, width: string}>;
     readonly dataList: (string | string[])[];
     readonly widthList: string[];
-    readonly listOnClick: (e: React.MouseEvent<HTMLDivElement>, corpCode: string, corpName?: string) => void;
+    readonly listOnClick: (e: React.MouseEvent<HTMLDivElement>, corpCode: string) => void;
     readonly btnList?: Array<(e: React.MouseEvent<HTMLElement>, corpCode: string, corpName?: string) => void>;
     readonly nullBtnOnClick?: () => void;
     readonly btnLabel?: string;

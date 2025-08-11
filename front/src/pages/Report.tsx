@@ -147,10 +147,10 @@ const Report = () => {
     <Container>
       <HeaderContent>
         <ReportHeader
-          logoUrl={reportData.header.logoUrl}
-          corpName={reportData.corpName}
-          corpCategory={reportData.header.major}
-          corpKeyword={reportData.header.keyword}
+          logoUrl={reportData?.header?.logoUrl ?? ''}
+          corpName={reportData?.corpName ?? '정보 없음'}
+          corpCategory={reportData?.header?.major ?? '정보 없음'}
+          corpKeyword={reportData?.header?.keyword ?? '정보 없음'}
           saveOnClick={handleSaveClick}
           shareOnClick={handleShareClick}
           reportOnClick={handleReportClick}
@@ -159,7 +159,7 @@ const Report = () => {
       </HeaderContent>
 
       <Content>
-        <ReportInfoBox titleLabel='기업 소개' corpSumary={reportFullDummyData.infoBox.corpSummary} infoData={reportFullDummyData.infoBox.infoData} />
+        <ReportInfoBox titleLabel='기업 소개' corpSumary={reportData?.infoBox?.corpSummary ?? '정보없음'} infoData={reportData?.infoBox?.infoData ?? '정보없음'} />
 
         <ReportSumaryBox data={reportData.rader} cropName={reportData.corpName} aiSumaryData={reportFullDummyData.aiSumary} similarCorpData={reportFullDummyData.similarCorp} />
 

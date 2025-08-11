@@ -63,6 +63,19 @@ const InfoBox = styled.div<{width: string}>`
     gap: 5px;
 `;
 
+// 숫자 단위 변환 함수 (예: 123456789 -> "1억")
+const formatToUnit = (value: string) => {
+    const num = Number(value.replace(/[^0-9]/g, ''));
+    
+  if (num >= 100_000_000) {
+    return `${Math.floor(num / 100_000_000)}억`;
+  } else if (num >= 10_000) {
+    return `${Math.floor(num / 10_000)}만`;
+  }
+  
+  return num;
+};
+
 const ReportInfoBox = ({titleLabel, corpSumary, infoData}: Props) => {
     const infoCategory = ['CEO', '상장여부', '연간매출', '고용인원', '설립일자'];
   return (
@@ -76,7 +89,7 @@ const ReportInfoBox = ({titleLabel, corpSumary, infoData}: Props) => {
             {infoData.map((info, index) => (
                 <InfoBox width={100 / infoData.length + '%'}>
                     <BodyText>{infoCategory[index]}</BodyText>
-                    <SubTitleLabel>{info}</SubTitleLabel>
+                    <SubTitleLabel>{info === null ? '정보 없음' : (index === 2 ? formatToUnit(info) + '원' : info)}</SubTitleLabel>
                 </InfoBox>
             ))}
         </ContentBox>
