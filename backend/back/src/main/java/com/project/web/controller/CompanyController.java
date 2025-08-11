@@ -29,8 +29,8 @@ public class CompanyController {
 	
 	@Operation(summary = "관심 기업 등록")
 	@PostMapping
-	public ResponseEntity<FcDTO> insertCompany(@RequestParam String userId,@RequestParam String corpName, @RequestParam String u_comment) {
-		FcDTO response = companyService.insertCompany(userId, corpName, u_comment);
+	public ResponseEntity<FcDTO> insertCompany(@RequestParam String userId,@RequestParam String corpCode, @RequestParam String uComment) {
+		FcDTO response = companyService.insertCompany(userId, corpCode, uComment);
 	    return new ResponseEntity<>(response, response.getSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
 	}
 	
@@ -46,16 +46,16 @@ public class CompanyController {
      // 메모 수정
 	@Operation(summary = "관심 기업 수정")
     @PatchMapping("/comment")
-    public ResponseEntity<FcDTO> updateComment(@RequestParam String userId, @RequestParam String corpName, @RequestParam String u_comment) {
-        FcDTO response = companyService.updateComment(userId, corpName, u_comment);
+    public ResponseEntity<FcDTO> updateComment(@RequestParam String userId, @RequestParam String corpCode, @RequestParam String uComment) {
+        FcDTO response = companyService.updateComment(userId, corpCode, uComment);
         return new ResponseEntity<>(response, response.getSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     // 관심 기업 삭제
 	@Operation(summary = "관심 기업 삭제")
-    @DeleteMapping("/{userId}/{corpName}")
-    public ResponseEntity<FcDTO> deleteCompany(@PathVariable String userId, @PathVariable String corpName) {
-        FcDTO response = companyService.deleteCompany(userId, corpName);
+    @DeleteMapping("/{userId}/{corpCode}")
+    public ResponseEntity<FcDTO> deleteCompany(@PathVariable String userId, @PathVariable String corpCode) {
+        FcDTO response = companyService.deleteCompany(userId, corpCode);
         return new ResponseEntity<>(response, response.getSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 }

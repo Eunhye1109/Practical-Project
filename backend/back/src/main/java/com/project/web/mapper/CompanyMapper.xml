@@ -6,36 +6,55 @@
 <mapper namespace="com.project.web.mapper.CompanyMapper">
 
     <!-- 관심 기업 등록 -->
-	<insert id="insertCompany">
-	    INSERT INTO FAVORITE_COMPANY (USER_ID, CORP_NAME, LOGO_URL, U_COMMENT)
-	    VALUES (#{userId}, #{corpName}, #{logoUrl, jdbcType=VARCHAR}, #{u_comment})
-	</insert>
+	<!-- FC.GPT_SUMMARY이 VARCHAR2(4000)인 경우 -->
+<insert id="insertCompany" parameterType="com.project.web.vo.FcVO">
+  INSERT INTO FAVORITE_COMPANY (
+    USER_ID, CORP_NAME, CORP_CODE, U_COMMENT, CREATED_AT
+  )
+  SELECT
+    #{userId},
+    c.CORP_NAME,          
+    #{corpCode},
+    #{uComment},
+    SYSTIMESTAMP
+  FROM SEARCH_LIST_CACHE c
+  WHERE c.CORP_CODE = #{corpCode}
+</insert>
+
+
+
+
 	
-	<select id="selectCompany" resultType="com.project.web.vo.FcVO">
-    SELECT 
-        FC_IDX AS fc_idx,
-        USER_ID AS userId,
-        CORP_NAME AS corpName,
-        CREATED_AT AS createdAt,
-        LOGO_URL AS logoUrl,
-        U_COMMENT AS u_comment
-    FROM FAVORITE_COMPANY
-    WHERE USER_ID = #{userId}
-    ORDER BY CREATED_AT DESC
+	<!-- CompanyMapper.xml -->
+<select id="selectCompany" resultType="com.project.web.vo.FcVO">
+  SELECT
+    f.USER_ID     AS userId,
+    f.CORP_CODE   AS corpCode,
+    COALESCE(f.CORP_NAME, s.CORP_NAME) AS corpName, 
+    COALESCE(f.LOGO_URL,  s.LOGO_URL)  AS logoUrl,   
+    NVL(f.GPT_SUMMARY, s.GPT_SUMMARY)  AS gptSummary,
+    f.U_COMMENT   AS uComment
+  FROM FAVORITE_COMPANY f
+  LEFT JOIN SEARCH_LIST_CACHE s
+    ON s.CORP_CODE = f.CORP_CODE
+  WHERE f.USER_ID = #{userId}
+  ORDER BY f.CREATED_AT DESC
 </select>
+
 	
 	 <!-- 메모 수정 -->
-	<update id="updateComment" parameterType="com.project.web.vo.FcVO">
-    UPDATE FAVORITE_COMPANY
-    SET U_COMMENT = #{u_comment}
-    WHERE USER_ID = #{userId} AND CORP_NAME = #{corpName}
+	<update id="updateComment">
+  UPDATE FAVORITE_COMPANY
+  SET U_COMMENT = #{uComment}
+  WHERE USER_ID = #{userId} AND CORP_CODE = #{corpCode}
 </update>
 	
 	
 	<!-- 관심 기업 삭제 -->
 	<delete id="deleteCompany">
 	    DELETE FROM FAVORITE_COMPANY
-	    WHERE USER_ID = #{userId} AND CORP_NAME = #{corpName}
+	    WHERE USER_ID = #{userId} AND CORP_Code = #{corpCode}
 	</delete>
+
 
 </mapper>

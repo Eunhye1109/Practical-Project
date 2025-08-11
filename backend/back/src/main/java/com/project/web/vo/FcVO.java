@@ -1,18 +1,22 @@
 package com.project.web.vo;
 
-import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FcVO {
-	  	private Long fc_idx; 
 	    private String userId;
 	    private String corpName;
-	    private LocalDateTime createdAt;
-	    private String u_comment;
+	    private String uComment;
 	    private String corpCode;
 	    private String logoUrl;
+	    private String gptSummary; 
 	   
 }
