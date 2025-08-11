@@ -1,5 +1,6 @@
 from utils.config import CLIENT
-import json
+import json, re
+from datetime import datetime
 
 # # ✅ GPT 요약 프롬프트 (기업 개요 기반)
 # def build_summary_prompt(profile: dict, investor_type: str) -> str:
@@ -25,19 +26,30 @@ import json
 
 # ✅ GPT 뉴스 요약 프롬프트
 def build_news_summary_prompt(news_items: list, sentiments: list) -> str:
+    def clean_html(raw_text):
+        clean = re.compile('<.*?>')
+        return re.sub(clean, '', raw_text).strip()
+    def format_date(date_str):
+        try:
+            dt = datetime.strptime(date_str, '%a, %d %b %Y %H:%M:%S %z')
+            return dt.strftime('%Y.%m.%d')
+        except Exception:
+            return date_str
     joined = "\n".join(
-        f"- {item['title']} ({sentiment})\n  {item['link']}"
-        for item, sentiment in zip(news_items, sentiments)
+        f"- [{format_date(item['date'])}] {clean_html(item['title'])}\n"
+        f"  {clean_html(item['body'])}\n"
+        f"  링크: {item['link']}"
+        for item in news_items
     )
 
-    prompt = f"""
+    prompt_lines = f"""
 다음은 특정 기업과 관련된 최근 뉴스 제목, 링크, 감성 분석 결과입니다.
 이 기업의 투자 관점에서 핵심 뉴스 흐름과 긍·부정 시사점을 요약해 주세요.
 
 [뉴스 목록]
 {joined}
 """
-    return prompt
+    return "\n".join(prompt_lines)
 
 
 

@@ -62,11 +62,12 @@ const Corporation = ({headerList, widthList, notiLabel, typeList, fullData, reDa
     const updateFavoriteCorp = async () => {
       if(user?.userId) {
         try {
-          const res = await updateCorpe(user.userId, corpName ?? '', memo ?? '');
+          const res = await updateCorpe(user.userId, corpCode ?? '', memo ?? '');
           reData();
           alert('관심기업이 수정되었습니다.');
         } catch (e) {
           alert('수정 실패');
+          console.log(corpCode);
         }
       }
     }
@@ -77,12 +78,14 @@ const Corporation = ({headerList, widthList, notiLabel, typeList, fullData, reDa
     const deleteFavoriteCorp = async () => {
       if(user?.userId) {
         try {
-          const res = await deleteCorp(user.userId, corpName ?? '');
+          const res = await deleteCorp(user.userId, corpCode ?? '');
           reData();
           alert('관심기업이 삭제되었습니다.');
           
         } catch (e) {
           alert('삭제 실패');
+          console.log(corpCode);
+          
         }
       }
     }

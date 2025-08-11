@@ -15,13 +15,15 @@ def collect_profile(corp_code):
         print(f"⚠️ 기업 개요 수집 실패: {corp_code}")
         return {}
     return {
-        "회사명": res.get("corp_name"),
-        "상장여부": "상장" if res.get("stock_code") else "비상장",
-        "업종": res.get("industry"),            # 추가
-        "사업개요": res.get("business"),         # 추가
-        "설립일": res.get("est_dt"),            # 선택
-        "본사위치": res.get("adres"),           # 선택
-    }
+    "회사명": res.get("corp_name"),
+    "상장여부": "상장" if res.get("stock_code") else "비상장",
+    "업종": res.get("industry"),
+    "사업개요": res.get("business"),
+    "설립일": res.get("est_dt"),
+    "본사위치": res.get("adres"),
+    "대표자명": res.get("ceo_nm"),  # ← 추가
+}
+
 
 
 def fetch_corp_emp_data(corp_code: str) -> dict:
@@ -88,8 +90,17 @@ def fetch_news_articles(keyword: str, max_count: int = 5):
     res = requests.get(url, headers=headers, params=params)
     if res.status_code != 200:
         return []
-    return [{
-        "title": item["title"],
-        "description": item["description"],
-        "link": item["link"]
-    } for item in res.json().get("items", [])]
+    news_list = []
+    for item in res.json().get("items", []):
+        # pubDate → YYYY.MM.DD 변환
+        from datetime import datetime
+        date_str = datetime.strptime(item["pubDate"], "%a, %d %b %Y %H:%M:%S %z").strftime("%Y.%m.%d")
+
+        news_list.append({
+            "date": date_str,
+            "title": item["title"],
+            "body": item["description"],
+            "link": item["link"]
+        })
+
+    return news_list

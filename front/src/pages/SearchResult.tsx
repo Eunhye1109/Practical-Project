@@ -4,8 +4,6 @@ import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
 import { List, SearchBar, SearchInput } from 'components/molecules';
 import { dropdownOption, modeOption, headerList, typeList, widthList } from '../constants/searchResultOption';
-import TextButton from 'components/atoms/textButton/TextButton';
-import { logoDummyData } from 'constants/mypageDummyData';
 import { reportOutput } from 'api/reportApi';
 import { useLogin } from 'contexts/LoginContext';
 import { hisKeyword, saveKeyword, searchCorp } from 'api/searchApi';
@@ -209,8 +207,8 @@ const SearchResult = () => {
             const reportData = await reportOutput(corpCode, user?.riskType ?? '비회원');
             console.log(user?.riskType ?? '비회원');
             console.log('리포트 전체 데이터: ', reportData);
-            if(reportData.header === null || reportData.infoBox === null) {
-                alert('최근 3개년 데이터가 없어 리포트를 제공할 수 없습니다.');
+            if (reportData.header === null || reportData.infoBox === null){
+                alert('최근 3개년 데이터가 없어 리포트를 제공할 수 없습니다. -> null 이슈');
             } else {
                 navigate('/report', {state: {reportData: reportData, userType: user?.riskType ?? '비회원'}});
             }

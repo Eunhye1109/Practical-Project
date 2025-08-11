@@ -7,8 +7,8 @@ import { UpdateUserVO, UserDTO } from "types/user.types";
 const BASE_URL = 'http://localhost:8087/api/';
 
 // 관심기업 저장
-export const saveCorp = async (userId: string, corpName: string, uComment: string) => {
-    const res = await axios.post(`${BASE_URL}v1/company?userId=${userId}&corpName=${corpName}&u_comment=${uComment}`);
+export const saveCorp = async (userId: string, corpCode: string, uComment: string) => {
+    const res = await axios.post(`${BASE_URL}v1/company?userId=${userId}&corpCode=${corpCode}&uComment=${uComment}`);
     return res.data;
 }
 
@@ -19,14 +19,14 @@ export const selectCorp = async (userId: string) => {
 }
 
 // 관심기업 수정
-export const updateCorpe = async (userId: string, corpName: string, u_comment: string) => {
-    const res = await axios.patch(`${BASE_URL}v1/company/comment?userId=${userId}&corpName=${corpName}&u_comment=${u_comment}`)
+export const updateCorpe = async (userId: string, corpCode: string, uComment: string) => {
+    const res = await axios.patch(`${BASE_URL}v1/company/comment?userId=${userId}&corpCode=${corpCode}&uComment=${uComment}`)
     return res.data;
 }
 
 // 관심기업 삭제
-export const deleteCorp = async (userId: string, corpName: string) => {
-    const res = await axios.delete(`${BASE_URL}v1/company/${userId}/${corpName}`);
+export const deleteCorp = async (userId: string, corpCode: string) => {
+    const res = await axios.delete(`${BASE_URL}v1/company/${userId}/${corpCode}`);
     return res.data.success;
 }
 

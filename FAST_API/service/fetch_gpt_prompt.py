@@ -21,3 +21,5 @@ def analyze_ai_summary(request: AiSummaryRequest):
     emotion = labels[label_id]
 
     return [AiSummaryResponse(emotion=emotion, sumary=summary)]
+
+

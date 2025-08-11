@@ -100,7 +100,7 @@ const Report = () => {
       if(onOff) {
         setOnOff(false);
         try {
-          const res = deleteCorp(user.userId, reportData.header.corpName);
+          const res = deleteCorp(user.userId, corpCode);
           alert('관심기업이 삭제되었습니다.');
         } catch (e) {
           alert('삭제 실패~~~');
@@ -109,7 +109,7 @@ const Report = () => {
           if(window.confirm("메모를 추가하시겠습니까?")) {
             const memo = prompt('메모를 입력해주세요.');
             try {
-              const res = await saveCorp(user.userId, corpName, memo ?? '');
+              const res = await saveCorp(user.userId, corpCode, memo ?? '');
               console.log(res);
               alert(corpName + '이 관심기업에 추가되었습니다.');
             } catch (e) {
@@ -117,7 +117,7 @@ const Report = () => {
             }
           } else {
             try {
-              const res = await saveCorp(user.userId, corpName, '');
+              const res = await saveCorp(user.userId, corpCode, '');
               console.log(res);
               alert(corpName + '이 관심기업에 추가되었습니다.');
             } catch (e) {
@@ -172,7 +172,7 @@ const Report = () => {
         // 비회원
         <RegularTypeGraph data={reportData} />)}
         
-        <ReportNewsBox newsData={reportFullDummyData.newsData} corpName={reportData.corpName} />
+        <ReportNewsBox newsData={reportData.newsData} corpName={reportData.corpName} />
         
         <NotiBox>
           <BodyText>

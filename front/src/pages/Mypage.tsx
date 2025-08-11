@@ -128,18 +128,20 @@ const Mypage = () => {
             const fullData = res.fcVOList;
             const newData: mypageData = {
                 logo: fullData.map((item: { logoUrl: string }) => item.logoUrl),
-                corpData: fullData.map((item: { corpName: string; corpSummary: string; u_comment: string }) => [
+                corpData: fullData.map((item: { corpName: string; gptSummary: string; ucomment: string }) => [
                     item.corpName,
-                    item.corpSummary,
-                    item.u_comment
+                    item.gptSummary,
+                    item.ucomment
                 ]),
                 corpCode: fullData.map((item: { corpCode: string }) => item.corpCode)
             };
+            
             // 관심기업 데이터 가공
             newData.corpData.forEach(item => {
                 item.push('수정', '해제');
             })
             setData(newData);
+            console.log('뉴 데이터: ', newData);
             console.log('전체 데이터: ', res);
             console.log('배열에 있는 데이터: ', fullData);
             console.log('최종 데이터: ', data);

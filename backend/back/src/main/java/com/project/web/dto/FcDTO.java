@@ -1,27 +1,33 @@
 package com.project.web.dto;
 
+
 import java.util.List;
 
 import com.project.web.vo.FcVO;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Singular;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FcDTO {
-
-	// private List<>
     private String userId;
-    private String corpName;
-    private String u_comment;
-    private String corpCode;
-     // ✅ VO와 이름 일치
 
-    @Singular("fc")            // ✅ 리스트 빌더 안정성 강화
-    private List<FcVO> fcVOList;
+    // ✅ corpCode/Name 동시 제공
+    private String corpCode;
+    private String corpName;
+
+    // ✅ 응답 본문에 바로 포함
+    private String logoUrl;
+    private String gptSummary;
+    private String uComment;
 
     private Boolean success;
     private String message;
+    private List<FcVO> fcVOList;
+
 }

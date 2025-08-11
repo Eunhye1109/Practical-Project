@@ -140,6 +140,12 @@ const RiskRank = styled.span`
     color: white;
 `;
 
+const TestBox = styled.div`
+    width: 100%;
+    height: 100%;
+    background-color: red;
+`;
+
 const ReportNewsBox = ({newsData, corpName}: Props) => {
     const theme = useTheme();
   return (
@@ -148,22 +154,27 @@ const ReportNewsBox = ({newsData, corpName}: Props) => {
             <TextBox>
                 <TitleBox>
                     <TitleLabel>연관기사</TitleLabel>
-                    <Help color={theme.colors.primary[80]} data-tooltip-id='id00' width={20} />
-                    <Tooltip id='id00'>해당 지표 근거 ~~~</Tooltip>
                 </TitleBox>
             </TextBox>
             <Line width='100%' color={theme.colors.natural[15]} margin='10px' />
-            <NewsContent>
-                {newsData.map((item) => (
-                    <NewsItemBox>
-                        <NewsTitle href={item.url} width='70%'>
-                            <NewsItem width='100%' thickness={true} color={theme.colors.natural[60]} position={false}>{item.title}</NewsItem>
-                            <NewsItem width='100%' thickness={false} color={theme.colors.natural[40]} position={false}>{item.body}</NewsItem>
-                        </NewsTitle>
-                        <NewsItem width='30%' thickness={false} color={theme.colors.natural[40]} position={true}>{item.date}</NewsItem>
-                    </NewsItemBox>
-                ))}
-            </NewsContent>
+            {newsData === null ? 
+                <TestBox>
+                    <NewsTitle href={''} width='70%'>
+                        <NewsItem width='100%' thickness={true} color={theme.colors.natural[60]} position={false}>연관기사를 찾지 못했습니다.</NewsItem>
+                    </NewsTitle>
+                </TestBox>
+                : <NewsContent>
+                    {newsData.map((item) => (
+                        <NewsItemBox>
+                            <NewsTitle href={item.url} width='70%'>
+                                <NewsItem width='100%' thickness={true} color={theme.colors.natural[60]} position={false}>{item.title}</NewsItem>
+                                <NewsItem width='100%' thickness={false} color={theme.colors.natural[40]} position={false}>{item.body}</NewsItem>
+                            </NewsTitle>
+                            <NewsItem width='30%' thickness={false} color={theme.colors.natural[40]} position={true}>{item.date}</NewsItem>
+                        </NewsItemBox>
+                    ))}
+                </NewsContent>
+            }
         </Content>
 
         <NewContent>

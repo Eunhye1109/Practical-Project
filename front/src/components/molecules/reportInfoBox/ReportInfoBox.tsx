@@ -76,22 +76,29 @@ const formatToUnit = (value: string) => {
   return num;
 };
 
+// 날짜 데이터 변환 함수
+const formatDate = (value: string) => {
+    let date = value.replace(/[-]/g, '.');
+    date = date.replace(' 00:00:00', '')
+  return date;
+};
+
 const ReportInfoBox = ({titleLabel, corpSumary, infoData}: Props) => {
     const infoCategory = ['CEO', '상장여부', '연간매출', '고용인원', '설립일자'];
   return (
     <Container>
         <TextBox>
             <TitleLabel>{titleLabel}</TitleLabel>
-            <BodyText>{corpSumary}</BodyText>
+            <BodyText>{corpSumary ?? '정보 없음'}</BodyText>
         </TextBox>
         <Line width='100%' color='white' margin='30px' />
         <ContentBox>
-            {infoData.map((info, index) => (
+            {infoData ? infoData.map((info, index) => (
                 <InfoBox width={100 / infoData.length + '%'}>
                     <BodyText>{infoCategory[index]}</BodyText>
-                    <SubTitleLabel>{info === null ? '정보 없음' : (index === 2 ? formatToUnit(info) + '원' : info)}</SubTitleLabel>
+                    <SubTitleLabel>{info === null ? '정보 없음' : (index === 2 ? formatToUnit(info) + '원' : (index === 4 ? formatDate(info) : info))}</SubTitleLabel>
                 </InfoBox>
-            ))}
+            )) : undefined}
         </ContentBox>
     </Container>
   )
