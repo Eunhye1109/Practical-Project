@@ -29,13 +29,13 @@ const Content = styled.main`
 `;
 
 function App() {
-  const {isLoading} = useLoading();
+  const {isLoading, label, url} = useLoading();
   return (
     <Wrapper>
       <LoginProvider>
           <MainLayout>
             <Content>
-              <Loading isLoading={isLoading} />
+              <Loading isLoading={isLoading} label={label} url={url} />
               <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/login' element={<Login />} />

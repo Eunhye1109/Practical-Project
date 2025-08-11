@@ -101,7 +101,7 @@ const Home = () => {
   // 최근 검색어 저장
   const [recentKeywords, setRecentKeywords] = useState<string[]>([]);
   // 로딩창
-  const {setLoading} = useLoading();
+  const {setLoading, setLabel} = useLoading();
 
   // 최근 검색어 불러오기
   useEffect(() => {
@@ -124,6 +124,7 @@ const Home = () => {
 
   // 검색 실행
   const handleSearchClick = async () => {
+    setLabel('기업들을 찾아보는 중입니다...');
     setLoading(true);
     try {
       const searchDataList = await searchCorp(corpName);

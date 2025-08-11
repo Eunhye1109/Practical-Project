@@ -97,7 +97,7 @@ const Content = styled.div<{width: string}>`
 const Mypage = () => {
     const theme = useTheme();
     const [searchParams, setSearchParams] = useSearchParams();
-    const itemList = ['관심기업', '내정보수정', '회원탈퇴'];
+    const itemList = ['관심기업', '내 정보 수정', '회원탈퇴'];
     const defaultTab = parseInt(searchParams.get('tab') ?? '0'); // 기본값은 0번 탭
     const {user} = useLogin();
     // 관심기업 리스트

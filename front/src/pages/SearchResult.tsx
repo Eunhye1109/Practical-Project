@@ -153,7 +153,7 @@ const SearchResult = () => {
     const [searchCorpName, setSearchCorpName] = useState(location.state?.corpName);
     const {user} = useLogin();
     // 로딩창
-    const {setLoading} = useLoading();
+    const {setLoading, setLabel} = useLoading();
 
     // 스크롤 이벤트 관리
     const [scrolled, setScrolled] = useState(false);
@@ -203,6 +203,7 @@ const SearchResult = () => {
 
     // 기업 선택 -> 리포트 화면 이동
     const handleReportClick = async (corpCode: string) => {
+        setLabel('리포트를 작성하는 중입니다...');
         setLoading(true);
         try {
             const reportData = await reportOutput(corpCode, user?.riskType ?? '비회원');
@@ -238,6 +239,8 @@ const SearchResult = () => {
 
     // 검색
     const handleSearchClick = async () => {
+        setLabel('기업들을 찾아보는 중입니다...');
+        setLoading(true);
         try {
             fetchKeyword();
             const searchDataList = await searchCorp(searchCorpName);
@@ -268,6 +271,8 @@ const SearchResult = () => {
             setSearchTitle(searchCorpName);
         } catch (e) {
             alert('실패~~~');
+        } finally {
+            setLoading(false);
         }
     }
 
