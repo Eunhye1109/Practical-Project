@@ -7,8 +7,9 @@ from typing import Optional
 from fastapi import HTTPException
 from utils.config import DARTAPI_KEY, YEARS, REPRT_CODE, FS_DIV_OPTIONS
 from utils.corp_code import get_corp_name
-from utils.api_util import fetch_corp_emp_data
+from utils.api_util import fetch_corp_emp_data, fetch_news_articles
 from utils.logo_utils import get_logo_url
+from prompts.gpt_prompts import build_news_summary_prompt
 import logging
 
 
@@ -67,5 +68,12 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     # ✅ [4] 아무것도 없으면 soft return
     if not any(k in result for k in YEARS):
         result["warning"] = "수집된 재무 또는 인사정보가 없습니다."
+    try:
+        news_data = fetch_news_articles(corp_name)[:3]  # 최대 3개
+        result["newsData"] = news_data
+        result["newsSummaryPrompt"] = build_news_summary_prompt(news_data)
+    except Exception as e:
+        result["newsData"] = []
+        print(f"⚠️ 뉴스 수집 실패: {e}")
 
     return result

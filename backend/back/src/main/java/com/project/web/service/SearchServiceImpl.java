@@ -8,6 +8,7 @@ import com.project.web.dto.AiSummaryDTO;
 import com.project.web.dto.HeaderDTO;
 import com.project.web.dto.InfoBoxDTO;
 import com.project.web.dto.MatchResultDTO;
+import com.project.web.dto.NewsDataDTO;
 import com.project.web.dto.RadarDTO;
 import com.project.web.dto.ResponseDTO;
 import com.project.web.dto.SearchResultDTO;
@@ -149,6 +150,8 @@ public class SearchServiceImpl implements SearchService {
 	
 	     // ✅ 인포박스 조립
 	     infoBoxAssembler.build(corpCode, flatColumns);
+	     
+	     List<NewsDataDTO> newsList = fetchService.fetchNewsData(corpName);
 
 	     // ❌ 삭제: result.setInfoBox(infoBox);  // 이런 변수 없음. 지워주세요.
 	
@@ -159,6 +162,7 @@ public class SearchServiceImpl implements SearchService {
 	    		    .header(header)
 	    		    .infoBox(infoBox)
 	    		    .graphData(flatColumns)
+	    		    .newsData(newsList)
 	    		    .rader(radarList)
 	    		    .aiSumary(aiSummaryList)
 	    		    .build();

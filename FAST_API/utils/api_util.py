@@ -90,8 +90,17 @@ def fetch_news_articles(keyword: str, max_count: int = 5):
     res = requests.get(url, headers=headers, params=params)
     if res.status_code != 200:
         return []
-    return [{
-        "title": item["title"],
-        "description": item["description"],
-        "link": item["link"]
-    } for item in res.json().get("items", [])]
+    news_list = []
+    for item in res.json().get("items", []):
+        # pubDate → YYYY.MM.DD 변환
+        from datetime import datetime
+        date_str = datetime.strptime(item["pubDate"], "%a, %d %b %Y %H:%M:%S %z").strftime("%Y.%m.%d")
+
+        news_list.append({
+            "date": date_str,
+            "title": item["title"],
+            "body": item["description"],
+            "link": item["link"]
+        })
+
+    return news_list
