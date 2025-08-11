@@ -64,6 +64,8 @@ def search_list_summary(keyword: str, user_purpose: Optional[str] = None):
                 "major": major,
                 "keywords": keywords,
                 "gptSummary": gpt_summary_text,
+                "ceoName": profile.get("대표자명"),          # ← 추가
+                "establishDate": profile.get("설립일"),      # ← 추가
             }
             print("📦 [DEBUG] append data →", debug_obj)
 

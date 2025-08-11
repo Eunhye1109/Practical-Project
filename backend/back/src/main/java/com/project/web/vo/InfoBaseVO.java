@@ -8,7 +8,7 @@ public class InfoBaseVO {
 	private String corpName;
 	private String stockType;
 	private String ceoName;
-	private String estDt;
+	private String establishDate;
 	private String gptSummary;
 	private String logoUrl;
 	

@@ -5,18 +5,26 @@
 
 <mapper namespace="com.project.web.mapper.SearchListMapper">
 
-<insert id="insertSearchResult" parameterType="com.project.web.dto.SearchListDTO">
+<insert id="insertSearchResult" parameterType="com.project.web.dto.SearchListInsertDTO">
   INSERT INTO SEARCH_LIST_CACHE (
     CORP_NAME, STOCK_TYPE, KEYWORDS_JSON, MAJOR, CORP_CODE,
     GPT_SUMMARY, LOGO_URL, CEO_NAME, ESTABLISH_DATE, CREATED_AT
   ) VALUES (
-    #{corpName}, #{stockType}, #{keywordsJson}, #{major}, #{corpCode},
-    #{gptSummary}, #{logoUrl}, #{ceoName}, #{establishDate}, SYSDATE
+    #{corpName},
+    #{stockType},
+    #{keywords, typeHandler=com.project.web.handler.StringListJsonTypeHandler},
+    #{major},
+    #{corpCode},
+    #{gptSummary},
+    #{logoUrl},
+    #{ceoName},
+    #{establishDate},
+    SYSDATE
   )
 </insert>
 
 
-<select id="selectByCorpName" parameterType="String" resultType="com.project.web.dto.SearchListDTO">
+<select id="selectByCorpName" parameterType="String" resultType="com.project.web.dto.SearchListInsertDTO">
      SELECT
     CORP_NAME       AS corpName,
     STOCK_TYPE      AS stockType,
@@ -43,7 +51,6 @@
       KEYWORDS_JSON AS keywordsJson
     FROM SEARCH_LIST_CACHE
     WHERE CORP_CODE = #{corpCode}
-    -- 최신 것 우선이면 정렬 컬럼에 맞게 바꿔줘 (예: CREATED_AT DESC)
   )
   WHERE ROWNUM = 1
 </select>

@@ -2,11 +2,15 @@ package com.project.web.dto;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SearchListDTO {
 
 	private String logoUrl;
@@ -18,12 +22,5 @@ public class SearchListDTO {
     private String corpCode;
     
     
- // DB 저장용
-    @JsonIgnore
-    private String keywordsJson;
-    @JsonIgnore
-    private String ceoName;
-    @JsonIgnore
-    private String establishDate;
 }
 

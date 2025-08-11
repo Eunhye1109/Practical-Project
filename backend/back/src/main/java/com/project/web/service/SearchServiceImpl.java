@@ -154,14 +154,14 @@ public class SearchServiceImpl implements SearchService {
 	
 	     // 최종 리턴
 	     return SearchResultDTO.builder()
-	         .corpCode(corpCode)
-	         .corpName(corpName)
-	         .header(header)
-	         .infoBox(infoBox)
-	         .graphData(flatColumns)
-	         .rader(radarList)
-	         .aiSumary(aiSummaryList)
-	         .build();
+	    		    .corpCode(corpCode)
+	    		    .corpName(corpName)
+	    		    .header(header)
+	    		    .infoBox(infoBox)
+	    		    .graphData(flatColumns)
+	    		    .rader(radarList)
+	    		    .aiSumary(aiSummaryList)
+	    		    .build();
 
     }
 
