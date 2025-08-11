@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.web.dto.AiSummaryDTO;
 import com.project.web.dto.HeaderDTO;
+import com.project.web.dto.InfoBoxDTO;
 import com.project.web.dto.MatchResultDTO;
 import com.project.web.dto.RadarDTO;
 import com.project.web.dto.ResponseDTO;
@@ -14,6 +15,7 @@ import com.project.web.mapper.SearchHisMapper;
 import com.project.web.mapper.TargetColMapper;
 import com.project.web.utils.ConvertToFlatYearlyListUtil;
 import com.project.web.utils.HeaderAssembler;
+import com.project.web.utils.InfoBoxAssembler;
 import com.project.web.utils.RadarScoreCalculator;
 import com.project.web.vo.ColumnMatchVO;
 import com.project.web.vo.SearchwordVO;
@@ -33,6 +35,7 @@ public class SearchServiceImpl implements SearchService {
     private final SearchHisMapper searchHisMapper;
     private final AiSummaryService aiSummaryService;
     private final HeaderAssembler headerAssembler;
+    private final InfoBoxAssembler infoBoxAssembler;
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
     @Override
@@ -141,28 +144,47 @@ public class SearchServiceImpl implements SearchService {
         System.out.println("🤖 [AI] 긍부정 분석 결과 수 = " + aiSummaryList.size());
         
         HeaderDTO header = headerAssembler.buildFromCache(corpCode);
-        
-        return SearchResultDTO.builder()
-            .corpCode(corpCode)
-            .corpName(corpName)
-            .header(header)
-            .graphData(flatColumns)
-            .rader(radarList)
-            .aiSumary(aiSummaryList)
-            .build();
+
+        InfoBoxDTO infoBox = infoBoxAssembler.build(corpCode, flatColumns);
+	
+	     // ✅ 인포박스 조립
+	     infoBoxAssembler.build(corpCode, flatColumns);
+
+	     // ❌ 삭제: result.setInfoBox(infoBox);  // 이런 변수 없음. 지워주세요.
+	
+	     // 최종 리턴
+	     return SearchResultDTO.builder()
+	    		    .corpCode(corpCode)
+	    		    .corpName(corpName)
+	    		    .header(header)
+	    		    .infoBox(infoBox)
+	    		    .graphData(flatColumns)
+	    		    .rader(radarList)
+	    		    .aiSumary(aiSummaryList)
+	    		    .build();
 
     }
 
 
 
-    private Map<String, Object> extractLatestYearData(Map<String, Object> allYearData) {
-        for (String year : YEARS) {
-            if (allYearData.containsKey(year)) {
-                return (Map<String, Object>) allYearData.get(year);
+ // 맨 아래 private 메서드들 교체
+    private Map<String, Object> extractLatestYearData(List<Map<String, Object>> flatColumns) {
+        Map<String, Object> row = pickLatestRow(flatColumns, "2024", "2023", "2022");
+        return row != null ? row : new HashMap<>();
+    }
+
+    private Map<String, Object> pickLatestRow(List<Map<String, Object>> flatColumns, String... years) {
+        for (String y : years) {
+            for (Map<String, Object> row : flatColumns) {
+                Object v = row.get("year");
+                if (v != null && y.equals(String.valueOf(v))) {
+                    return row;
+                }
             }
         }
         return null;
     }
+
 
 
 	@Override
