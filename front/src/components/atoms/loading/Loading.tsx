@@ -28,7 +28,7 @@ const LoadingBox = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  margin-bottom: 10%;
+  margin-bottom: 15%;
 `;
 
 const Label = styled.p`

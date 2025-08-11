@@ -161,7 +161,7 @@ const Report = () => {
       <Content>
         <ReportInfoBox titleLabel='기업 소개' corpSumary={reportData?.infoBox?.corpSummary ?? '정보없음'} infoData={reportData?.infoBox?.infoData ?? '정보없음'} />
 
-        <ReportSumaryBox data={reportData.rader} cropName={reportData.corpName} aiSumaryData={reportFullDummyData.aiSumary} similarCorpData={reportFullDummyData.similarCorp} />
+        <ReportSumaryBox data={reportData.rader} cropName={reportData.corpName} aiSumaryData={reportData.aiSumary} similarCorpData={reportFullDummyData.similarCorp} />
 
         {user?.riskType == '안정형' ?
         <StableTypeGraph data={reportData} /> :

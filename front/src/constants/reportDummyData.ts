@@ -51,8 +51,8 @@ export const reportFullDummyData: ReportFullData = {
     ],
   // AI 기업 분석 -> 총 2개 필요 [{}, {}] 형태
   aiSumary: [
-    {emotion: '긍정', sumary: '아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아'},
-    {emotion: '부정', sumary: '아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아'},
+    {emotion: '긍정', summary: '아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아'},
+    {emotion: '부정', summary: '아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아아'},
     ],
   // 유사 상장사 -> 총 3개 필요 [{}, {}, {}] 형태
   similarCorp: [
@@ -146,9 +146,9 @@ export const reportFullDummyData: ReportFullData = {
   ],
   // 연관기사 -> 총 3개 필요 [{}, {}, {}] 형태
   newsData: [
-    {date: '2025.08.14', title: '테스트 뉴스기사 제목입니다1.테스트 뉴스기사 제목입니다1.테스트 뉴스기사 제목입니다1.테스트 뉴스기사 제목입니다1.', body: '테스트 뉴스 기사 본문입니다.', url: 'https://www.naver.com/'},
-    {date: '2025.08.14', title: '테스트 뉴스기사 제목입니다2.', body: '테스트 뉴스 기사 본문입니다.', url: 'https://www.naver.com/'},
-    {date: '2025.08.14', title: '테스트 뉴스기사 제목입니다3.', body: '테스트 뉴스 기사 본문입니다.', url: 'https://www.naver.com/'},
+    {date: '2025.08.14', title: '테스트 뉴스기사 제목입니다1.테스트 뉴스기사 제목입니다1.테스트 뉴스기사 제목입니다1.테스트 뉴스기사 제목입니다1.', body: '테스트 뉴스 기사 본문입니다.', link: 'https://www.naver.com/'},
+    {date: '2025.08.14', title: '테스트 뉴스기사 제목입니다2.', body: '테스트 뉴스 기사 본문입니다.', link: 'https://www.naver.com/'},
+    {date: '2025.08.14', title: '테스트 뉴스기사 제목입니다3.', body: '테스트 뉴스 기사 본문입니다.', link: 'https://www.naver.com/'},
     ]
 }
 

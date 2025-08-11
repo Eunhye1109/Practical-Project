@@ -1,4 +1,4 @@
-import requests
+import requests, re, html
 
 
 from utils.config import DARTAPI_KEY, NAVER_CLIENT_ID, NAVER_CLIENT_SECRET, REPRT_CODE, YEARS
@@ -76,6 +76,13 @@ def fetch_corp_emp_data(corp_code: str) -> dict:
 
 
 
+def _strip_html(s: str) -> str:
+    if not s:
+        return ""
+    # 태그 제거 + HTML 엔티티 해제
+    no_tags = re.sub(r"<.*?>", "", s)
+    return html.unescape(no_tags).strip()
+
 
 
 
@@ -98,8 +105,8 @@ def fetch_news_articles(keyword: str, max_count: int = 5):
 
         news_list.append({
             "date": date_str,
-            "title": item["title"],
-            "body": item["description"],
+            "title": _strip_html(item["title"]),
+            "body": _strip_html(item["description"]),
             "link": item["link"]
         })
 

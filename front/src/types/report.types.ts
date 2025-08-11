@@ -45,7 +45,7 @@ export interface ReportFullData {
   // AI 기업 분석 -> 총 2개 필요 [{}, {}] 형태
   aiSumary: Array<{
     emotion: string, // 긍정/부정
-    sumary: string // AI 분석 요약 내용
+    summary: string // AI 분석 요약 내용
   }>,
   // 유사 상장사 -> 총 3개 필요 [{}, {}, {}] 형태
   similarCorp: Array<{
@@ -63,7 +63,7 @@ export interface ReportFullData {
     date: string, // 기사 날짜 -> 2025.00.00 양식
     title: string, //기사제목
     body: string, // 기사 본문
-    url: string // 기사 링크
+    link: string // 기사 링크
   }>,
   message?: string
 }

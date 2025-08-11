@@ -9,7 +9,7 @@ import { useTheme } from '@emotion/react';
 import bg from 'assets/images/bg/background11.png';
 
 interface Props {
-    newsData: Array<{date: string, title: string, body: string, url: string}>;
+    newsData: Array<{date: string, title: string, body: string, link: string}>;
     corpName: string;
 }
 
@@ -119,6 +119,7 @@ const NewsTitle = styled.a<{width: string}>`
     display: flex;
     flex-direction: column;
     gap: 5px;
+    cursor: pointer;
 
     &:hover {
         text-decoration: underline;
@@ -166,7 +167,7 @@ const ReportNewsBox = ({newsData, corpName}: Props) => {
                 : <NewsContent>
                     {newsData.map((item) => (
                         <NewsItemBox>
-                            <NewsTitle href={item.url} width='70%'>
+                            <NewsTitle href={item.link} width='70%'>
                                 <NewsItem width='100%' thickness={true} color={theme.colors.natural[60]} position={false}>{item.title}</NewsItem>
                                 <NewsItem width='100%' thickness={false} color={theme.colors.natural[40]} position={false}>{item.body}</NewsItem>
                             </NewsTitle>

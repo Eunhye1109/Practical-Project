@@ -11,7 +11,7 @@ import { useTheme } from '@emotion/react';
 interface Props {
     data: {subject: string, A: number, B: number, fullMark: number}[];
     cropName: string;
-    aiSumaryData: {emotion: string, sumary: string}[];
+    aiSumaryData: {emotion: string, summary: string}[];
     similarCorpData: {corpName: string, logo: string, probability: string, basis: string}[]
 }
 
@@ -73,13 +73,9 @@ const SumaryBox = styled.div`
     display: flex;
     justify-content: center;
     box-sizing: border-box;
-    padding: 15px;
+    padding-top: 15px;
     flex-wrap: wrap;
     gap: 10px;
-    // 스타일
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
-    border: 1px solid white;
 `;
 
 const BodyText = styled.p<{align: boolean}>`
@@ -89,15 +85,12 @@ const BodyText = styled.p<{align: boolean}>`
     line-height: 1.4rem;
 `;
 
-const EmotionBox = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 5x;
+const EmotionTitle = styled.span<{color: string}>`
+    ${({theme}) => typoStyle.body.semiBold(theme)}
+    color: ${({color}) => color};
 `;
 
-const EmotionTitle = styled.span<{color: string}>`
-    padding-top: 3px;
+const SimilarTitle = styled.span<{color: string}>`
     ${({theme}) => typoStyle.caption.regular(theme)}
     color: ${({color}) => color};
 `;
@@ -148,18 +141,16 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, similarCorpData}: Props)
                 <TitleBox>
                     <TitleLabel>AI 기업 분석 요약</TitleLabel>
                     <Help color={theme.colors.primary[80]} data-tooltip-id='id00' width={20} />
-                    <Tooltip id='id00'>해당 지표 근거 ~~~</Tooltip>
+                    <Tooltip id='id00'>AI가 분석한 현재 기업의 현황입니다.</Tooltip>
                 </TitleBox>
             </TextBox>
             <Line width='100%' color={theme.colors.primary[80]} margin='20px' />
             <SumaryContent>
                 {aiSumaryData.map((item) => (
                     <SumaryBox>
-                        <EmotionBox>
-                            {item.emotion === '긍정' ? <ThumbUp width={40} color={theme.colors.primary[100]} /> : <ThumbDown width={40} color={theme.colors.primaryBlue[100]} />}
-                            {item.emotion === '긍정' ? <EmotionTitle color={theme.colors.primary[100]}>긍정적인 분석</ EmotionTitle> : <EmotionTitle color={theme.colors.primaryBlue[100]}>부정적인 분석</ EmotionTitle>}
-                        </EmotionBox>
-                        <BodyText align={true}>{item.sumary}</BodyText>
+                        {item.emotion === '긍정' ? <ThumbUp width={25} height={25} color={theme.colors.primary[100]} /> : <ThumbDown width={25} height={25}  color={theme.colors.primaryBlue[100]} />}
+                        {item.emotion === '긍정' ? <EmotionTitle color={theme.colors.primary[100]}>긍정적인 분석</ EmotionTitle> : <EmotionTitle color={theme.colors.primaryBlue[100]}>부정적인 분석</ EmotionTitle>}
+                        <BodyText align={true}>{item.summary}</BodyText>
                     </SumaryBox>
                 ))}
             </SumaryContent>
@@ -180,7 +171,7 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, similarCorpData}: Props)
                     <SimilarBox>
                         <Logo src={item.logo} />
                         <SimilarTextBox>
-                            <EmotionTitle color={theme.colors.natural[80]}>{item.corpName} | 유사도 {item.probability}</EmotionTitle>
+                            <SimilarTitle color={theme.colors.natural[80]}>{item.corpName} | 유사도 {item.probability}</SimilarTitle>
                             <BodyText align={false}>{item.basis}</BodyText>
                         </SimilarTextBox>
                     </SimilarBox>

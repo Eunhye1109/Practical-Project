@@ -11,4 +11,7 @@ router = APIRouter(
 
 @router.post("/summary", response_model=List[AiSummaryResponse])
 def summarize_with_sentiment(request: AiSummaryRequest):
-    return analyze_ai_summary(request)
+    print(f"[POST /api/gpt/summary] corpCode={request.corpCode}, purpose={request.userPurpose}")
+    res = analyze_ai_summary(request)
+    print(f"[POST /api/gpt/summary] ok -> {res}")
+    return res
