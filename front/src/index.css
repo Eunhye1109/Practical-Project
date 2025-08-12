@@ -3,22 +3,22 @@
 
 /* SB 어그로 폰트 선언 */
 @font-face {
-  font-family: 'SB어그로';
-  src: url('./assets/fonts/SB\ 어그로OTF\ M.otf') format('opentype');
+  font-family: 'SB_Aggro';
+  src: url('./assets/fonts/SB_Aggro_M.otf') format('opentype');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'SB어그로';
-  src: url('./assets/fonts/SB\ 어그로OTF\ L.otf') format('opentype');
+  font-family: 'SB_Aggro';
+  src: url('./assets/fonts/SB_Aggro_L.otf') format('opentype');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'SB어그로';
-  src: url('./assets/fonts/SB\ 어그로OTF\ B.otf') format('opentype');
+  font-family: 'SB_Aggro';
+  src: url('./assets/fonts/SB_Aggro_B.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
