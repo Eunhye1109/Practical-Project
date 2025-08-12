@@ -144,17 +144,14 @@ const Home = () => {
         dataList.push(values.slice(1, values.length - 1));
         codeList.push(lastValue);
         logoList.push(firstValue);
-        console.log('밸류: ', values);
-        console.log('데이터: ', dataList);
-        console.log('코드: ', codeList);
-        console.log('로고: ', logoList);
+        console.log('여기까지는 됨 - 데이터 나눠서 저장');
       });
       if(searchDataList[0]) {
         navigate('/searchResult', { state: { res: dataList, code: codeList, corpName: corpName, logo: logoList } });
+        console.log('여기까지는 됨 - 데이터 전송');
+        
       }
       
-      console.log('전체 데이터: ', dataList);
-
       // 데이터 타입 확인
       dataList.map(item => (
         item.map(smitem => (

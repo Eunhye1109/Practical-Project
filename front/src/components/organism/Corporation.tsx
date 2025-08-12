@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { mypageData } from 'types/mypage.types';
 import { useLogin } from 'contexts/LoginContext';
 import { deleteCorp, updateCorpe } from 'api/mypageApi';
+import { useLoading } from 'contexts/LodingContext';
+import { reportOutput } from 'api/reportApi';
 
 interface Props {
   readonly headerList: Array<{label: string, width: string}>;
@@ -53,6 +55,8 @@ const ListBox = styled.div`
 const Corporation = ({headerList, widthList, notiLabel, typeList, fullData, reData}: Props) => {
   const navigate = useNavigate();
   const {user} = useLogin();
+  // 로딩창
+  const {setLoading, setLabel} = useLoading();
 
   // 빈 함수
   const noop = (e: React.MouseEvent<HTMLElement>, corpCode: string) => {};
@@ -92,8 +96,23 @@ const Corporation = ({headerList, widthList, notiLabel, typeList, fullData, reDa
     deleteFavoriteCorp();
   }
   // 리포트 페이지로 이동
-  const handleReportClick = async (e: React.MouseEvent<HTMLElement>, corpCode: string) => {
-
+  const handleReportClick = async (corpCode: string) => {
+      setLabel('리포트를 작성하는 중입니다...');
+      setLoading(true);
+      try {
+          const reportData = await reportOutput(corpCode, user?.riskType ?? '비회원');
+          console.log(user?.riskType ?? '비회원');
+          console.log('리포트 전체 데이터: ', reportData);
+          if (reportData.header === null || reportData.infoBox === null){
+              alert('최근 3개년 데이터가 없어 리포트를 제공할 수 없습니다.');
+          } else {
+              navigate('/report', {state: {reportData: reportData, userType: user?.riskType ?? '비회원'}});
+          }
+      } catch (e) {
+          alert('최근 3개년 데이터가 없어 리포트를 제공할 수 없습니다.');
+      } finally {
+          setLoading(false);
+      }
   }
 
   // 리스트 안의 버튼 함수
@@ -111,7 +130,7 @@ const Corporation = ({headerList, widthList, notiLabel, typeList, fullData, reDa
           widthList={widthList}
           btnLabel='기업 검색하러 가기'
           notiLabel={notiLabel}
-          listOnClick={handleReportClick}
+          listOnClick={(e, corpCode) => {handleReportClick(corpCode);}}
           btnList={btnList}
           nullBtnOnClick={() => navigate('/')}
           typeList={typeList}

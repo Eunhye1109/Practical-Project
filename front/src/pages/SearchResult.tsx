@@ -208,7 +208,7 @@ const SearchResult = () => {
             console.log(user?.riskType ?? '비회원');
             console.log('리포트 전체 데이터: ', reportData);
             if (reportData.header === null || reportData.infoBox === null){
-                alert('최근 3개년 데이터가 없어 리포트를 제공할 수 없습니다. -> null 이슈');
+                alert('최근 3개년 데이터가 없어 리포트를 제공할 수 없습니다.');
             } else {
                 navigate('/report', {state: {reportData: reportData, userType: user?.riskType ?? '비회원'}});
             }
