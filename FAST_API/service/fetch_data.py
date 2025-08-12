@@ -7,10 +7,7 @@ from typing import Optional
 from fastapi import HTTPException
 from utils.config import DARTAPI_KEY, YEARS, REPRT_CODE, FS_DIV_OPTIONS
 from utils.corp_code import get_corp_name
-from utils.api_util import fetch_corp_emp_data, fetch_news_articles, fetch_corp_dividend_data
-from utils.canon_util import _build_dividend_canon
-from prompts.gpt_prompts import build_news_summary_prompt
-import logging
+from utils.api_util import fetch_corp_emp_data, fetch_news_articles
 
 
 
@@ -108,6 +105,7 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     try:
         news_data = fetch_news_articles(corp_name)[:3]  # 최대 3개
         result["newsData"] = news_data
+        print(f"📰 news ok: {len(news_data)}건, signal={result['newsSignal']}")
         result["newsSummaryPrompt"] = build_news_summary_prompt(news_data)
     except Exception as e:
         result["newsData"] = []

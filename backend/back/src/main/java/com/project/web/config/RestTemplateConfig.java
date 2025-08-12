@@ -13,8 +13,8 @@ public class RestTemplateConfig {
   @Bean("fastApiRestTemplate")  // FastAPI 전용
   public RestTemplate fastApiRestTemplate(RestTemplateBuilder builder) {
     return builder
-        .setConnectTimeout(Duration.ofSeconds(2))
-        .setReadTimeout(Duration.ofSeconds(3))
+        .setConnectTimeout(Duration.ofSeconds(30))
+        .setReadTimeout(Duration.ofSeconds(30))
         .build();
   }
 }
