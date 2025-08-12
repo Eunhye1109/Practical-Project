@@ -40,7 +40,7 @@
   VALUES (
     SEARCH_CACHE_SEQ.NEXTVAL,  <!-- Oracle일 경우 시퀀스 사용 --> 
     #{corpCode, jdbcType=VARCHAR},
-    #{corpName, jdbcType=VARCHAR},
+    NVL(#{corpName, jdbcType=VARCHAR}, #{corpCode, jdbcType=VARCHAR}),
     #{colName, jdbcType=VARCHAR},
     #{colValue, jdbcType=VARCHAR},
     #{years, jdbcType=VARCHAR},

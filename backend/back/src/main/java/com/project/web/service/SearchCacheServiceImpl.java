@@ -68,7 +68,9 @@ public class SearchCacheServiceImpl implements SearchCacheService {
     @Override
     public SearchResultDTO save(String corpCode, SearchResultDTO result) {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-        String corpName = result.getCorpName();
+        String corpName = (result.getCorpName() == null || result.getCorpName().isBlank())
+                ? corpCode        // or "정보없음"
+                : result.getCorpName();
         
         for (Map<String, Object> row : result.getGraphData()) {
             String year = String.valueOf(row.get("year"));

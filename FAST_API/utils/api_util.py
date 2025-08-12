@@ -130,3 +130,89 @@ def fetch_news_articles(keyword: str, max_count: int = 5):
         })
 
     return news_list
+
+def _clean_ws(s: str | None) -> str:
+    """앞뒤/연속 공백 정리 + 파이프(|) 양옆 공백 제거"""
+    if not s:
+        return ""
+    s = re.sub(r"\s+", " ", s.strip())
+    return re.sub(r"\s*\|\s*", "|", s)
+
+def _num_or_none(v):
+    """-, 빈문자 → None, 숫자 문자열은 int/float로 변환"""
+    if v is None:
+        return None
+    s = str(v).strip().replace(",", "")
+    if s in ("", "-"):
+        return None
+    return float(s) if "." in s else int(s)
+
+
+# === 새로 추가: 배당(alot) 수집 ===
+def fetch_corp_dividend_data(corp_code: str) -> dict:
+    """
+    DART alotMatter(배당·Earnings 관련 주요 수치) 연도별 수집.
+    - 키 형식: 'se|stock_knd' (stock_knd 없으면 se만)
+    - 공백/파이프 주변 공백 자동 정리
+    - 값(thstrm): '-', '' → None, 그 외 숫자 변환
+    반환값 예: {"2024": {"현금배당수익률(%)|보통주": 3.7, ...}, "2023": {...}}
+    """
+    if not corp_code:
+        raise HTTPException(status_code=400, detail="corp_code는 필수입니다.")
+
+    result: dict[str, dict] = {}
+    success = False
+
+    for year in YEARS:
+        url = "https://opendart.fss.or.kr/api/alotMatter.json"
+        params = {
+            "crtfc_key": DARTAPI_KEY,
+            "corp_code": corp_code,
+            "bsns_year": year,
+            "reprt_code": REPRT_CODE,
+        }
+        print(f"📡 [배당 alot] 요청 중: year={year}")
+
+        try:
+            res = requests.get(url, params=params, timeout=10).json()
+            rows = res.get("list") or []
+
+            flat: dict[str, int | float | None] = {}
+            for item in rows:
+                se = _clean_ws(item.get("se"))
+                if not se:
+                    continue
+                stock = _clean_ws(item.get("stock_knd"))
+                key = f"{se}|{stock}" if stock else se
+
+                raw = item.get("thstrm")
+                val = _num_or_none(raw)
+                flat[key] = val  # 동일 키 중복 시 마지막 값 유지
+
+                # 🔎 우리가 보는 4종만 로깅
+                if (
+                    "현금배당수익률" in se
+                    or "주식배당수익률" in se
+                    or "현금배당금" in se      # 주당 현금배당금(원)
+                    or "배당성향" in se        # (연결)현금배당성향
+                ):
+                    print(f"[alot row {year}] key={key} raw={raw!r} -> val={val}")
+
+            if flat:
+                # 🔎 해당 연도 핵심 키 요약
+                dbg = [k for k in sorted(flat.keys()) if ("배당" in k or "수익률" in k or "성향" in k)]
+                print(f"[alot keys {year}] {dbg[:50]}")
+                result[str(year)] = flat
+                success = True
+            else:
+                print(f"⚠️ [배당] 유효 데이터 없음: year={year}")
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"{year}년도 배당(alot) 조회 실패: {str(e)}")
+
+    if not success:
+        # 배당 정보 없을 수 있음(무배당 기업). 빈 dict 반환하고 상위에서 try/except로 흡수해도 OK.
+        print("⚠️ DART alotMatter에 등록된 배당 정보가 없습니다.")
+        return {}
+
+    return result

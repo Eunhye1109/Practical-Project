@@ -12,6 +12,7 @@ import com.project.web.dto.NewsDataDTO;
 import com.project.web.dto.RadarDTO;
 import com.project.web.dto.ResponseDTO;
 import com.project.web.dto.SearchResultDTO;
+import com.project.web.dto.SimilarCorpDTO;
 import com.project.web.mapper.SearchHisMapper;
 import com.project.web.mapper.TargetColMapper;
 import com.project.web.utils.ConvertToFlatYearlyListUtil;
@@ -37,6 +38,7 @@ public class SearchServiceImpl implements SearchService {
     private final AiSummaryService aiSummaryService;
     private final HeaderAssembler headerAssembler;
     private final InfoBoxAssembler infoBoxAssembler;
+    private final SimilarCorpService similarCorpService;
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
     @Override
@@ -152,6 +154,9 @@ public class SearchServiceImpl implements SearchService {
 	     // ✅ 인포박스 조립
 	     infoBoxAssembler.build(corpCode, flatColumns);
 	     
+
+	     List<SimilarCorpDTO> similarCorp = similarCorpService.fetchTop3(corpName);
+	     
 	     List<NewsDataDTO> newsList = fetchService.fetchNewsData(corpName);
 
 	     List<AiSummaryDTO> aiSummaryList = aiSummaryService.getAiSummaryFromFastAPI(corpCode, safePurpose, flatColumns, newsList);
@@ -169,6 +174,7 @@ public class SearchServiceImpl implements SearchService {
 	    		    .newsData(newsList)
 	    		    .rader(radarList)
 	    		    .aiSumary(aiSummaryList)
+	    		    .similarCorp(similarCorp)
 	    		    .build();
 
     }
