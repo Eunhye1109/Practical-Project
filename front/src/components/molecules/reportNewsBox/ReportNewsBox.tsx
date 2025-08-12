@@ -209,7 +209,7 @@ const ReportNewsBox = ({newsData, data}: Props) => {
             <Line width='100%' color={theme.colors.natural[0]} margin='20px' />
             {hasNull ? (
             <GraphBox position={true}>
-              <GraphTitle>데이터를 찾지 못했습니다.</GraphTitle>
+              <GraphTitle>배당 데이터를 찾지 못했거나 배당을 지급하지 않는 기업입니다.</GraphTitle>
             </GraphBox>
           ) : (
             <GraphBox>
