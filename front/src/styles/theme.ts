@@ -49,32 +49,32 @@ export const theme = {
         title1Bold: {
             fontSize: '35px',
             fontWeight: 300,
-            fontFamily: 'SB어그로'
+            fontFamily: 'SB_Aggro'
         },
         title1Regular: {
             fontSize: '35px',
             fontWeight: 200,
-            fontFamily: 'SB어그로'
+            fontFamily: 'SB_Aggro'
         },
         title2Bold: {
             fontSize: '30px',
             fontWeight: 300,
-            fontFamily: 'SB어그로'
+            fontFamily: 'SB_Aggro'
         },
         title2Regular: {
             fontSize: '30px',
             fontWeight: 200,
-            fontFamily: 'SB어그로'
+            fontFamily: 'SB_Aggro'
         },
         title3Bold: {
             fontSize: '25px',
             fontWeight: 300,
-            fontFamily: 'SB어그로'
+            fontFamily: 'SB_Aggro'
         },
         title3Regular: {
             fontSize: '25px',
             fontWeight: 200,
-            fontFamily: 'SB어그로'
+            fontFamily: 'SB_Aggro'
         },
         bodyTitle1SemiBold: {
             fontSize: '23px',
