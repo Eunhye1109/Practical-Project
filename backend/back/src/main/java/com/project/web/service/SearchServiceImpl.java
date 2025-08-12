@@ -13,7 +13,6 @@ import com.project.web.dto.RadarDTO;
 import com.project.web.dto.ResponseDTO;
 import com.project.web.dto.SearchResultDTO;
 import com.project.web.dto.SignalDTO;
-import com.project.web.dto.SimilarCorpDTO;
 import com.project.web.mapper.SearchHisMapper;
 import com.project.web.mapper.TargetColMapper;
 import com.project.web.utils.ConvertToFlatYearlyListUtil;
