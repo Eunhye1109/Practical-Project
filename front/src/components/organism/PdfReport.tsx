@@ -183,7 +183,7 @@ const PdfReport: React.FC<PdfReportProps> = ({ data, onComplete }) => {
                 </PageTitleBox>
                 <Line color={theme.colors.primary[40]} width='100%' margin='20px' thickness='2px' />
                 <PageBodyContent>
-                    <ReportSumaryBox data={data.rader} cropName={data.corpName} aiSumaryData={data.aiSumary} similarCorpData={reportFullDummyData.similarCorp} />
+                    <ReportSumaryBox data={data.rader} cropName={data.corpName} aiSumaryData={data.aiSumary} similarCorpData={reportFullDummyData.similarCorp} fullData={data} />
                 </PageBodyContent>
             </PageContent>
             <CoverLogo src={colorLogo}></CoverLogo>

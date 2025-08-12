@@ -10,12 +10,14 @@ import { useTheme } from '@emotion/react';
 import siren01 from 'assets/images/etc/siren01.png';
 import siren02 from 'assets/images/etc/siren02.png';
 import siren03 from 'assets/images/etc/siren03.png';
+import { ReportFullData } from 'types/report.types';
 
 interface Props {
     data: {subject: string, A: number, B: number, fullMark: number}[];
     cropName: string;
     aiSumaryData: {emotion: string, summary: string}[];
-    similarCorpData: {corpName: string, logo: string, probability: string, basis: string}[]
+    similarCorpData: {corpName: string, logo: string, probability: string, basis: string}[];
+    fullData: ReportFullData;
 }
 
 const Container = styled.div`
@@ -151,9 +153,8 @@ const RiskSiren = styled.img`
     top: -10%;
 `;
 
-const ReportSumaryBox = ({data, cropName, aiSumaryData}: Props) => {
+const ReportSumaryBox = ({data, cropName, aiSumaryData, fullData}: Props) => {
     const theme = useTheme();
-    let summaryList = [];
 
     // ai분석 쪼개기
     const splitText = (text: string) => {
@@ -236,14 +237,14 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData}: Props) => {
             </TextBox>
             <Line width='100%' color={theme.colors.primary[80]} margin='20px' />
             <RiskContent>
-                <RiskSiren src={siren01} />
+                <RiskSiren src={fullData.signalScore?.signalScore === '1' ? siren01 : (fullData.signalScore?.signalScore === '2' ? siren02 : siren03)} />
                 <RiskTextBox>
                     <RiskTitleBox>
                         <RiskCaption>{cropName}의 리스크 신호등은</RiskCaption>
-                        <RiskTitle>'안전'한 상태</RiskTitle>
+                        <RiskTitle>'{fullData.signalScore?.signalScore === '1' ? '안전' : (fullData.signalScore?.signalScore === '2' ? '양호' : '위험')}'한 상태</RiskTitle>
                     </RiskTitleBox>
                     <RiskBody>
-                        최근 3년간 부채비율 변화폭이 15% 미만이고, 현재 부채비율이 150% 미만인 상태
+                        {fullData.signalScore?.signalScore === '최근 3년간 부채비율 변화폭이 15% 미만이고, 현재 부채비율이 150% 미만인 상태' ? siren01 : (fullData.signalScore?.signalScore === '변화폭이 연평균 15~30%이거나, 현재 부채비율이 150~200%인 상태' ? siren02 : '변화폭이 연평균 30% 이상으로 크거나, 현재 부채비율이 200% 초과인 상태')}
                     </RiskBody>
                 </RiskTextBox>
             </RiskContent>

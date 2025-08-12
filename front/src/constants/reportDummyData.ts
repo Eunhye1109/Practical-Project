@@ -244,5 +244,5 @@ export const similarCorpDummyData = [
     logo: 'https://res.cloudinary.com/zuzu-homepage/image/upload/f_auto,q_auto/v1739446680/p4rn9qxymke0lda94pzk.jpg',
     probability: '98%',
     basis: '이러이러한 이유로 이러이러한 유사점을 찾을 수 있었다'
-  }
+  },
 ]
