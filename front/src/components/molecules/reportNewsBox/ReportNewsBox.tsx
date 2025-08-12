@@ -1,16 +1,17 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { typoStyle } from 'styles/typoStyle';
-import { Line } from 'components/atoms';
+import { Line, LineGraph } from 'components/atoms';
 import { useTheme } from '@emotion/react';
 import bg from 'assets/images/bg/background11.png';
 import { Tooltip } from 'react-tooltip';
 import { Help } from 'assets/icons';
-import { GraphData } from 'types/report.types';
+import { GraphData, ReportFullData } from 'types/report.types';
+import BarGraph from 'components/atoms/barGraph/BarGraph';
 
 interface Props {
     newsData: Array<{date: string, title: string, body: string, link: string}>;
-    data: GraphData;
+    data: ReportFullData;
 }
 
 const Container = styled.div`
@@ -121,13 +122,47 @@ const NewsTitle = styled.a<{width: string}>`
     }
 `;
 
+const GraphBox = styled.div<{position?: boolean}>`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: ${({position}) => position ? 'center' : undefined};
+    align-items: ${({position}) => position ? 'center' : undefined};
+    gap: 5px;
+`;
+
+const Graph = styled.div`
+    width: calc(50% - 2.5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+`;
+
+const GraphTitle = styled.p`
+    ${({theme}) => typoStyle.caption.light(theme)}
+    color: white;
+`;
+
 const TestBox = styled.div`
     width: 100%;
     height: 100%;
+    display: flex;
 `;
 
 const ReportNewsBox = ({newsData, data}: Props) => {
     const theme = useTheme();
+    // null 값인지 판별
+    const nullFind = (graphData: ReportFullData): boolean => {
+        return graphData.graphData.some(item => 
+            item['주당 현금배당금(원)'] === 'null' && 
+            item['현금배당수익률(%)'] === 'null'
+        );
+    };
+    const hasNull = nullFind(data);
+
+    console.log('확인', data);
+    
   return (
     <Container>
         <Content>
@@ -171,8 +206,23 @@ const ReportNewsBox = ({newsData, data}: Props) => {
                     </Tooltip>
                 </TitleBox>
             </TextBox>
-            <Line width='100%' color={theme.colors.natural[0]} margin='10px' />
-            
+            <Line width='100%' color={theme.colors.natural[0]} margin='20px' />
+            {hasNull ? (
+            <GraphBox position={true}>
+              <GraphTitle>데이터를 찾지 못했습니다.</GraphTitle>
+            </GraphBox>
+          ) : (
+            <GraphBox>
+              <Graph>
+                <GraphTitle>현금 배당 수익률(%)</GraphTitle>
+                <LineGraph data={data.graphData} graphList={['현금배당수익률']} unit={'%'} size={'sm'} height={200} style={true} />
+              </Graph>
+              <Graph>
+                <GraphTitle>주당 현금 배당금(원)</GraphTitle>
+                <BarGraph data={data.graphData} graphList={['주당 현금배당금(원)']} unit={'원'} size={'sm'} height={200} style={true} />
+              </Graph>
+            </GraphBox>
+          )}
         </GradeContent>
     </Container>
   )

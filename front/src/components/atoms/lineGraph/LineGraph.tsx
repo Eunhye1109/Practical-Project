@@ -10,25 +10,26 @@ interface Props {
     readonly unit?: string;
     readonly height?: number;
     readonly size: string;
+    readonly style?: boolean;
 }
 
-const LineGraph = ({data, graphList, unit, height, size}: Props) => {
+const LineGraph = ({data, graphList, unit, height, size, style=false}: Props) => {
     const theme = useTheme();
   return (
     <ResponsiveContainer width='100%' height={height ?? 100}>
         <LineChart data={data} style={{overflow: 'visible'}} margin={{top: 10, left: 0, bottom: 0, right: 10}}>
-            <CartesianGrid stroke={theme.colors.primary[100]} strokeDasharray={'1 3'} />
+            <CartesianGrid stroke={style ? 'white' : theme.colors.primary[100]} strokeDasharray={'1 3'} />
             <XAxis
                 dataKey='year'
                 tickFormatter={(value) => value + '년'}
                 tickMargin={5}
                 tick={{
                     fontSize: theme.typo.caption2Light.fontSize,
-                    fill: theme.colors.natural[50]
+                    fill: style ? 'white' : theme.colors.natural[50]
                 }}
                 tickLine={false}
                 axisLine={{
-                    stroke: theme.colors.primary[80]
+                    stroke: style ? 'white' : theme.colors.primary[80]
                 }}
             />
             <YAxis
@@ -36,11 +37,11 @@ const LineGraph = ({data, graphList, unit, height, size}: Props) => {
                 tickMargin={5}
                 tick={{
                     fontSize: theme.typo.caption2Light.fontSize,
-                    fill: theme.colors.natural[50]
+                    fill: style ? 'white' : theme.colors.natural[50]
                 }}
                 tickLine={false}
                 axisLine={{
-                    stroke: theme.colors.primary[80]
+                    stroke: style ? 'white' : theme.colors.primary[80]
                 }}
             />
             <Tooltip formatter={(value: number | string) => {
@@ -54,13 +55,13 @@ const LineGraph = ({data, graphList, unit, height, size}: Props) => {
                     return value + '%';
                 }
             }}
-            itemStyle={{color: theme.colors.natural[50]}}
+            itemStyle={{color: style ? 'white' : theme.colors.natural[50]}}
             />
             {graphList.map((item, index) => (
             <Line
                 dataKey={item}
                 name={item}
-                stroke={index === 0 ? theme.colors.primary[100] : (index === 1 ? theme.colors.primaryBlue[100] : (index === 2 ? theme.colors.primaryGreen[100] : theme.colors.natural[80]))}
+                stroke={style ? 'white' : (index === 0 ? theme.colors.primary[100] : (index === 1 ? theme.colors.primaryBlue[100] : (index === 2 ? theme.colors.primaryGreen[100] : theme.colors.natural[80])))}
                 strokeWidth={2}
                 dot={{r: 4}}
             />

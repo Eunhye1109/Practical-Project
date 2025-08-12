@@ -1,6 +1,7 @@
 package com.project.web.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,4 +75,58 @@ public class FinancialUtils {
     private static double parse(String s) {
         return Double.parseDouble(s.replace(",", ""));
     }
+
+ // FinancialUtils.java
+
+    public static String debtSignalLabelAvgChange(Map<String, String> debtByYear) {
+        Triple t = last3Years(debtByYear);
+        if (t == null) return "평가불가";
+
+        double a = t.a, b = t.b, c = t.c;
+        double avgChange = ((b - a) + (c - b)) / 2.0;
+
+        // 안전: AVG_CHANGE < 15 AND c < 150
+        if (avgChange < 15.0 && c < 150.0) return "안전";
+
+        // 양호: (15 ≤ AVG_CHANGE < 30) OR (150 ≤ c ≤ 200)
+        if ((avgChange >= 15.0 && avgChange < 30.0) || (c >= 150.0 && c <= 200.0)) return "양호";
+
+        // 주의: AVG_CHANGE ≥ 30 OR c > 200
+        if (avgChange >= 30.0 || c > 200.0) return "주의";
+
+        return "평가불가";
+    }
+
+    public static String debtSignalCodeAvgChange(Map<String, String> debtByYear) {
+        String label = debtSignalLabelAvgChange(debtByYear);
+        return switch (label) {
+            case "안전" -> "1";
+            case "양호" -> "2";
+            case "주의" -> "3";
+            default -> "0";
+        };
+    }
+
+    // --- helpers ---
+    private static class Triple { double a,b,c; Triple(double a,double b,double c){this.a=a;this.b=b;this.c=c;} }
+
+    private static Triple last3Years(Map<String, String> byYear) {
+        if (byYear == null || byYear.size() < 3) return null;
+        List<String> years = new ArrayList<>(byYear.keySet());
+        Collections.sort(years);                 // "2022","2023","2024" 처럼 오름차순
+        int n = years.size();
+        String y1 = years.get(n-3), y2 = years.get(n-2), y3 = years.get(n-1);
+        Double a = parsePct(byYear.get(y1));
+        Double b = parsePct(byYear.get(y2));
+        Double c = parsePct(byYear.get(y3));
+        if (a == null || b == null || c == null) return null;
+        return new Triple(a,b,c);
+    }
+
+    private static Double parsePct(String s) {
+        if (s == null) return null;
+        try { return Double.parseDouble(s.replace(",", "")); }
+        catch (Exception e) { return null; }
+    }
+
 }

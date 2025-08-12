@@ -7,7 +7,7 @@ from typing import Optional
 from fastapi import HTTPException
 from utils.config import DARTAPI_KEY, YEARS, REPRT_CODE, FS_DIV_OPTIONS
 from utils.corp_code import get_corp_name
-from utils.api_util import fetch_corp_emp_data, fetch_news_articles
+from utils.api_util import fetch_corp_emp_data, fetch_news_articles, fetch_corp_dividend_data
 
 
 
@@ -75,7 +75,6 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
         "주당 현금배당금(원)": 0,
         "현금배당수익률(%)": 0.0,
         "주식배당수익률(%)": 0.0,
-        "(연결)현금배당성향(%)": 0.0,
         }
         # 2) 병합 직후 캐논키 생성
         for y in YEARS:

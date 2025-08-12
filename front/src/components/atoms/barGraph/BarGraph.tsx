@@ -10,20 +10,21 @@ interface Props {
     readonly unit?: string;
     readonly height?: number;
     readonly size: string;
+    readonly style?: boolean;
 }
 
-const BarGraph = ({data, graphList, unit, height, size}: Props) => {
+const BarGraph = ({data, graphList, unit, height, size, style}: Props) => {
     const theme = useTheme();
   return (
     <ResponsiveContainer width='100%' height={height ?? 100}>
         <BarChart data={data} barCategoryGap={size !== 'sm' ? 20 : 10} margin={{top: 0, left: 0, bottom: 0, right: 0}} >
-            <CartesianGrid stroke={theme.colors.primary[100]} strokeDasharray={'1 3'} vertical={false} />
+            <CartesianGrid stroke={style ? 'white' : theme.colors.primary[100]} strokeDasharray={'1 3'} vertical={false} />
             <Bar
                 dataKey={graphList[0]}
                 name={graphList[0]}
                 radius={[5, 5, 0 , 0]}
-                fill={theme.colors.primaryGreen[40]}
-                activeBar={{fill: theme.colors.primaryGreen[60]}}
+                fill={style ? 'white' : theme.colors.primaryGreen[40]}
+                activeBar={{fill: style ? 'white' : theme.colors.primaryGreen[60]}}
             />
             <XAxis
                 dataKey='year'
@@ -31,11 +32,11 @@ const BarGraph = ({data, graphList, unit, height, size}: Props) => {
                 tickMargin={5}
                 tick={{
                     fontSize: theme.typo.caption2Light.fontSize,
-                    fill: theme.colors.natural[50]
+                    fill: style ? 'white' : theme.colors.natural[50]
                 }}
                 tickLine={false}
                 axisLine={{
-                    stroke: theme.colors.primary[80]
+                    stroke: style ? 'white' : theme.colors.primary[80]
                 }}
             />
             <YAxis
@@ -43,11 +44,11 @@ const BarGraph = ({data, graphList, unit, height, size}: Props) => {
                 tickMargin={5}
                 tick={{
                     fontSize: theme.typo.caption2Light.fontSize,
-                    fill: theme.colors.natural[50]
+                    fill: style ? 'white' : theme.colors.natural[50]
                 }}
                 tickLine={false}
                 axisLine={{
-                    stroke: theme.colors.primary[80]
+                    stroke: style ? 'white' : theme.colors.primary[80]
                 }}
             />
             <Tooltip formatter={(value: number | string) => {
@@ -61,7 +62,7 @@ const BarGraph = ({data, graphList, unit, height, size}: Props) => {
                     return value + '%';
                 }
             }}
-            itemStyle={{color: theme.colors.natural[50]}}
+            itemStyle={{color: style ? 'white' : theme.colors.natural[50]}}
             cursor={{fill: theme.colors.natural[5]}}
             />
             {size !== 'sm' && <Legend content={<CustomLegend />} verticalAlign="top" />}

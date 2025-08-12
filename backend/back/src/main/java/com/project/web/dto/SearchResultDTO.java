@@ -20,9 +20,9 @@ public class SearchResultDTO {
     private InfoBoxDTO infoBox;
     private List<RadarDTO> rader;
     private List<AiSummaryDTO> aiSumary;
-    private List<SimilarCorpDTO> similarCorp;
     private List<Map<String, Object>> graphData;
     private List<NewsDataDTO> newsData;
+    private SignalDTO signalData;
     private String message;
 
 }

@@ -18,7 +18,10 @@ export interface GraphData {
     '자기자본비율': number | null | undefined,          
     '레버리지비율': number | null | undefined,
     '매출액성장률': number | null | undefined,          
-    '순이익성장률': number | null | undefined 
+    '순이익성장률': number | null | undefined,
+    "주당 현금배당금(원)": number | null | undefined | string,
+    "현금배당수익률(%)": number | null | undefined | string,
+    "주식배당수익률(%)": number | null | undefined | string,
 }
 
 // 리포트 데이터 양식

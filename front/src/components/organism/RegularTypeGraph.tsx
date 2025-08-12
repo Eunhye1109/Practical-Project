@@ -63,7 +63,7 @@ const RegularTypeGraph = ({data}: Prop) => {
   return (
     <Container>
         <LineContent>
-            <GraphBox type={typeList[0]} titleLable={stableTypeTitle[0]} textType={0} data={data.graphData} graphList={stableType[0]} tooltipId={'tip00'} bodyText={stableTypeBodyText} unit={unitList[0]} size={'lg'} height={200} aiSummary={'가짜 데이터입니다. 이 데이터는 이러이러한 근거를 바탕으로 이러이러한 내용의 분석 결과를 알 수 있다.'} boxBlur={true} />
+            <GraphBox type={typeList[0]} titleLable={stableTypeTitle[0]} textType={0} data={data.graphData} graphList={stableType[0]} tooltipId={'tip00'} bodyText={stableTypeBodyText} unit={unitList[0]} size={'lg'} height={300} aiSummary={'가짜 데이터입니다. 이 데이터는 이러이러한 근거를 바탕으로 이러이러한 내용의 분석 결과를 알 수 있다.'} boxBlur={true} />
             <SmContent>
                 <GraphBox type={typeList[1]} titleLable={stableTypeTitle[1]} textType={1} data={data.graphData} graphList={stableType[1]} tooltipId={'tip01'} bodyText={stableTypeBodyText} unit={unitList[1]} size={'sm'} aiSummary={''} boxBlur={true} />
                 <GraphBox type={typeList[2]} titleLable={stableTypeTitle[2]} textType={2} data={data.graphData} graphList={stableType[2]} tooltipId={'tip02'} bodyText={stableTypeBodyText} unit={unitList[2]} size={'sm'} aiSummary={''} boxBlur={true} />
