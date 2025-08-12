@@ -137,30 +137,31 @@ public class SearchServiceImpl implements SearchService {
                     .build()
             );
         }
+        String safePurpose = (userPurpose == null || userPurpose.isBlank()) ? "안정형" : userPurpose;
 
         Map<String, Map<String, String>> ratios = financialRatioService.calculate(columnList);
         List<Map<String, Object>> flatColumns = ConvertToFlatYearlyListUtil.convert(columnList, ratios);
+        
         String corpName = (String) allYearData.get("corpName");
         
         
-        
-        List<RadarDTO> radarList = RadarScoreCalculator.calculateScores(flatColumns);
-        String safePurpose = (userPurpose == null || userPurpose.isBlank()) ? "안정형" : userPurpose;
-        
         HeaderDTO header = headerAssembler.buildFromCache(corpCode);
 
-        InfoBoxDTO infoBox = infoBoxAssembler.build(corpCode, flatColumns);
+        String major = header.getMajor();
+        List<RadarDTO> radarList = RadarScoreCalculator.calculateScores(flatColumns, major);
 	
-	     // ✅ 인포박스 조립
-	     infoBoxAssembler.build(corpCode, flatColumns);
+        infoBoxAssembler.build(corpCode, flatColumns);
+        
+        InfoBoxDTO infoBox = infoBoxAssembler.build(corpCode, flatColumns);
 	     
-
 	     List<SimilarCorpDTO> similarCorp = similarCorpService.fetchTop3(corpName);
 	     
 	     List<NewsDataDTO> newsList = fetchService.fetchNewsData(corpName);
 
 	     List<AiSummaryDTO> aiSummaryList = aiSummaryService.getAiSummaryFromFastAPI(corpCode, safePurpose, flatColumns, newsList);
 	     System.out.println("🤖 [AI] 긍부정 분석 결과 수 = " + aiSummaryList.size());
+	     
+	     
 	     
 	     // ❌ 삭제: result.setInfoBox(infoBox);  // 이런 변수 없음. 지워주세요.
 	
