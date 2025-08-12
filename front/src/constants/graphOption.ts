@@ -4,7 +4,7 @@ import React from "react";
 export const stableTypeTitle = ['부채 안정성 지수', '비상금 지갑 크기', '지갑 속 현금 사정', '3년간 빚 부담의 평균선', '3년간 버틸 여력의 평균선', '재무 체력 변화 한눈에 보기']
 
 // 공격형 그래프제목 리스트
-export const attackTypeTitle = ['매출·이익 가속도', '수익 파워 지수', '순이익 점프율', '매출 벌이 속도', '순이익 벌이 속도', '재무 체력 변화 한눈에 보기']
+export const attackTypeTitle = ['3개년 실적', '3개년 수익률', '순이익의 변화', '매출 벌이 속도', '순이익 벌이 속도', '재무 체력 변화 한눈에 보기']
 
 // 혼합형 그래프제목 리스트
 export const adminTypeTitle = ['재무 밸런스 점검표', '안정성과 수익 더블체크', '매출 성장 곡선', '재무 체력 변화 한눈에 보기']
@@ -27,7 +27,7 @@ export const stableType = {
 export const attackType: Record<number, string[]> = {
     // 조합1
     0: ['매출액', '영업이익'], // 그룹바
-    1: ['매출성장률'], // 라인
+    1: ['매출액성장률'], // 라인
     2: ['순이익성장률'], // 복합형(라인/바)
     // 조합2
     3: ['ROE', 'ROA', '영업이익률'], // 스택
@@ -195,21 +195,24 @@ export const adminTypeBodyText = (type: number) => {
         return {
             description: "수익·안정·성장의 균형이 잘 지켜지고 있을까?",
             tips: [
-                "-"
+                '도출 방법',
+                "3년간의 ROA, ROE, 부채비율, 영업이익률, 유동비율 값"
             ]
         }
     case 1:
         return {
             description: '부채 관리와 수익 창출이 균형 잡혔을까?',
             tips: [
-                '-'
+                '도출 방법',
+                '3년간의 ROE, 매출총이익률, 영업이익률  변화율'
             ]
         }
     case 2:
         return {
             description: '매출과 이익이 꾸준히 늘고 있을까?',
             tips: [
-                '-'
+                '도출 방법',
+                '연도별 매출액, 영업이익 증감률 '
             ]
         }
     case 3:

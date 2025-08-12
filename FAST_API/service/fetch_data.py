@@ -8,9 +8,6 @@ from fastapi import HTTPException
 from utils.config import DARTAPI_KEY, YEARS, REPRT_CODE, FS_DIV_OPTIONS
 from utils.corp_code import get_corp_name
 from utils.api_util import fetch_corp_emp_data, fetch_news_articles
-from utils.logo_utils import get_logo_url
-from prompts.gpt_prompts import build_news_summary_prompt
-import logging
 
 
 
@@ -22,6 +19,8 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     
     corp_name = get_corp_name(corp_code)
     result = {}
+    result["corpName"] = corp_name
+    result["corpCode"] = corp_code
 
     # ✅ [1] 재무정보 수집
     for year in YEARS:
@@ -60,19 +59,53 @@ def fetch_corp_data(corp_code: str, user_purpose: Optional[str] = None):
     except Exception as e:
         print(f"⚠️ 인사정보 수집 실패: {e}")
 
-    # ✅ [3] 최종 기본 정보 추가
-    result["corpName"] = corp_name
-    result["corpCode"] = corp_code
-    result["logoUrl"] = get_logo_url(corp_name)
+    # [배당(alot)] 수집/병합
+    try:
+        alot_data = fetch_corp_dividend_data(corp_code)
 
-    # ✅ [4] 아무것도 없으면 soft return
-    if not any(k in result for k in YEARS):
-        result["warning"] = "수집된 재무 또는 인사정보가 없습니다."
+        # 1) alot 원본을 result[연도]에 먼저 병합
         
+        for y in YEARS:
+            ystr = str(y)
+            ymap = (alot_data or {}).get(ystr)
+            if ymap:
+                result.setdefault(ystr, {}).update(ymap)
+
+        DEFAULT_DIVIDEND = {
+        "주당 현금배당금(원)": 0,
+        "현금배당수익률(%)": 0.0,
+        "주식배당수익률(%)": 0.0,
+        "(연결)현금배당성향(%)": 0.0,
+        }
+        # 2) 병합 직후 캐논키 생성
+        for y in YEARS:
+            ystr = str(y)
+            if ystr in result:
+                canon = _build_dividend_canon(result[ystr])  # ← 이제 원본 키가 존재!
+                result[ystr].update(canon)
+
+                # (선택) 퍼지매칭 원천 차단: 원본 suffix 키 제거
+                for k in list(result[ystr].keys()):
+                    if "|보통주" in k or "|우선주" in k:
+                        del result[ystr][k]
+
+        # 디버그
+        for y in YEARS:
+            ystr = str(y)
+            if ystr in result:
+                keys = sorted([k for k in result[ystr].keys()
+                            if ("배당" in k or "수익률" in k or "성향" in k)])
+                print(f"[final dividend keys {ystr}] {keys}")
+
+        print("✅ 배당(alot) 병합 완료")
+    except Exception as e:
+        print(f"⚠️ 배당(alot) 수집 실패: {e}")
+
     # 뉴스 정보
     try:
         news_data = fetch_news_articles(corp_name)[:3]  # 최대 3개
         result["newsData"] = news_data
+        print(f"📰 news ok: {len(news_data)}건, signal={result['newsSignal']}")
         result["newsSummaryPrompt"] = build_news_summary_prompt(news_data)
     except Exception as e:
         result["newsData"] = []

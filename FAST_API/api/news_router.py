@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query
 from typing import Optional
-from service.fetch_data import fetch_news_articles
+from utils.api_util import fetch_news_articles
 
 router = APIRouter()
 

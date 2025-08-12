@@ -220,3 +220,94 @@
 #         result = generate_report(keyword, investor_type)
 #         print("\n✅ 보고서 생성 완료!")
 #         print(json.dumps(result, ensure_ascii=False, indent=2))
+
+
+# # FAST_API/api/pdf_router.py
+# from fastapi import APIRouter, Query, HTTPException
+# from fastapi.responses import StreamingResponse
+# from typing import Optional
+# from datetime import datetime
+# import io
+# from playwright.async_api import async_playwright
+
+# router = APIRouter(prefix="/pdf", tags=["pdf"])
+
+# PDF_MARGIN = {"top": "20mm", "right": "12mm", "bottom": "18mm", "left": "12mm"}
+# HEADER_HTML = """
+# <div style="width:100%; font-size:10px; color:#6b7280; padding:0 8px; display:flex; justify-content:space-between; align-items:center;">
+#   <span>Project Report</span><span></span>
+# </div>
+# """
+# FOOTER_HTML = f"""
+# <div style="width:100%; font-size:10px; color:#6b7280; padding:0 8px; display:flex; justify-content:space-between; align-items:center;">
+#   <span>Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S KST")}</span>
+#   <span>Page <span class="pageNumber"></span> / <span class="totalPages"></span></span>
+# </div>
+# """
+
+# async def _url_to_pdf_bytes(url: str, auth_header: Optional[str] = None) -> bytes:
+#     async with async_playwright() as p:
+#         browser = await p.chromium.launch(args=["--no-sandbox"])
+#         context = await browser.new_context(
+#             locale="ko-KR",
+#             extra_http_headers={"Authorization": auth_header} if auth_header else None,
+#         )
+#         page = await context.new_page()
+#         await page.goto(url, wait_until="networkidle", timeout=120000)
+#         await page.emulate_media(media="print")
+#         pdf = await page.pdf(
+#             format="A4", margin=PDF_MARGIN, print_background=True,
+#             display_header_footer=True, header_template=HEADER_HTML, footer_template=FOOTER_HTML
+#         )
+#         await browser.close()
+#         return pdf
+
+# async def _html_to_pdf_bytes(html: str, base_url: Optional[str] = None) -> bytes:
+#     async with async_playwright() as p:
+#         browser = await p.chromium.launch(args=["--no-sandbox"])
+#         context = await browser.new_context(locale="ko-KR")
+#         page = await context.new_page()
+#         await page.set_content(html, wait_until="networkidle", base_url=base_url)
+#         await page.emulate_media(media="print")
+#         pdf = await page.pdf(
+#             format="A4", margin=PDF_MARGIN, print_background=True,
+#             display_header_footer=True, header_template=HEADER_HTML, footer_template=FOOTER_HTML
+#         )
+#         await browser.close()
+#         return pdf
+
+# @router.get("/report", summary="리포트 화면(URL) → PDF")
+# async def export_report_pdf(
+#     corp_code: str = Query(..., description="기업 코드"),
+#     deep: bool = Query(False, description="심층 보고서 여부"),
+#     token: Optional[str] = Query(None, description="프론트 인증 토큰(옵션)")
+# ):
+#     # 프론트 라우트 규칙에 맞춰 URL 구성
+#     base = "http://localhost:3000"  # 배포 시 ENV로
+#     route = f"/reports/{corp_code}/deep" if deep else f"/reports/{corp_code}"
+#     url = f"{base}{route}"
+
+#     try:
+#         pdf_bytes = await _url_to_pdf_bytes(url, auth_header=f"Bearer {token}" if token else None)
+#     except Exception as e:
+#         raise HTTPException(500, f"PDF 생성 실패: {e}")
+
+#     filename = f"{corp_code}_{'deep' if deep else 'report'}.pdf"
+#     return StreamingResponse(
+#         io.BytesIO(pdf_bytes),
+#         media_type="application/pdf",
+#         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+#     )
+
+# @router.post("/render", summary="서버 생성 HTML → PDF")
+# async def export_rendered_pdf(html: str, base_url: Optional[str] = None, filename: str = "rendered.pdf"):
+#     try:
+#         pdf_bytes = await _html_to_pdf_bytes(html, base_url=base_url)
+#     except Exception as e:
+#         raise HTTPException(500, f"PDF 생성 실패: {e}")
+
+#     return StreamingResponse(
+#         io.BytesIO(pdf_bytes),
+#         media_type="application/pdf",
+#         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+#     )

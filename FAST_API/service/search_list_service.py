@@ -92,7 +92,7 @@ def search_list_summary(keyword: str, user_purpose: Optional[str] = None):
         except Exception as e:
             results.append({"회사명": corp["corp_name"], "오류": str(e)})
 
-        time.sleep(1.2)  # DART 요청 제한 대응
+        time.sleep(0.5)  # DART 요청 제한 대응
 # ✅ Spring Boot와 통신을 위한 JSON 객체 형태로 감싸기
     print(f"\n🎯 결과 총 {len(results)}건 준비 완료. 반환 중...")
     print("📤 [DEBUG] 최종 반환 JSON 데이터 →")

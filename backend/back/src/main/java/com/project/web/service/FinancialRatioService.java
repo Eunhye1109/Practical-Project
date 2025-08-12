@@ -30,6 +30,9 @@ public class FinancialRatioService {
         result.put("레버리지비율", FinancialUtils.divide(FinancialUtils.sum(자본총계, 부채총계), 자본총계));
         result.put("ROA", FinancialUtils.divide(순이익, FinancialUtils.sum(자본총계, 부채총계)));
 
+        result.put("매출액성장률", FinancialUtils.yoy(매출액));
+        result.put("순이익성장률", FinancialUtils.yoy(순이익));
+        
         return result;
     }
 

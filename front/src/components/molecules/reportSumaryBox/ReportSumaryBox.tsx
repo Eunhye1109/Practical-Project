@@ -133,6 +133,14 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, similarCorpData}: Props)
                         <p>다른 회사와 비교한 이 회사의 컨디션은?</p>
                         <p><strong>안정성</strong></p>
                         <p>= 100 - (부채비율/3) + (자기자본비율 /2)</p>
+                        <p><strong>유동성</strong></p>
+                        <p>= min(유동비율 / 2, 100)</p>
+                        <p><strong>수익성</strong></p>
+                        <p>= (영업이익륳 * 0.6)  + (ROE * 0.4)</p>
+                        <p><strong>성장성</strong></p>
+                        <p>= (0.3 * 매출성장률 + 0.4 * 영업이익성장률 + 0.3 * 순이익CAGR)</p>
+                        <p><strong>인적효율성</strong></p>
+                        <p>{`= [ 매출성장률 - {(당년 평균인건비 - 전년 평균인건비) / 전년 평균인건비} ] * 100`}</p>
                     </Tooltip>
                 </TitleBox>
             </TextBox>

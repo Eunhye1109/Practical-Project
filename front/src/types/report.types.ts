@@ -16,7 +16,9 @@ export interface GraphData {
     '부채비율': number | null | undefined,            
     '유동비율': number | null | undefined,        
     '자기자본비율': number | null | undefined,          
-    '레버리지비율': number | null | undefined 
+    '레버리지비율': number | null | undefined,
+    '매출액성장률': number | null | undefined,          
+    '순이익성장률': number | null | undefined 
 }
 
 // 리포트 데이터 양식

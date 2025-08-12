@@ -127,9 +127,9 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
             graphList.some((key) => {
                 const value = item[key as keyof typeof item];
                 const isEmpty =
-                value === null ||
-                value === undefined ||
-                value === '' ||
+                value === null &&
+                value === undefined &&
+                value === '' &&
                 (typeof value === 'number' && isNaN(value));
 
                 if (isEmpty) {
@@ -202,10 +202,10 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
                             </TextBox>
                             <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
                             {graph(type)}
-                            <AiSumaryBox>
+                            {/* <AiSumaryBox>
                                 <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
                                     <AiSumary type={false}>{aiSummary}</AiSumary>
-                            </AiSumaryBox>
+                            </AiSumaryBox> */}
                         </BlurBox>
                     </Container>
                 )
@@ -228,10 +228,10 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
                             </TextBox>
                             <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
                             {graph(type)}
-                            <AiSumaryBox>
+                            {/* <AiSumaryBox>
                                 <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
                                     <AiSumary type={false}>{aiSummary}</AiSumary>
-                            </AiSumaryBox>
+                            </AiSumaryBox> */}
                         </BlurBox>
                     </Container>
                 )
@@ -254,10 +254,10 @@ const GraphBox = ({type, titleLable, textType, data, graphList, unit, tooltipId,
                             </TextBox>
                             <Line width='100%' color={theme.colors.natural[15]} margin='30px' />
                             {graph(type)}
-                            <AiSumaryBox>
+                            {/* <AiSumaryBox>
                                 <AiSumary type={true}>AI 그래프 분석 요약</AiSumary>
                                     <AiSumary type={false}>{aiSummary}</AiSumary>
-                            </AiSumaryBox>
+                            </AiSumaryBox> */}
                         </BlurBox>
                     </Container>
                 )
