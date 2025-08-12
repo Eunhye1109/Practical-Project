@@ -7,6 +7,9 @@ import { Tooltip } from 'react-tooltip';
 import { Line } from 'components/atoms';
 import RadarGraph from 'components/atoms/radarGraph/RadarGraph';
 import { useTheme } from '@emotion/react';
+import siren01 from 'assets/images/etc/siren01.png';
+import siren02 from 'assets/images/etc/siren02.png';
+import siren03 from 'assets/images/etc/siren03.png';
 
 interface Props {
     data: {subject: string, A: number, B: number, fullMark: number}[];
@@ -66,6 +69,19 @@ const SumaryContent = styled.div`
     gap: 20px;
 `;
 
+const RiskContent = styled.div`
+    width: 100%;
+    // 디스플레이
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    align-items: center;
+    justify-content: start;
+    box-sizing: border-box;
+    padding-top: 45%;
+`;
+
 const SumaryBox = styled.div`
     width: 100%;
     max-height: calc(50% - 5px);
@@ -83,6 +99,11 @@ const BodyText = styled.p<{align: boolean}>`
     color: ${({theme}) => theme.colors.natural[70]};
     text-align: ${({align}) => align ? 'center' : 'left'};
     line-height: 1.4rem;
+    box-sizing: border-box;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid white;
+    border-radius: 5px;
 `;
 
 const EmotionTitle = styled.span<{color: string}>`
@@ -90,36 +111,54 @@ const EmotionTitle = styled.span<{color: string}>`
     color: ${({color}) => color};
 `;
 
-const SimilarTitle = styled.span<{color: string}>`
-    ${({theme}) => typoStyle.caption.regular(theme)}
-    color: ${({color}) => color};
+const RiskTextBox = styled.div`
+    width: 100%;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.7);
+    box-sizing: border-box;
+    border: 1px solid white;
+    padding: 15px;
+    z-index: 2;
 `;
 
-const SimilarTextBox = styled.div`
+const RiskTitleBox = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: start;
-    gap: 2px;
-`;
-
-const Logo = styled.img`
-  // 크기
-  width: 70px;
-  height: 70px;
-  // 스타일
-  border-radius: 50%;
-`;
-
-const SimilarBox = styled.div`
-    width: 100%;
-    display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
 `;
 
-const ReportSumaryBox = ({data, cropName, aiSumaryData, similarCorpData}: Props) => {
+const RiskCaption = styled.p`
+    ${({theme}) => typoStyle.caption.regular(theme)}
+    color: ${({theme}) => theme.colors.primary[80]};
+`;
+
+const RiskBody = styled.p`
+    ${({theme}) => typoStyle.caption.light(theme)}
+    color: ${({theme}) => theme.colors.natural[80]};
+    text-align: center;
+`;
+
+const RiskTitle = styled.p`
+    ${({theme}) => typoStyle.title.bold(theme)};
+    color: ${({theme}) => theme.colors.primary[100]};
+`;
+
+const RiskSiren = styled.img`
+    width: 80%;
+    position: absolute;
+    top: -10%;
+`;
+
+const ReportSumaryBox = ({data, cropName, aiSumaryData}: Props) => {
     const theme = useTheme();
+    let summaryList = [];
+
+    // ai분석 쪼개기
+    const splitText = (text: string) => {
+        return text.split('다.').filter(s => s.trim() !== '').map(s => s + '다.')
+    }
   return (
     <Container>
         {/* 종합 재무지표 분석: radar 차트 */}
@@ -168,7 +207,9 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, similarCorpData}: Props)
                     <SumaryBox>
                         {item.emotion === '긍정' ? <ThumbUp width={25} height={25} color={theme.colors.primary[100]} /> : <ThumbDown width={25} height={25}  color={theme.colors.primaryBlue[100]} />}
                         {item.emotion === '긍정' ? <EmotionTitle color={theme.colors.primary[100]}>긍정적인 분석</ EmotionTitle> : <EmotionTitle color={theme.colors.primaryBlue[100]}>부정적인 분석</ EmotionTitle>}
-                        <BodyText align={true}>{item.summary}</BodyText>
+                        {splitText(item.summary).map((aiSummary) => (
+                            <BodyText align={true}>{aiSummary}</BodyText>
+                        ))}
                     </SumaryBox>
                 ))}
             </SumaryContent>
@@ -194,17 +235,18 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, similarCorpData}: Props)
                 </TitleBox>
             </TextBox>
             <Line width='100%' color={theme.colors.primary[80]} margin='20px' />
-            <SumaryContent>
-                {similarCorpData.map((item) => (
-                    <SimilarBox>
-                        <Logo src={item.logo} />
-                        <SimilarTextBox>
-                            <SimilarTitle color={theme.colors.natural[80]}>{item.corpName} | 유사도 {item.probability}</SimilarTitle>
-                            <BodyText align={false}>{item.basis}</BodyText>
-                        </SimilarTextBox>
-                    </SimilarBox>
-                ))}
-            </SumaryContent>
+            <RiskContent>
+                <RiskSiren src={siren01} />
+                <RiskTextBox>
+                    <RiskTitleBox>
+                        <RiskCaption>{cropName}의 리스크 신호등은</RiskCaption>
+                        <RiskTitle>'안전'한 상태</RiskTitle>
+                    </RiskTitleBox>
+                    <RiskBody>
+                        최근 3년간 부채비율 변화폭이 15% 미만이고, 현재 부채비율이 150% 미만인 상태
+                    </RiskBody>
+                </RiskTextBox>
+            </RiskContent>
         </Content>
     </Container>
   )

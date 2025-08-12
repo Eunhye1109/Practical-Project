@@ -6,10 +6,11 @@ import { useTheme } from '@emotion/react';
 import bg from 'assets/images/bg/background11.png';
 import { Tooltip } from 'react-tooltip';
 import { Help } from 'assets/icons';
+import { GraphData } from 'types/report.types';
 
 interface Props {
     newsData: Array<{date: string, title: string, body: string, link: string}>;
-    corpName: string;
+    data: GraphData;
 }
 
 const Container = styled.div`
@@ -34,25 +35,18 @@ const Content = styled.div`
     background-color: white;
 `;
 
-const NewContent = styled.div`
+const GradeContent = styled.div`
     width: calc(50% - 10px);
     // 디스플레이
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: start;
     flex-direction: column;
     padding: 30px;
     box-sizing: border-box;
-    gap: 5px;
     // 스타일
     border-radius: 10px;
     border: 1px solid ${({theme}) => theme.colors.primaryBlue[40]};
-    background-image:
-        ${({theme}) => theme.colors.gradient.crossOpacity},
-        url(${bg}),
-        ${({theme}) => theme.colors.gradient.greenCross};
-    background-size: cover;
-    background-position: center;
+    background-image: ${({theme}) => theme.colors.gradient.greenCross};
 `;
 
 const NewsContent = styled.div`
@@ -79,8 +73,9 @@ const TitleBox = styled.div`
     justify-content: space-between;
 `;
 
-const TitleLabel = styled.span`
-    ${({theme}) => typoStyle.bodyTitle.semiBold(theme)}
+const TitleLabel = styled.span<{type?: boolean}>`
+    ${({theme}) => typoStyle.bodyTitle.semiBold(theme)};
+    color: ${({type}) => type ? 'white' : undefined};
 `;
 
 const NewsItemBox = styled.div`
@@ -126,27 +121,12 @@ const NewsTitle = styled.a<{width: string}>`
     }
 `;
 
-const RiskSubTitle = styled.span<{thick: boolean}>`
-    font-size: 20px;
-    font-weight: ${({thick}) => thick ? 300 : 200};
-    font-family: 'SB어그로';
-    color: white;
-`;
-
-const RiskRank = styled.span`
-    font-size: 100px;
-    font-weight: 300;
-    font-family: 'SB어그로';
-    color: white;
-`;
-
 const TestBox = styled.div`
     width: 100%;
     height: 100%;
-    background-color: red;
 `;
 
-const ReportNewsBox = ({newsData, corpName}: Props) => {
+const ReportNewsBox = ({newsData, data}: Props) => {
     const theme = useTheme();
   return (
     <Container>
@@ -181,19 +161,19 @@ const ReportNewsBox = ({newsData, corpName}: Props) => {
             }
         </Content>
 
-        <Content>
+        <GradeContent>
             <TextBox>
                 <TitleBox>
-                    <TitleLabel>배당금 성적표</TitleLabel>
-                    <Help color={theme.colors.primary[80]} data-tooltip-id='news01' width={20} />
+                    <TitleLabel type={true}>배당금 성적표</TitleLabel>
+                    <Help color={theme.colors.natural[0]} data-tooltip-id='news01' width={20} />
                     <Tooltip id='news01'>
                         <p>최근 3개년  주당 현금배당금 및 현금배당수익률 추이</p>
                     </Tooltip>
                 </TitleBox>
             </TextBox>
-            <Line width='100%' color={theme.colors.natural[15]} margin='10px' />
+            <Line width='100%' color={theme.colors.natural[0]} margin='10px' />
             
-        </Content>
+        </GradeContent>
     </Container>
   )
 }

@@ -197,7 +197,7 @@ const Report = () => {
         // 비회원
         <RegularTypeGraph data={reportData} />)}
         
-        <ReportNewsBox newsData={reportData.newsData} corpName={reportData.corpName} />
+        <ReportNewsBox newsData={reportData.newsData} data={reportData.graphData} />
         
         <NotiBox>
           <BodyText>
