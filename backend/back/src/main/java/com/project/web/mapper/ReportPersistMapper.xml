@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.web.mapper.ReportPersistMapper">
+
+  <!-- ===== Freshness / 존재 체크 ===== -->
+  <select id="countFreshHeader" parameterType="string" resultType="int">
+    SELECT COUNT(1)
+    FROM COMPANY_HEADER
+    WHERE CORP_CODE = #{corpCode}
+      AND UPDATED_AT >= SYSDATE - 90
+  </select>
+
+  <select id="countGraph" parameterType="string" resultType="int">
+    SELECT COUNT(1) FROM COMPANY_GRAPH WHERE CORP_CODE = #{corpCode}
+  </select>
+
+  <!-- ===== UPSERT: HEADER / INFO / AI ===== -->
+  <insert id="upsertHeader" parameterType="map">
+    MERGE INTO COMPANY_HEADER t
+    USING (SELECT
+             #{corpCode} AS corpCode,
+             #{corpName} AS corpName,
+             #{logoUrl}  AS logoUrl,
+             #{major}    AS major,
+             #{keywordsJson} AS keywordsJson
+           FROM dual) s
+    ON (t.CORP_CODE = s.corpCode)
+    WHEN MATCHED THEN UPDATE SET
+      t.CORP_NAME = s.corpName,
+      t.LOGO_URL  = s.logoUrl,
+      t.MAJOR     = s.major,
+      t.KEYWORDS_JSON = s.keywordsJson,
+      t.UPDATED_AT = SYSDATE
+    WHEN NOT MATCHED THEN INSERT
+      (CORP_CODE, CORP_NAME, LOGO_URL, MAJOR, KEYWORDS_JSON, UPDATED_AT)
+      VALUES (s.corpCode, s.corpName, s.logoUrl, s.major, s.keywordsJson, SYSDATE)
+  </insert>
+
+  <insert id="upsertInfo" parameterType="map">
+    MERGE INTO COMPANY_INFO t
+    USING (SELECT
+             #{corpCode} AS corpCode,
+             #{summary}  AS summary,
+             #{ceoName}  AS ceoName,
+             #{stockType} AS stockType,
+             #{establishDate} AS establishDate,
+             #{revenueStr} AS revenueStr,
+             #{empCnt} AS empCnt
+           FROM dual) s
+    ON (t.CORP_CODE = s.corpCode)
+    WHEN MATCHED THEN UPDATE SET
+      t.SUMMARY = s.summary,
+      t.CEO_NAME = s.ceoName,
+      t.STOCK_TYPE = s.stockType,
+      t.ESTABLISH_DATE = s.establishDate,
+      t.REVENUE_STR = s.revenueStr,
+      t.EMP_CNT = s.empCnt,
+      t.UPDATED_AT = SYSDATE
+    WHEN NOT MATCHED THEN INSERT
+      (CORP_CODE, SUMMARY, CEO_NAME, STOCK_TYPE, ESTABLISH_DATE, REVENUE_STR, EMP_CNT, UPDATED_AT)
+      VALUES (s.corpCode, s.summary, s.ceoName, s.stockType, s.establishDate, s.revenueStr, s.empCnt, SYSDATE)
+  </insert>
+
+  <insert id="upsertAiSummary" parameterType="map">
+    MERGE INTO COMPANY_AI_SUMMARY t
+    USING (SELECT
+             #{corpCode} AS corpCode,
+             #{emotion}  AS emotion,
+             #{summary}  AS summary
+           FROM dual) s
+    ON (t.CORP_CODE = s.corpCode)
+    WHEN MATCHED THEN UPDATE SET
+      t.EMOTION = s.emotion, t.SUMMARY = s.summary, t.UPDATED_AT = SYSDATE
+    WHEN NOT MATCHED THEN INSERT
+      (CORP_CODE, EMOTION, SUMMARY, UPDATED_AT)
+      VALUES (s.corpCode, s.emotion, s.summary, SYSDATE)
+  </insert>
+
+  <!-- ===== UPSERT: RADAR (배치) ===== -->
+  <insert id="upsertRadarBatch" parameterType="map">
+  MERGE INTO COMPANY_RADAR t
+  USING (
+    <foreach collection="list" item="r" separator=" UNION ALL ">
+      SELECT #{corpCode} AS corpCode,
+             #{r.subject} AS subject,
+             #{r.aVal}    AS aVal,
+             #{r.bVal}    AS bVal,
+             #{r.fullMark} AS fullMark
+      FROM dual
+    </foreach>
+  ) s
+  ON (t.CORP_CODE = s.corpCode AND t.SUBJECT = s.subject)
+  WHEN MATCHED THEN UPDATE SET
+    t.A_VALUE = s.aVal, t.B_VALUE = s.bVal, t.FULL_MARK = s.fullMark, t.UPDATED_AT = SYSDATE
+  WHEN NOT MATCHED THEN
+    INSERT (RADAR_ID, CORP_CODE, SUBJECT, A_VALUE, B_VALUE, FULL_MARK, UPDATED_AT)
+    VALUES (COMPANY_RADAR_SEQ.NEXTVAL, s.corpCode, s.subject, s.aVal, s.bVal, s.fullMark, SYSDATE)
+</insert>
+
+  <!-- ===== UPSERT: GRAPH (배치) ===== -->
+  <insert id="upsertGraphBatch" parameterType="map">
+  MERGE INTO COMPANY_GRAPH t
+  USING (
+    <foreach collection="list" item="g" separator=" UNION ALL ">
+      SELECT #{corpCode} AS corpCode,
+             #{g.year}        AS year,
+             #{g.netProfit}   AS netProfit,
+             #{g.opProfit}    AS opProfit,
+             #{g.totalDebt}   AS totalDebt,
+             #{g.totalEquity} AS totalEquity,
+             #{g.revenue}     AS revenue,
+             #{g.curAssets}   AS curAssets,
+             #{g.curDebts}    AS curDebts,
+             #{g.avgSalary}   AS avgSalary,
+             #{g.empCnt}      AS empCnt,
+             #{g.dpsCommon}   AS dpsCommon,
+             #{g.roe}         AS roe,
+             #{g.opm}         AS opm,
+             #{g.debtRatio}   AS debtRatio,
+             #{g.curRatio}    AS curRatio,
+             #{g.profitMargin} AS profitMargin,
+             #{g.equityRatio} AS equityRatio,
+             #{g.leverage}    AS leverage,
+             #{g.roa}         AS roa,
+             #{g.salesGrowth} AS salesGrowth,
+             #{g.netGrowth}   AS netGrowth
+      FROM dual
+    </foreach>
+  ) s
+  ON (t.CORP_CODE = s.corpCode AND t.YEAR = s.year)
+  WHEN MATCHED THEN UPDATE SET
+    t.NET_PROFIT = s.netProfit, t.OP_PROFIT = s.opProfit, t.TOTAL_DEBT = s.totalDebt,
+    t.TOTAL_EQUITY = s.totalEquity, t.REVENUE = s.revenue, t.CUR_ASSETS = s.curAssets,
+    t.CUR_DEBTS = s.curDebts, t.AVG_SALARY = s.avgSalary, t.EMP_CNT = s.empCnt,
+    t.DPS_COMMON = s.dpsCommon, t.ROE = s.roe, t.OPM = s.opm, t.DEBT_RATIO = s.debtRatio,
+    t.CUR_RATIO = s.curRatio, t.PROFIT_MARGIN = s.profitMargin, t.EQUITY_RATIO = s.equityRatio,
+    t.LEVERAGE = s.leverage, t.ROA = s.roa, t.SALES_GROWTH = s.salesGrowth, t.NET_GROWTH = s.netGrowth,
+    t.UPDATED_AT = SYSDATE
+  WHEN NOT MATCHED THEN
+    INSERT (GRAPH_ID, CORP_CODE, YEAR, NET_PROFIT, OP_PROFIT, TOTAL_DEBT, TOTAL_EQUITY, REVENUE,
+            CUR_ASSETS, CUR_DEBTS, AVG_SALARY, EMP_CNT, DPS_COMMON, ROE, OPM, DEBT_RATIO,
+            CUR_RATIO, PROFIT_MARGIN, EQUITY_RATIO, LEVERAGE, ROA, SALES_GROWTH, NET_GROWTH, UPDATED_AT)
+    VALUES (COMPANY_GRAPH_SEQ.NEXTVAL, s.corpCode, s.year, s.netProfit, s.opProfit, s.totalDebt, s.totalEquity, s.revenue,
+            s.curAssets, s.curDebts, s.avgSalary, s.empCnt, s.dpsCommon, s.roe, s.opm, s.debtRatio,
+            s.curRatio, s.profitMargin, s.equityRatio, s.leverage, s.roa, s.salesGrowth, s.netGrowth, SYSDATE)
+</insert>
+
+  <!-- ===== UPSERT: NEWS (배치 / 단일 MERGE with UNION ALL) ===== -->
+  <insert id="mergeNewsBatch" parameterType="map">
+  MERGE INTO COMPANY_NEWS t
+  USING (
+    <foreach collection="list" item="n" separator=" UNION ALL ">
+      SELECT #{corpCode} AS corpCode,
+             TO_DATE(#{n.date}, 'YYYY.MM.DD') AS newsDate,
+             #{n.title} AS title,
+             #{n.body}  AS body,
+             #{n.link}  AS link
+      FROM dual
+    </foreach>
+  ) s
+  ON (t.CORP_CODE = s.corpCode AND t.LINK = s.link)
+  WHEN MATCHED THEN UPDATE SET
+    t.NEWS_DATE = s.newsDate, t.TITLE = s.title, t.BODY = s.body, t.UPDATED_AT = SYSDATE
+  WHEN NOT MATCHED THEN
+    INSERT (NEWS_ID, CORP_CODE, NEWS_DATE, TITLE, BODY, LINK, CREATED_AT)
+    VALUES (COMPANY_NEWS_SEQ.NEXTVAL, s.corpCode, s.newsDate, s.title, s.body, s.link, SYSDATE)
+</insert>
+
+  <!-- ===== SELECTs for 재구성 ===== -->
+  <select id="selectHeader" parameterType="string" resultType="map">
+    SELECT CORP_NAME, LOGO_URL, MAJOR, KEYWORDS_JSON FROM COMPANY_HEADER WHERE CORP_CODE = #{corpCode}
+  </select>
+
+  <select id="selectInfo" parameterType="string" resultType="map">
+    SELECT SUMMARY, CEO_NAME, STOCK_TYPE, ESTABLISH_DATE, REVENUE_STR, EMP_CNT
+    FROM COMPANY_INFO WHERE CORP_CODE = #{corpCode}
+  </select>
+
+  <select id="selectRadar" parameterType="string" resultType="map">
+    SELECT SUBJECT, A_VALUE, B_VALUE, FULL_MARK
+    FROM COMPANY_RADAR WHERE CORP_CODE = #{corpCode} ORDER BY SUBJECT
+  </select>
+
+  <select id="selectAi" parameterType="string" resultType="map">
+    SELECT EMOTION, SUMMARY FROM COMPANY_AI_SUMMARY WHERE CORP_CODE = #{corpCode}
+  </select>
+
+  <select id="selectGraph" parameterType="string" resultType="map">
+    SELECT YEAR, NET_PROFIT, OP_PROFIT, TOTAL_DEBT, TOTAL_EQUITY, REVENUE,
+           CUR_ASSETS, CUR_DEBTS, AVG_SALARY, EMP_CNT, DPS_COMMON, ROE, OPM,
+           DEBT_RATIO, CUR_RATIO, PROFIT_MARGIN, EQUITY_RATIO, LEVERAGE, ROA,
+           SALES_GROWTH, NET_GROWTH
+    FROM COMPANY_GRAPH
+    WHERE CORP_CODE = #{corpCode}
+    ORDER BY YEAR
+  </select>
+
+  <select id="selectNews" parameterType="string" resultType="map">
+    SELECT TO_CHAR(NEWS_DATE,'YYYY.MM.DD') AS DATE, TITLE, BODY, LINK
+    FROM COMPANY_NEWS
+    WHERE CORP_CODE = #{corpCode}
+    ORDER BY NEWS_DATE DESC
+  </select>
+
+</mapper>
