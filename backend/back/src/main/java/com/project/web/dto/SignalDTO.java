@@ -8,5 +8,6 @@ import lombok.Data;
 public class SignalDTO {
 
 	private String corpName;
-	private String Rank;
+	private String signalColor;
+	private String signalSummary;
 }

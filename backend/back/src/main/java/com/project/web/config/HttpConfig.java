@@ -15,8 +15,8 @@ public class HttpConfig {
   @Primary                // 기본 주입 대상(여러 개 있을 때)
   public RestTemplate restTemplate(RestTemplateBuilder builder) {
     return builder
-        .setConnectTimeout(Duration.ofSeconds(3))
-        .setReadTimeout(Duration.ofSeconds(4))
+        .setConnectTimeout(Duration.ofSeconds(15))
+        .setReadTimeout(Duration.ofSeconds(20))
         .build();
   }
 }
