@@ -6,33 +6,39 @@ import java.util.*;
 
 public class RadarScoreCalculator {
 
-    public static List<RadarDTO> calculateScores(List<Map<String, Object>> graphData) {
+    public static List<RadarDTO> calculateScores(List<Map<String, Object>> graphData, String major) {
         if (graphData == null || graphData.size() < 2) return List.of();
 
         List<RadarDTO> result = new ArrayList<>();
 
-        result.add(makeRadar("안정성", avgStability(graphData)));
-        result.add(makeRadar("유동성", avgLiquidity(graphData)));
-        result.add(makeRadar("수익성", avgProfitability(graphData)));
-        result.add(makeRadar("성장성", calcGrowth(graphData)));
-        result.add(makeRadar("인적투입 효율성", calcHRProductivity(graphData)));
+        result.add(makeRadar("안정성", avgStability(graphData), major));
+        result.add(makeRadar("유동성", avgLiquidity(graphData), major));
+        result.add(makeRadar("수익성", avgProfitability(graphData), major));
+        result.add(makeRadar("성장성", calcGrowth(graphData), major));
+        result.add(makeRadar("인적투입 효율성", calcHRProductivity(graphData), major));
 
         return result;
     }
 
-    private static RadarDTO makeRadar(String subject, double score) {
-        RadarDTO dto = new RadarDTO();
-        dto.setSubject(subject);
-        dto.setB((int) Math.round(score));
-        dto.setA(50); // 업계 평균값: 추후 설정
-        dto.setFullMark(100);
-        return dto;
+    private static RadarDTO makeRadar(String subject, double score, String major) {
+    	 RadarDTO dto = new RadarDTO();
+         dto.setSubject(subject);
+         // ✅ 업계 평균값 반영 (제조 포함)
+         dto.setA(RadarIndustryAverage.getAValue(major, subject));
+         // ✅ B 값 0~100으로 제한
+         dto.setB((int) Math.round(clamp(score, 0, 100)));
+         dto.setFullMark(100);
+         return dto;
+    }
+    
+    private static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
     }
 
-    // 1. 안정성 = 평균[100 - (부채비율 / 3) + (자기자본비율 / 2)]
+
+ // 1. 안정성 = 평균[100 - (부채비율 / 3) + (자기자본비율 / 2)]
     private static double avgStability(List<Map<String, Object>> dataList) {
-        double sum = 0;
-        int count = 0;
+        double sum = 0; int count = 0;
         for (Map<String, Object> data : dataList) {
             double 부채비율 = getAsDouble(data, "부채비율");
             double 자기자본비율 = getAsDouble(data, "자기자본비율");
@@ -44,8 +50,7 @@ public class RadarScoreCalculator {
 
     // 2. 유동성 = 평균[min(유동비율 / 2, 100)]
     private static double avgLiquidity(List<Map<String, Object>> dataList) {
-        double sum = 0;
-        int count = 0;
+        double sum = 0; int count = 0;
         for (Map<String, Object> data : dataList) {
             double 유동비율 = getAsDouble(data, "유동비율");
             sum += Math.min(유동비율 / 2.0, 100.0);
@@ -56,8 +61,7 @@ public class RadarScoreCalculator {
 
     // 3. 수익성 = 평균[(영업이익률 * 0.6) + (ROE * 0.4)]
     private static double avgProfitability(List<Map<String, Object>> dataList) {
-        double sum = 0;
-        int count = 0;
+        double sum = 0; int count = 0;
         for (Map<String, Object> data : dataList) {
             double opMargin = getAsDouble(data, "영업이익률");
             double roe = getAsDouble(data, "ROE");
@@ -84,8 +88,9 @@ public class RadarScoreCalculator {
 
         double profitStart = getAsDouble(old, "순이익");
         double profitEnd = getAsDouble(now, "순이익");
-        double profitCAGR = (profitStart > 0 && profitEnd > 0 && size > 1) ?
-            (Math.pow(profitEnd / profitStart, 1.0 / (size - 1)) - 1) * 100 : 0;
+        double profitCAGR = (profitStart > 0 && profitEnd > 0 && size > 1)
+                ? (Math.pow(profitEnd / profitStart, 1.0 / (size - 1)) - 1) * 100
+                : 0;
 
         return 0.3 * salesGrowth + 0.4 * opGrowth + 0.3 * profitCAGR;
     }
