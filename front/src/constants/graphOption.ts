@@ -1,13 +1,13 @@
 import React from "react";
 
 // 안정형 그래프제목 리스트
-export const stableTypeTitle = ['자본, 부채 구조', '부채비율 3년 평균', '유동비율 3년 평균', '유동 비율 & 레버리지', '유동성 상태', '재무 건전성']
+export const stableTypeTitle = ['부채 안정성 지수', '비상금 지갑 크기', '지갑 속 현금 사정', '3년간 빚 부담의 평균선', '3년간 버틸 여력의 평균선', '재무 체력 변화 한눈에 보기']
 
 // 공격형 그래프제목 리스트
-export const attackTypeTitle = ['매출과 영업이익 추이', '매출 성장률', '순이익 성장률', '수익성 비교', '순이익 추이', '재무 건전성']
+export const attackTypeTitle = ['매출·이익 가속도', '수익 파워 지수', '순이익 점프율', '매출 벌이 속도', '순이익 벌이 속도', '재무 체력 변화 한눈에 보기']
 
 // 혼합형 그래프제목 리스트
-export const adminTypeTitle = ['균형 비율', '수익성, 효율', '매출, 영업이익 추이', '재무 건전성']
+export const adminTypeTitle = ['재무 밸런스 점검표', '안정성과 수익 더블체크', '매출 성장 곡선', '재무 체력 변화 한눈에 보기']
 
 // 안정형 그래프리스트
 export const stableType = {
@@ -65,44 +65,50 @@ export const stableTypeBodyText = (type: number) => {
   switch(type) {
     case 0:
         return {
-            description: "회사의 빚과 자본이 얼마나 균형을 이루고 있는지 보여줍니다.",
+            description: "빚 부담이 줄었을까 늘었을까?",
             tips: [
-                "빛과 자본의 군형"
+                '도출 방법',
+                "최근 3개년 부채비율 평균"
             ]
         }
     case 1:
         return {
-            description: '부채비율 3년 평균',
+            description: '단기 채무를 감당할 여력이 있을까?',
             tips: [
-                '부채 안정성'
+                '도출 방법',
+                '최근 3개년 유동비율과 레버리지 비율 추이'
             ]
         }
     case 2:
         return {
-            description: '유동비율 3년 평균',
+            description: '당장 현금이 얼마나 있나?',
             tips: [
-                '지급능력 유지력'
+                '도출 방법',
+                '유동부채 절대값, 유동자산 절대값 비교'
             ]
         }
     case 3:
         return {
-            description: "회사 재무가 안전한지, 빚이 과한지 간단히 확인할 수 있습니다.",
+            description: "지난 3년 평균 빚이 안전선 안에 있을까?",
             tips: [
-                "재무 안전지대"
+                '도출 방법',
+                "(부채비율_2022 + 부채비율_2023 + 부채비율_2024) ÷ 3"
             ]
         }
     case 4:
         return {
-            description: '단기적으로 회사가 현금처럼 쓸 수 있는 자산과 갚아야 할 빚을 비교합니다.',
+            description: '지난 3년 동안 버틸 힘이 유지됐을까?',
             tips: [
-                '단기 버틸 힘'
+                '도출 방법',
+                '(유동비율_2022 + 유동비율_2023 + 유동비율_2024) ÷ 3'
             ]
         }
     case 5:
         return {
-            description: '재무 상태와 수익성을 종합해 위험 신호를 한눈에 알려줍니다.',
+            description: '체력이 회복 중일까, 악화 중일까?',
             tips: [
-                '위험경고'
+                '도출 방법',
+                'ROE, 레버리지비율, 부채비율, 유동비율 '
             ]
         }
 
@@ -120,44 +126,56 @@ export const attackTypeBodyText = (type: number) => {
 
     case 0:
         return {
-            description: "회사가 얼마나 팔고, 그중 얼마나 이익으로 남겼는지 보여줍니다.",
+            description: "실적이 얼마나 빠르게 늘고 있을까?",
             tips: [
-                "규모와 벌이"
+                '도출 방법',
+                "3개년 매출액과 영업이익"
             ]
         }
     case 1:
         return {
-            description: '매출 성장률',
+            description: '영업이익률이 업계 평균보다 높을까?',
             tips: [
-                '팔이 늘었나?'
+                '도출 방법',
+                'ROA (총자산수익률): 가진 모든 자산으로 돈을 얼마나 잘 벌었는지',
+                'ROA = (당기순이익 ÷ 총자산) × 100',
+                'ROE (자기자본이익률): 주주 돈으로 얼마를 벌었는지',
+                'ROE = (당기순이익 ÷ 자기자본) × 100',
+                '영업이익률: 매출 중에서 실제로 남긴 영업이익 비율',
+                '영업이익률 = (영업이익 ÷ 매출액) × 100',
+                '(현금, 주식) 배당수익률(%)": 17.9',
             ]
         }
     case 2:
         return {
-            description: '순이익 성장률',
+            description: '최근 순이익이 얼마나 뛰었을까?',
             tips: [
-                '실제 벌이 성장?'
+                '도출 방법',
+                '3개년 순이익 추이'
             ]
         }
     case 3:
         return {
-            description: "자본과 자산을 얼마나 효율적으로 돈 버는 데 쓰는지 비교합니다.",
+            description: "“앞으로 얼마나 더 벌 수 있나?”",
             tips: [
-                "자본, 자산 활용 효율"
+                '도출 방법',
+                "(금년도 매출액 − 전년도 매출액) ÷ 전년도 매출액 × 100"
             ]
         }
     case 4:
         return {
-            description: '모든 비용과 세금을 빼고 실제로 남은 돈의 흐름을 보여줍니다.',
+            description: '앞으로 더 벌 수 있나?',
             tips: [
-                '순수 남는 돈'
+                '도출 방법',
+                '(금년도 순이익 − 전년도 순이익) ÷ 전년도 순이익 × 100'
             ]
         }
     case 5:
         return {
-            description: '재무 상태와 수익성을 종합해 위험 신호를 한눈에 알려줍니다.',
+            description: '체력이 회복 중일까, 악화 중일까?',
             tips: [
-                '위험경고'
+                '도출 방법',
+                'ROE, 레버리지비율, 부채비율, 유동비율'
             ]
         }
     
@@ -175,30 +193,31 @@ export const adminTypeBodyText = (type: number) => {
   switch(type) {
     case 0:
         return {
-            description: "수익성, 안정성, 성장성을 함께 살펴 회사의 종합 건강 상태를 보여줍니다.",
+            description: "수익·안정·성장의 균형이 잘 지켜지고 있을까?",
             tips: [
-                "성장, 안정 종합 위치"
+                "-"
             ]
         }
     case 1:
         return {
-            description: '매출에서 이익이 얼마나 잘 나오는지와 돈 버는 구조를 확인합니다.',
+            description: '부채 관리와 수익 창출이 균형 잡혔을까?',
             tips: [
-                '돈 버는 구조'
+                '-'
             ]
         }
     case 2:
         return {
-            description: '얼마나 팔고, 그중 얼마를 실제 벌이로 남겼는지 보여줍니다.',
+            description: '매출과 이익이 꾸준히 늘고 있을까?',
             tips: [
-                '규모와 벌이'
+                '-'
             ]
         }
     case 3:
         return {
-            description: "재무 상태와 수익성을 종합해 위험 신호를 한눈에 알려줍니다.",
+            description: "체력이 회복 중일까, 악화 중일까?",
             tips: [
-                "위험경고"
+                '도출 방법',
+                "ROE, 레버리지비율, 부채비율, 유동비율"
             ]
         }
     

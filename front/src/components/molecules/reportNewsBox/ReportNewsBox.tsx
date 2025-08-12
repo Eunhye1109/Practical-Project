@@ -4,6 +4,8 @@ import { typoStyle } from 'styles/typoStyle';
 import { Line } from 'components/atoms';
 import { useTheme } from '@emotion/react';
 import bg from 'assets/images/bg/background11.png';
+import { Tooltip } from 'react-tooltip';
+import { Help } from 'assets/icons';
 
 interface Props {
     newsData: Array<{date: string, title: string, body: string, link: string}>;
@@ -151,7 +153,11 @@ const ReportNewsBox = ({newsData, corpName}: Props) => {
         <Content>
             <TextBox>
                 <TitleBox>
-                    <TitleLabel>연관기사</TitleLabel>
+                    <TitleLabel>요즘 뉴스 한 줄</TitleLabel>
+                    <Help color={theme.colors.primary[80]} data-tooltip-id='news00' width={20} />
+                    <Tooltip id='news00'>
+                        <p>이 기업에 대한 최신 뉴스 기사를 살펴보세요!</p>
+                    </Tooltip>
                 </TitleBox>
             </TextBox>
             <Line width='100%' color={theme.colors.natural[15]} margin='10px' />
@@ -175,13 +181,19 @@ const ReportNewsBox = ({newsData, corpName}: Props) => {
             }
         </Content>
 
-        <NewContent>
-            <div>
-                <RiskSubTitle thick={true}>{corpName}</RiskSubTitle>
-                <RiskSubTitle thick={false}>의 리스크 점수는</RiskSubTitle>
-            </div>
-            <RiskRank>A랭크</RiskRank>
-        </NewContent>
+        <Content>
+            <TextBox>
+                <TitleBox>
+                    <TitleLabel>배당금 성적표</TitleLabel>
+                    <Help color={theme.colors.primary[80]} data-tooltip-id='news01' width={20} />
+                    <Tooltip id='news01'>
+                        <p>최근 3개년  주당 현금배당금 및 현금배당수익률 추이</p>
+                    </Tooltip>
+                </TitleBox>
+            </TextBox>
+            <Line width='100%' color={theme.colors.natural[15]} margin='10px' />
+            
+        </Content>
     </Container>
   )
 }

@@ -126,9 +126,14 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, similarCorpData}: Props)
         <Content>
             <TextBox>
                 <TitleBox>
-                    <TitleLabel>종합 재무지표 분석</TitleLabel>
+                    <TitleLabel>이 회사, 건강검진 결과표</TitleLabel>
                     <Help color={theme.colors.primary[80]} data-tooltip-id='id00' width={20} />
-                    <Tooltip id='id00'>해당 지표 근거 ~~~</Tooltip>
+                    <Tooltip id='id00'>
+                        <p><strong>집중 할 내용</strong></p>
+                        <p>다른 회사와 비교한 이 회사의 컨디션은?</p>
+                        <p><strong>안정성</strong></p>
+                        <p>= 100 - (부채비율/3) + (자기자본비율 /2)</p>
+                    </Tooltip>
                 </TitleBox>
             </TextBox>
             <Line width='100%' color={theme.colors.primary[80]} margin='0' />
@@ -139,9 +144,14 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, similarCorpData}: Props)
         <Content>
             <TextBox>
                 <TitleBox>
-                    <TitleLabel>AI 기업 분석 요약</TitleLabel>
-                    <Help color={theme.colors.primary[80]} data-tooltip-id='id00' width={20} />
-                    <Tooltip id='id00'>AI가 분석한 현재 기업의 현황입니다.</Tooltip>
+                    <TitleLabel>AI의 한 줄 평</TitleLabel>
+                    <Help color={theme.colors.primary[80]} data-tooltip-id='id01' width={20} />
+                    <Tooltip id='id01'>
+                        <p><strong>집중 할 내용</strong></p>
+                        <p>기업의 최근 데이터를 분석한 AI의 진단 결과는?</p>
+                        <p><strong>분석 방법</strong></p>
+                        <p>* 보고서 내부 지표들 및 최신 뉴스 이슈들을 토대로 gpt 4, gpt 5 모델이 해석</p>
+                    </Tooltip>
                 </TitleBox>
             </TextBox>
             <Line width='100%' color={theme.colors.primary[80]} margin='20px' />
@@ -160,9 +170,19 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, similarCorpData}: Props)
         <Content>
             <TextBox>
                 <TitleBox>
-                    <TitleLabel>유사 상장사</TitleLabel>
-                    <Help color={theme.colors.primary[80]} data-tooltip-id='id00' width={20} />
-                    <Tooltip id='id00'>해당 지표 근거 ~~~</Tooltip>
+                    <TitleLabel>리스크 신호등</TitleLabel>
+                    <Help color={theme.colors.primary[80]} data-tooltip-id='id02' width={20} />
+                    <Tooltip id='id02'>
+                        <p><strong>집중 할 내용</strong></p>
+                        <p>이 회사의 리스크는 지금 어느 정도일까?</p>
+                        <p><strong>1. 평균증감률(아래 AVG_CHANGE)</strong></p>
+                        <p>{`{(b-a) + (c-b)}/2`}</p>
+                        <p><strong>2. 최근 부채비율(c)</strong></p>
+                        <p><strong>등급 규칙</strong></p>
+                        <p>{`안전: AVG_CHANGE < 15 AND c < 150`}</p>
+                        <p>{`양호: (15 ≤ AVG_CHANGE < 30) OR (150 ≤ c ≤ 200)`}</p>
+                        <p>{`주의: AVG_CHANGE ≥ 30 OR c > 200`}</p>
+                    </Tooltip>
                 </TitleBox>
             </TextBox>
             <Line width='100%' color={theme.colors.primary[80]} margin='20px' />
