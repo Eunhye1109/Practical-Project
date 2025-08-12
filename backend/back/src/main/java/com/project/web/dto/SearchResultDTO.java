@@ -23,6 +23,7 @@ public class SearchResultDTO {
     private List<SimilarCorpDTO> similarCorp;
     private List<Map<String, Object>> graphData;
     private List<NewsDataDTO> newsData;
+    private SignalDTO signalData;
     private String message;
 
 }

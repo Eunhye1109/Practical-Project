@@ -12,10 +12,12 @@ import com.project.web.dto.NewsDataDTO;
 import com.project.web.dto.RadarDTO;
 import com.project.web.dto.ResponseDTO;
 import com.project.web.dto.SearchResultDTO;
+import com.project.web.dto.SignalDTO;
 import com.project.web.dto.SimilarCorpDTO;
 import com.project.web.mapper.SearchHisMapper;
 import com.project.web.mapper.TargetColMapper;
 import com.project.web.utils.ConvertToFlatYearlyListUtil;
+import com.project.web.utils.FinancialUtils;
 import com.project.web.utils.HeaderAssembler;
 import com.project.web.utils.InfoBoxAssembler;
 import com.project.web.utils.RadarScoreCalculator;
@@ -38,7 +40,6 @@ public class SearchServiceImpl implements SearchService {
     private final AiSummaryService aiSummaryService;
     private final HeaderAssembler headerAssembler;
     private final InfoBoxAssembler infoBoxAssembler;
-    private final SimilarCorpService similarCorpService;
     private static final List<String> YEARS = List.of("2024", "2023", "2022");
 
     @Override
@@ -154,14 +155,14 @@ public class SearchServiceImpl implements SearchService {
         
         InfoBoxDTO infoBox = infoBoxAssembler.build(corpCode, flatColumns);
 	     
-	     List<SimilarCorpDTO> similarCorp = similarCorpService.fetchTop3(corpName);
 	     
 	     List<NewsDataDTO> newsList = fetchService.fetchNewsData(corpName);
 
 	     List<AiSummaryDTO> aiSummaryList = aiSummaryService.getAiSummaryFromFastAPI(corpCode, safePurpose, flatColumns, newsList);
 	     System.out.println("🤖 [AI] 긍부정 분석 결과 수 = " + aiSummaryList.size());
 	     
-	     
+	     String signalScore = FinancialUtils.debtSignalCodeAvgChange(ratios.get("부채비율"));;
+	     SignalDTO signalData = SignalDTO.builder().corpName(corpName).signalScore(signalScore).build();
 	     
 	     // ❌ 삭제: result.setInfoBox(infoBox);  // 이런 변수 없음. 지워주세요.
 	
@@ -175,7 +176,7 @@ public class SearchServiceImpl implements SearchService {
 	    		    .newsData(newsList)
 	    		    .rader(radarList)
 	    		    .aiSumary(aiSummaryList)
-	    		    .similarCorp(similarCorp)
+	    		    .signalData(signalData)
 	    		    .build();
 
     }
