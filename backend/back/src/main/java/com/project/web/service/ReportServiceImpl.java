@@ -1,256 +1,346 @@
 package com.project.web.service;
 
-import com.project.web.dto.*;
-import com.project.web.mapper.ReportPersistMapper;
-import lombok.RequiredArgsConstructor;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.project.web.dto.*;
+import com.project.web.mapper.ReportPersistMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
 
     private final ReportPersistMapper mapper;
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    // ========== 1) 존재 여부 (3개월 룰) ==========
+    // ------------------------------------------------------------
+    // 캐시 신선도: HEADER 90일 + GRAPH 존재
+    // ------------------------------------------------------------
     @Override
     public boolean existsValidReportDeep(String corpCode) {
-        Integer ok = mapper.existsValidReportDeep(corpCode);
-        return ok != null && ok == 1;
+        return mapper.countFreshHeader(corpCode) > 0 && mapper.countGraph(corpCode) > 0;
     }
 
-    // ========== 2) 저장 ==========
+    // ------------------------------------------------------------
+    // 저장 (FastAPI→DTO→DB)
+    // ------------------------------------------------------------
     @Transactional
     @Override
     public void persistReport(SearchResultDTO dto) {
-
         final String corpCode = dto.getCorpCode();
 
-        // 2-1) RAW JSON(원본 백업)
-        Map<String, Object> raw = new HashMap<>();
-        raw.put("corpCode", corpCode);
-        raw.put("rawJson", dto); // 필요하면 ObjectMapper로 문자열화
-        mapper.mergeRawJson(raw);
-
-        // 2-2) HEADER
+        // ===== HEADER =====
         HeaderDTO h = dto.getHeader();
-        Map<String, Object> header = Map.of(
-                "corpCode", corpCode,
-                "corpName", nvl(h.getCorpName(), "정보없음"),
-                "logoUrl", nvl(h.getLogoUrl(), ""),
-                "major",   nvl(h.getMajor(), "정보없음"),
-                "keywordsJson", (h.getKeyword() == null ? "[]" : String.join(",", h.getKeyword()))
-        );
-        mapper.mergeHeader(header);
+        String keywordsJoined = (h == null || h.getKeyword() == null)
+                ? ""
+                : String.join(",", h.getKeyword()); // DB가 VARCHAR이면 comma-join으로 저장
 
-        // 2-3) INFOBOX
-        InfoBoxDTO ib = dto.getInfoBox();
-        List<String> info = ib.getInfoData() == null ? List.of() : ib.getInfoData();
-        Map<String, Object> infoBox = new HashMap<>();
-        infoBox.put("corpCode", corpCode);
-        infoBox.put("corpSummary", nvl(ib.getCorpSummary(), "정보없음"));
-        infoBox.put("ceoName",  info.size() > 0 ? nvl(info.get(0), "정보없음") : "정보없음");
-        infoBox.put("stockType",info.size() > 1 ? nvl(info.get(1), "정보없음") : "정보없음");
-        infoBox.put("latestRevenue", info.size() > 2 ? toLong(info.get(2)) : null);
-        infoBox.put("empCount", info.size() > 3 ? toLong(info.get(3)) : null);
-        infoBox.put("establishDate", info.size() > 4 ? nvl(info.get(4), "정보없음") : "정보없음");
-        mapper.mergeInfoBox(infoBox);
+        mapper.upsertHeader(Map.of(
+        		  "corpCode", corpCode,
+        		  "corpName", nv(dto.getCorpName()),
+        		  "logoUrl",  nv(h!=null ? h.getLogoUrl() : null),
+        		  "major",    nv(h!=null ? h.getMajor()   : null)
+        		));
+     // KEYWORD 저장 (중복 방지 MERGE)
+        if (h != null && h.getKeyword() != null && !h.getKeyword().isEmpty()) {
+            // (선택) 완전 교체가 필요하면 먼저 삭제
+            // mapper.deleteKeywords(corpCode);
+            mapper.mergeKeywordBatch(corpCode, new ArrayList<>(h.getKeyword()));
+        }
 
-        // 2-4) RADAR
-        List<Map<String,Object>> rList = (dto.getRader()==null? List.of() :
-                dto.getRader().stream().map(r -> Map.of(
-                        "corpCode", corpCode,
-                        "subject",  r.getSubject(),
-                        "aVal",     r.getA(),
-                        "bVal",     r.getB(),
-                        "fullMark", r.getFullMark()
-                )).collect(Collectors.toList()));
-        if (!rList.isEmpty()) mapper.upsertRadarBatch(Map.of("corpCode", corpCode, "list", rList));
+        // ===== INFOBOX (XML이 #{param.xxx}) =====
+        if (dto.getInfoBox() != null) {
+            var i = dto.getInfoBox();
 
-        // 2-5) GRAPH  ← **여기가 안 들어가던 부분**
-        List<Map<String,Object>> gList = normalizeGraph(dto.getGraphData());
-        if (!gList.isEmpty()) mapper.upsertGraphBatch(Map.of("corpCode", corpCode, "list", gList));
+            // 1) 숫자 컬럼(Long)로 정규화
+            Long empCnt = toLong(i.getEmpCnt());  // "1,234" → 1234
 
-        // 2-6) NEWS
-        List<Map<String,Object>> nList = (dto.getNewsData()==null? List.of() :
-                dto.getNewsData().stream().map(n -> Map.of(
-                        "corpCode", corpCode,
-                        "date",    nvl(n.getDate(), ""),
-                        "title",   nvl(n.getTitle(), ""),
-                        "body",    nvl(n.getBody(), ""),
-                        "link",    nvl(n.getLink(), "")
-                )).collect(Collectors.toList()));
-        if (!nList.isEmpty()) mapper.mergeNewsBatch(Map.of("corpCode", corpCode, "list", nList));
+            // 2) REV_ANN 은 DTO에 메서드가 없으므로 infoData[2]에서 추출
+            String revAnn = null;
+            if (i.getInfoData() != null && i.getInfoData().size() >= 3) {
+                revAnn = nv(i.getInfoData().get(2));
+            }
 
-        // 2-7) SIGNAL
-        SearchResultDTO.SignalDTO sig = dto.getSignalData();
-        if (sig != null) {
-            mapper.mergeSignal(Map.of(
-                    "corpCode", corpCode,
-                    "corpName", nvl(sig.getCorpName(), dto.getCorpName()),
-                    "signalScore", nvl(sig.getSignalScore(), "0")
+            // 3) CEO/상장유형/설립일은 JSON으로
+            String infoJson;
+            try {
+                Map<String,String> json = new LinkedHashMap<>();
+                if (nv(i.getCeoName())       != null) json.put("ceoName",       i.getCeoName());
+                if (nv(i.getStockType())     != null) json.put("stockType",     i.getStockType());
+                if (nv(i.getEstablishDate()) != null) json.put("establishDate", i.getEstablishDate());
+                infoJson = MAPPER.writeValueAsString(json); // ← ObjectMapper 인스턴스
+            } catch (Exception e) {
+                infoJson = "{}";
+            }
+
+            mapper.upsertInfoBox(Map.of(
+                "param", Map.of(
+                    "corpCode",  corpCode,
+                    "summary",   nv(i.getCorpSummary()),
+                    "empCnt",    empCnt,     // NUMBER 컬럼
+                    "revAnn",    revAnn,     // VARCHAR2 컬럼
+                    "infoJson",  infoJson    // CLOB/VARCHAR2
+                )
             ));
         }
+
+        // ===== AI SUMMARY =====
+        if (dto.getAiSumary() != null && !dto.getAiSumary().isEmpty()) {
+            AiSummaryDTO ai = dto.getAiSumary().get(0);
+            mapper.upsertAiSummary(Map.of(
+                "corpCode", corpCode,
+                "emotion",  nv(ai.getEmotion()),
+                "summary",  nv(ai.getSummary())
+            ));
+        }
+
+        // ===== RADAR (배치) =====
+        if (dto.getRader()!=null && !dto.getRader().isEmpty()) {
+            List<Map<String,String>> list = dto.getRader().stream().map(r -> {
+                Map<String,String> m = new HashMap<>();
+                m.put("subject",  nv(r.getSubject()));
+                m.put("aValue",   nv(r.getA()));       // XML: #{r.aValue} → A_VALUE
+                m.put("bValue",   nv(r.getB()));
+                m.put("fullMark", nv(r.getFullMark()));
+                return m;
+            }).toList();
+            mapper.upsertRadarBatch(corpCode, new ArrayList<>(list));
+        }
+
+        // ===== NEWS (배치) =====
+        if (dto.getNewsData()!=null && !dto.getNewsData().isEmpty()) {
+            List<Map<String,String>> list = dto.getNewsData().stream().map(n -> {
+                Map<String,String> m = new HashMap<>();
+                m.put("newsDate", nv(n.getDate()));    // XML: NEWS_DATE
+                m.put("title",    nv(n.getTitle()));
+                m.put("body",     nv(n.getBody()));
+                m.put("link",     nv(n.getLink()));
+                return m;
+            }).toList();
+            mapper.mergeNewsBatch(corpCode, new ArrayList<>(list));
+        }
+
+        // ===== SIGNAL (XML이 #{param.xxx}) =====
+        if (dto.getSignalData()!=null) {
+            mapper.mergeSignal(Map.of("param", Map.of(
+                "corpCode",    corpCode,
+                "signalScore", nv(dto.getSignalData().getSignalScore())
+            )));
+        }
+        Map<String,Object> sig = mapper.selectSignal(corpCode);
+        SignalDTO signal = (sig==null) ? null
+            : SignalDTO.builder()
+              .corpName(dto.getCorpName()) // DB에 없음 → DTO에서 보정
+              .signalScore(getStr(sig, "SIGNAL_SCORE", "0"))
+              .build();
     }
 
-    // ========== 3) 조회(3개월 이내면 DB→DTO 재구성) ==========
+    // ------------------------------------------------------------
+    // 조회 (DB→DTO 재조립)
+    // ------------------------------------------------------------
     @Override
     public SearchResultDTO getReport(String corpCode) {
+        Map<String,Object> h    = mapper.selectHeader(corpCode);
+        Map<String,Object> i    = mapper.selectInfoBox(corpCode);
+        Map<String,Object> ai   = mapper.selectAi(corpCode);
+        List<Map<String,Object>> radar = mapper.selectRadar(corpCode);
+        List<Map<String,Object>> graph = mapper.selectGraph(corpCode);
+        List<Map<String,Object>> news  = mapper.selectNews(corpCode);
+        Map<String,Object> sig  = safeSelectSignal(corpCode);
+        List<String> keywords = mapper.selectKeywords(corpCode);
 
-        Map<String,Object> h = mapper.selectHeader(corpCode);     // 단건
-        Map<String,Object> i = mapper.selectInfoBox(corpCode);    // 단건
-        List<Map<String,Object>> rlist = mapper.selectRadar(corpCode);
-        List<Map<String,Object>> glist = mapper.selectGraph(corpCode);
-        List<Map<String,Object>> nlist = mapper.selectNews(corpCode);
-        Map<String,Object> s = mapper.selectSignal(corpCode);
+        // HeaderDTO
+        HeaderDTO header = (h == null) ? null :
+        	  HeaderDTO.builder()
+        	      .corpName(getStr(h, "CORP_NAME", "정보없음"))
+        	      .logoUrl(getStr(h, "LOGO_URL", ""))
+        	      .major(getStr(h, "MAJOR", "정보없음"))
+        	      .keyword(keywords == null ? List.of() : keywords)
+        	      .build();
 
-        // --- header ---
-        HeaderDTO header = HeaderDTO.builder()
-                .corpName(nvl(str(h.get("CORP_NAME")), "정보없음"))
-                .logoUrl(nvl(str(h.get("LOGO_URL")), ""))
-                .major(nvl(str(h.get("MAJOR")), "정보없음"))
-                .keyword(parseKeywords(str(h.get("KEYWORDS_JSON"))))
-                .build();
+        // InfoBoxDTO (리스트 복원)
+        InfoBoxDTO infoBox = null;
+        if (i != null) {
+        	String infoJson = getStr(i, "INFO_JSON", null);
+        	String ceoName = null, stockType = null, establishDate = null;
+        	try {
+        	    if (infoJson != null && !infoJson.isBlank()) {
+        	        Map<?, ?> m = MAPPER.readValue(infoJson, Map.class);
+        	        ceoName       = asStr(m.get("ceoName"));
+        	        stockType     = asStr(m.get("stockType"));      // <-- asStr 필요
+        	        establishDate = asStr(m.get("establishDate"));
+        	    }
+        	} catch (Exception ignore) {}
 
-        // --- infoBox ---
-        List<String> infoData = new ArrayList<>();
-        infoData.add(nvl(str(i.get("CEO_NAME")), "정보없음"));
-        infoData.add(nvl(str(i.get("STOCK_TYPE")), "정보없음"));
-        infoData.add(fmtNum(i.get("LATEST_REVENUE")));
-        infoData.add(fmtNum(i.get("EMP_COUNT")));
-        infoData.add(nvl(str(i.get("ESTABLISH_DATE")), "정보없음"));
+            List<String> infoData = new ArrayList<>();
+            infoData.add(nzd(ceoName, "정보없음"));
+            infoData.add(nzd(stockType, "정보없음"));
+            infoData.add(getStr(i, "REV_ANN", null));
+            infoData.add(fmtNum(i.get("EMP_CNT")));
+            infoData.add(nzd(establishDate, "정보없음"));
 
-        InfoBoxDTO infoBox = InfoBoxDTO.builder()
-                .corpSummary(nvl(str(i.get("CORP_SUMMARY")), "정보없음"))
-                .infoData(infoData)
-                .build();
+            infoBox = new InfoBoxDTO();
+            infoBox.setCorpSummary(getStr(i, "SUMMARY", "정보없음"));
+            infoBox.setInfoData(infoData);
+        }
 
-        // --- radar ---
-        List<RadarDTO> radar = rlist.stream().map(m ->
-                RadarDTO.builder()
-                        .subject(nvl(str(m.get("SUBJECT")), ""))
-                        .A(nvlInt(m.get("A_VALUE")))
-                        .B(nvlInt(m.get("B_VALUE")))
-                        .fullMark(nvlInt(m.get("FULL_MARK")))
-                        .build()
-        ).collect(Collectors.toList());
+        // AiSummaryDTO
+        List<AiSummaryDTO> aiList = (ai == null) ? List.of()
+            : List.of(AiSummaryDTO.builder()
+                        .emotion(getStr(ai, "EMOTION", "neutral"))
+                        .summary(getStr(ai, "SUMMARY", ""))
+                        .build());
 
-        // --- ai (있으면) ---
-        // 필요 시 mapper.selectAiSummary(corpCode) 만들어서 매핑, 지금은 빈 리스트로.
-        List<AiSummaryDTO> aiList = new ArrayList<>();
+        // RadarDTO list
+        List<RadarDTO> radarList = (radar == null) ? List.of()
+            : radar.stream().map(r -> RadarDTO.builder()
+                    .subject(getStr(r, "SUBJECT", ""))
+                    .A(getInt(r, "A_VALUE"))
+                    .B(getInt(r, "B_VALUE"))
+                    .fullMark(getInt(r, "FULL_MARK"))
+                    .build())
+              .collect(Collectors.toList());
 
-        // --- news ---
-        List<NewsDataDTO> news = nlist.stream().map(m ->
-                NewsDataDTO.builder()
-                        .date(nvl(str(m.get("NEWS_DATE")), ""))
-                        .title(nvl(str(m.get("TITLE")), ""))
-                        .body(nvl(str(m.get("BODY")), ""))
-                        .link(nvl(str(m.get("LINK")), ""))
-                        .build()
-        ).collect(Collectors.toList());
+        // NewsDataDTO list
+        List<NewsDataDTO> newsList = (news == null) ? List.of()
+            : news.stream().map(n -> NewsDataDTO.builder()
+                    .date(getStr(n, "DATE", ""))
+                    .title(getStr(n, "TITLE", ""))
+                    .body(getStr(n, "BODY", ""))
+                    .link(getStr(n, "LINK", ""))
+                    .build())
+              .collect(Collectors.toList());
 
-        // --- graph (DB → 프론트 포맷) ---
-        List<Map<String,Object>> graph = glist.stream().map(m -> {
-            Map<String,Object> g = new LinkedHashMap<>();
-            g.put("year", str(m.get("YEAR")));
-            g.put("순이익",         m.get("NET_PROFIT"));
-            g.put("영업이익",       m.get("OP_PROFIT"));
-            g.put("부채총계",       m.get("TOTAL_DEBT"));
-            g.put("자본총계",       m.get("TOTAL_EQUITY"));
-            g.put("매출액",         m.get("REVENUE"));
-            g.put("유동자산",       m.get("CUR_ASSETS"));
-            g.put("유동부채",       m.get("CUR_DEBTS"));
-            g.put("jan_salary_am", m.get("AVG_SALARY"));
-            g.put("sm",            m.get("EMP_CNT"));
-            g.put("주당 현금배당금(원)", m.get("DPS_COMMON"));
-            g.put("ROE",           m.get("ROE"));
-            g.put("영업이익률",     m.get("OPM"));
-            g.put("부채비율",       m.get("DEBT_RATIO"));
-            g.put("유동비율",       m.get("CUR_RATIO"));
-            g.put("매출액순이익률", m.get("PROFIT_MARGIN"));
-            g.put("자기자본비율",   m.get("EQUITY_RATIO"));
-            g.put("레버리지비율",   m.get("LEVERAGE"));
-            g.put("ROA",           m.get("ROA"));
-            g.put("매출액성장률",   m.get("SALES_GROWTH"));
-            g.put("순이익성장률",   m.get("NET_GROWTH"));
-            return g;
-        }).collect(Collectors.toList());
-
-        // --- signal ---
-        SearchResultDTO.SignalDTO signal = SearchResultDTO.SignalDTO.builder()
-                .corpName(nvl(str(s.get("CORP_NAME")), ""))
-                .signalScore(nvl(str(s.get("SIGNAL_SCORE")), "0"))
+        // SignalDTO
+        SignalDTO signal = (sig == null) ? null
+            : SignalDTO.builder()
+                .corpName(getStr(sig, "CORP_NAME", ""))
+                .signalScore(getStr(sig, "SIGNAL_SCORE", "0"))
                 .build();
 
         return SearchResultDTO.builder()
-                .corpName(header.getCorpName())
-                .corpCode(corpCode)
-                .header(header)
-                .infoBox(infoBox)
-                .rader(radar)               // ★ 필드명이 rader(오타) 맞음
-                .aiSumary(aiList)           // ★ 필드명이 aiSumary(오타) 맞음
-                .graphData(graph)
-                .newsData(news)
-                .signalData(signal)
-                .build();
+            .corpCode(corpCode)
+            .corpName(header != null ? header.getCorpName() : null)
+            .header(header)
+            .infoBox(infoBox)
+            .aiSumary(aiList)
+            .rader(radarList)
+            .graphData(graph == null ? List.of() : graph) // 그대로 전달
+            .newsData(newsList)
+            .signalData(signal)
+            .message("from-db")
+            .build();
     }
 
-    // ===== 유틸 =====
-    private static String nvl(String s, String def) { return (s==null || s.isEmpty()) ? def : s; }
-    private static String str(Object o){ return o==null ? null : String.valueOf(o); }
-    private static int nvlInt(Object o){
-        if (o==null) return 0;
-        if (o instanceof Number) return ((Number)o).intValue();
-        String s = str(o).replace(",","");
-        return s.isEmpty()?0: new BigDecimal(s).intValue();
-    }
-    private static String fmtNum(Object o){
-        if (o==null) return "정보없음";
-        try { return String.format("%,d", new BigDecimal(str(o).replace(",","")).longValue()); }
-        catch (Exception e){ return str(o); }
-    }
-    private static Long toLong(String s){
-        try { return new BigDecimal(s.replace(",","")).longValue(); } catch (Exception e){ return null; }
-    }
-    private static List<String> parseKeywords(String raw){
-        if (raw==null || raw.isBlank()) return List.of();
-        // DB에 ,로 저장했으면 분리, JSON이면 파서로 바꿔도 됨
-        return Arrays.stream(raw.split(",")).map(String::trim).filter(v->!v.isEmpty()).collect(Collectors.toList());
+    // ------------------------------------------------------------
+    // 헬퍼
+    // ------------------------------------------------------------
+    private static String nv(Object o) {
+        return (o == null) ? "" : String.valueOf(o);
     }
 
-    /** 프론트 → DB 포맷으로 변환(키 영문화) */
-    private static List<Map<String,Object>> normalizeGraph(List<Map<String,Object>> raw) {
-        if (raw==null) return List.of();
+    private static String getStr(Map<?,?> m, String k, String def) {
+        if (m == null) return def;
+        Object v = m.get(k);
+        return v == null ? def : Objects.toString(v, def);
+    }
+
+    private static Integer getInt(Map<?,?> m, String k) {
+        Double d = getNum(m, k);
+        return d == null ? null : d.intValue();
+    }
+
+    private static Double getNum(Map<?,?> m, String k) {
+        if (m == null) return null;
+        Object v = m.get(k);
+        if (v == null) return null;
+        if (v instanceof Number n) return n.doubleValue();
+        try { return Double.valueOf(v.toString()); } catch (Exception e) { return null; }
+    }
+
+    private static String fmtNum(Object v) {
+        if (v == null) return null;
+        if (v instanceof Number n) return String.valueOf(n.longValue());
+        return v.toString();
+    }
+
+    private static Long toLong(String s) {
+        try { return s == null || s.isBlank() ? null : Long.valueOf(s.replaceAll("[^0-9-]", "")); }
+        catch (Exception e) { return null; }
+    }
+
+    private static List<String> parseKeywords(String joined) {
+        if (joined == null || joined.isBlank()) return List.of();
+        // 콤마 저장 기준
+        return Arrays.stream(joined.split(","))
+                     .map(String::trim)
+                     .filter(t -> !t.isEmpty())
+                     .collect(Collectors.toList());
+    }
+
+    private Map<String,Object> safeSelectSignal(String corpCode) {
+        try { return mapper.selectSignal(corpCode); }
+        catch (Exception ignore) { return null; }
+    }
+
+    /** graphData(Map 리스트) → XML의 g.year, g.netProfit ... 키에 맞게 정규화 */
+    private static List<Map<String,Object>> normalizeGraph(List<Map<String,Object>> src){
+        if (src == null) return List.of();
         List<Map<String,Object>> out = new ArrayList<>();
-        for (Map<String,Object> g : raw) {
-            Map<String,Object> m = new LinkedHashMap<>();
-            m.put("year",           g.get("year"));
-            m.put("netProfit",      g.get("순이익"));
-            m.put("opProfit",       g.get("영업이익"));
-            m.put("totalDebt",      g.get("부채총계"));
-            m.put("totalEquity",    g.get("자본총계"));
-            m.put("revenue",        g.get("매출액"));
-            m.put("curAssets",      g.get("유동자산"));
-            m.put("curDebts",       g.get("유동부채"));
-            m.put("avgSalary",      g.get("jan_salary_am"));
-            m.put("empCnt",         g.get("sm"));
-            m.put("dpsCommon",      g.get("주당 현금배당금(원)"));
-            m.put("roe",            g.get("ROE"));
-            m.put("opm",            g.get("영업이익률"));
-            m.put("debtRatio",      g.get("부채비율"));
-            m.put("curRatio",       g.get("유동비율"));
-            m.put("profitMargin",   g.get("매출액순이익률"));
-            m.put("equityRatio",    g.get("자기자본비율"));
-            m.put("leverage",       g.get("레버리지비율"));
-            m.put("roa",            g.get("ROA"));
-            m.put("salesGrowth",    g.get("매출액성장률"));
-            m.put("netGrowth",      g.get("순이익성장률"));
+        for (Map<String,Object> g : src) {
+            Map<String,Object> m = new LinkedHashMap<>(); // 키 순서 유지
+            m.put("year",         g.get("year"));
+            m.put("netProfit",    g.get("netProfit"));
+            m.put("opProfit",     g.get("operatingProfit"));
+            m.put("totalDebt",    g.get("totalDebt"));
+            m.put("totalEquity",  g.get("totalEquity"));
+            m.put("revenue",      g.get("revenue"));
+            m.put("curAssets",    g.get("currentAssets"));
+            m.put("curDebts",     g.get("currentLiabilities"));
+            m.put("avgSalary",    g.get("avgSalary"));
+            m.put("empCnt",       g.get("empCnt"));
+            m.put("dpsCommon",    g.get("dpsCommon"));
+            m.put("roe",          g.get("ROE"));
+            m.put("opm",          g.get("OPM"));
+            m.put("debtRatio",    g.get("debtRatio"));
+            m.put("curRatio",     g.get("currentRatio"));
+            m.put("profitMargin", g.get("profitMargin"));
+            m.put("equityRatio",  g.get("equityRatio"));
+            m.put("leverage",     g.get("leverage"));
+            m.put("roa",          g.get("ROA"));
+            m.put("salesGrowth",  g.get("salesGrowth"));
+            m.put("netGrowth",    g.get("netProfitGrowth"));
             out.add(m);
         }
         return out;
     }
+    
+ // ====== ReportServiceImpl 하단(또는 클래스 내 적절한 위치)에 추가 ======
+    private static String asStr(Object value) {
+        return value == null ? null : String.valueOf(value);
+    }
+
+
+    private static String nzd(String s, String def) { // null → 기본값
+        return (s == null || s.isBlank()) ? def : s;
+    }
+
+    private static Long toLong(Object value) {
+        if (value == null) return null;
+        String s = String.valueOf(value).replaceAll("[^0-9\\-]", "");
+        if (s.isBlank()) return null;
+        return Long.valueOf(s);
+    }
+
+    
+
+
+
 }
