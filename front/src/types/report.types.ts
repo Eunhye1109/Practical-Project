@@ -70,7 +70,7 @@ export interface ReportFullData {
     body: string, // 기사 본문
     link: string // 기사 링크
   }>,
-  signalScore?: {
+  signalData?: {
     corpName: string,
     signalScore: string
   },

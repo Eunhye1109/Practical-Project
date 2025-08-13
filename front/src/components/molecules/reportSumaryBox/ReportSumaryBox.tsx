@@ -11,6 +11,7 @@ import siren01 from 'assets/images/etc/siren01.png';
 import siren02 from 'assets/images/etc/siren02.png';
 import siren03 from 'assets/images/etc/siren03.png';
 import { ReportFullData } from 'types/report.types';
+import { log } from 'console';
 
 interface Props {
     data: {subject: string, A: number, B: number, fullMark: number}[];
@@ -160,6 +161,9 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, fullData}: Props) => {
     const splitText = (text: string) => {
         return text.split('다.').filter(s => s.trim() !== '').map(s => s + '다.')
     }
+
+    console.log('스코어 점수 확인', fullData.signalData);
+    
   return (
     <Container>
         {/* 종합 재무지표 분석: radar 차트 */}
@@ -237,14 +241,14 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, fullData}: Props) => {
             </TextBox>
             <Line width='100%' color={theme.colors.primary[80]} margin='20px' />
             <RiskContent>
-                <RiskSiren src={fullData.signalScore?.signalScore === '1' ? siren01 : (fullData.signalScore?.signalScore === '2' ? siren02 : siren03)} />
+                <RiskSiren src={fullData.signalData?.signalScore === '1' ? siren01 : (fullData.signalData?.signalScore === '2' ? siren02 : siren03)} />
                 <RiskTextBox>
                     <RiskTitleBox>
                         <RiskCaption>{cropName}의 리스크 신호등은</RiskCaption>
-                        <RiskTitle>'{fullData.signalScore?.signalScore === '1' ? '안전' : (fullData.signalScore?.signalScore === '2' ? '양호' : '위험')}'한 상태</RiskTitle>
+                        <RiskTitle>'{fullData.signalData?.signalScore === '1' ? '안전' : (fullData.signalData?.signalScore === '2' ? '양호' : '위험')}'한 상태</RiskTitle>
                     </RiskTitleBox>
                     <RiskBody>
-                        {fullData.signalScore?.signalScore === '최근 3년간 부채비율 변화폭이 15% 미만이고, 현재 부채비율이 150% 미만인 상태' ? siren01 : (fullData.signalScore?.signalScore === '변화폭이 연평균 15~30%이거나, 현재 부채비율이 150~200%인 상태' ? siren02 : '변화폭이 연평균 30% 이상으로 크거나, 현재 부채비율이 200% 초과인 상태')}
+                        {fullData.signalData?.signalScore === '1' ? '최근 3년간 부채비율 변화폭이 15% 미만이고, 현재 부채비율이 150% 미만인 상태' : (fullData.signalData?.signalScore === '2' ? '변화폭이 연평균 15~30%이거나, 현재 부채비율이 150~200%인 상태' : '변화폭이 연평균 30% 이상으로 크거나, 현재 부채비율이 200% 초과인 상태')}
                     </RiskBody>
                 </RiskTextBox>
             </RiskContent>
@@ -252,5 +256,4 @@ const ReportSumaryBox = ({data, cropName, aiSumaryData, fullData}: Props) => {
     </Container>
   )
 }
-
 export default ReportSumaryBox
