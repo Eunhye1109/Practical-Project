@@ -1,0 +1,28 @@
+package com.project.web.dto;
+
+import java.util.List;
+
+import com.project.web.vo.UserVO;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDTO {
+	
+	
+    private boolean success;
+    private String message;
+    private String userId;
+    private String userPw;
+    private String riskType;
+    private List<UserVO> userInfo;
+	
+    
+	 
+}

@@ -1,0 +1,56 @@
+import React from 'react'
+import styled from '@emotion/styled'
+import { WarningText, Input } from 'components/atoms'
+import { typoStyle } from 'styles/typoStyle';
+
+interface Props {
+    readonly inputLabel: string;
+    readonly inputTitleLabel: string;
+    readonly textLabel: string;
+    readonly visible: boolean;
+    readonly type?: string;
+    readonly onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    readonly onBlur?: () => void;
+    readonly value?: string;
+}
+
+const Container = styled.div`
+  // 크기 세팅
+  width: 100%;
+  // 디스플레이 세팅
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const InputContent = styled.div`
+  // 크기 세팅
+  width: 100%;
+  // 디스플레이 세팅
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const InputTitle = styled.p`
+  ${({theme}) => typoStyle.caption.regular(theme)}
+  color: ${({theme}) => theme.colors.natural[60]};
+`;
+
+const InputBox = ({inputLabel, inputTitleLabel, textLabel, visible, type, onChange, onBlur, value}: Props) => {
+  return (
+    <Container>
+        <InputTitle>{inputTitleLabel}</InputTitle>
+        <InputContent>
+          <Input width='100%' label={inputLabel} type={type} onChange={onChange} onBlur={onBlur} align='left' value={value} />
+          <WarningText label={textLabel} visible={visible} />
+        </InputContent>
+    </Container>
+  )
+}
+
+export default InputBox
